@@ -23,3 +23,5 @@ cd frontend
 npm init -y
 cd .. to go back
 same for backend
+cd backend
+npm install express
