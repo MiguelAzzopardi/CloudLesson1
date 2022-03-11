@@ -3,10 +3,16 @@ import cors from "cors";
 import { v4 as uuid } from "uuid";
 import session from "express-session"
 import {CreateUser, GetUser, HashPassword} from "./db.js"
+import { fileURLToPath} from "url";
+import path, {dirname} from "path";
 
+const _filename = fileURLToPath(import.meta.url);
+const _dirname = dirname(_filename);
+
+//Session config
 const config={
     genid: (req) => uuid(), 
-    secret: "ketboard cat",
+    secret: "keyboard cat",
     cookie: {},
     resave: false,
     saveUninitialized: true,
@@ -15,23 +21,23 @@ const config={
 const app = Express();
 app.use(cors());
 app.use(session(config));
+//Delivering static path
+app.use(Express.static(path.join(_dirname, "../frontend/public/")));
 
 const PORT = 3001;
 let requests = 0;
 const secretToken = uuid();
 
-app.get("/secret", (req, res) => {
-  const token = req.query.token;
-  requests++;
-  if (token === secretToken) {
-    res.send({
-      result: 200,
-      requests: requests,
-      message: "This is a very secret message.",
-    });
-  } else {
-    res.send({ result: 401, message: "Invalid token!" });
-  }
+app.get("/", (req, res)=> {
+  res.sendFile(path.join(_dirname, "../frontend/index.html"));
+});
+
+app.get("/login", (req, res)=> {
+  res.sendFile(path.join(_dirname, "../frontend/login.html"));
+});
+
+app.get("/register", (req, res)=> {
+  res.sendFile(path.join(_dirname, "../frontend/register.html"));
 });
 
 app.post("/login", (req, res) => {

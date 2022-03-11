@@ -25,3 +25,12 @@ cd .. to go back
 same for backend
 cd backend
 npm install express
+
+#SERVER CONFIG
+```bash
+sudo apt-get update
+sudo apt-get upgrade -y
+curl -sL https://deb.nodesource.com/setup_17.x -o nodesource_setup.sh
+sudo bash nodesource_setup.sh
+sudo apt install nodejs
+```bash
