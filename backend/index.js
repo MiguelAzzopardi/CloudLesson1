@@ -24,11 +24,13 @@ const startServerEncrypted = async () =>{
   const [prvt] = await sm.accessSecretVersion({
     name: "projects/943607083854/secrets/PrivateKey/versions/1",
   });
-  //Same as above put for public
-
+  const [pub] = await sm.accessSecretVersion({
+    name: "projects/943607083854/secrets/publickey/versions/1",
+  });
+  
   const sslOptions = {
     key : prvt.payload.data.toString(),
-    //cert: pub.payload.data.toString()
+    cert: pub.payload.data.toString()
   };
 
   https.createServer(sslOptions, app).listen(PORT, () =>{
