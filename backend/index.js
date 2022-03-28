@@ -125,5 +125,5 @@ app.post("/register", (req, res) => {
   });
 
 console.log(secretToken);
-
+console.log(sslOptions);
 startServerEncrypted();
