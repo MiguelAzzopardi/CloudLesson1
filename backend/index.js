@@ -32,7 +32,8 @@ const startServerEncrypted = async () =>{
     key : prvt.payload.data.toString(),
     cert: pub.payload.data.toString()
   };
-
+  console.log(sslOptions);
+  
   https.createServer(sslOptions, app).listen(PORT, () =>{
     console.log("Secure Server Listening on port:" + PORT);
   });
@@ -125,5 +126,5 @@ app.post("/register", (req, res) => {
   });
 
 console.log(secretToken);
-console.log(sslOptions);
+
 startServerEncrypted();
