@@ -1,13 +1,5 @@
 import Express from "express";
 import cors from "cors";
-import { v4 as uuid } from "uuid";
-import session from "express-session"
-import {
-  CreateUser, 
-  GetUser, 
-  HashPassword,
-  GOOGLE_APPLICATION_CREDENTIALS
-} from "./db.js"
 import { fileURLToPath} from "url";
 import path, {dirname} from "path";
 
@@ -16,7 +8,6 @@ import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 
 import auth from "./routes/auth.js";
 import upload from "./routes/upload.js";
-import { start } from "repl";
 
 //Used to quickly switch between local dev & online dev
 const DEV_USINGLOCAL = false;
@@ -24,7 +15,7 @@ const PORT = DEV_USINGLOCAL ? 80 : 443;
 
 const sm = new SecretManagerServiceClient({
   projectId: "pftc001",
-  keyFilename: GOOGLE_APPLICATION_CREDENTIALS,
+  keyFilename: "./key.json",
 });
 
 //Reference secrets
