@@ -1,72 +1,88 @@
-document.addEventListener("submit", (e) => {
-    e.preventDefault();
-    submitLoginInformation();
-});
+let signInButton = document.getElementById("signIn");
+let signOutButton = document.getElementById("signOut");
+let profile = document.getElementById("profile");
+let signInContainer = document.getElementById("signInContainer");
 
-async function submitLoginInformation(){
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const url = "http://localhost:3001/login?email="+email+"&password="+password;
+const authenticateReq = async (token) => {
+  const url = `/auth?token=${token}`;
+  const headers = {
+    "Content-Type": "text/html",
+    "Access-Control-Allow-Origin": "*",
+  };
+  const response = await axios.post(url, headers);
+  const status = response.data.status;
 
-    const headers = {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": true,
-    };
+  if (status == 200) {
+    const name = response.data.name;
+    const email = response.data.email;
+    const picture = response.data.picture;
+    const expiry = response.data.expiry;
+    profile.style.display = "inline";
+    signInContainer.style.display = "none";
 
-    const response = await axios.post(url, {}, {headers});
-    if(response.data.results ==="success"){
-        console.log("Hello " + response.data.name);
-    }else{
-        console.log(response.data.results + ": " + response.data.reason);
-    }
-}
+    document.getElementById("navbarDropdownMenuLink").innerHTML =
+      `<img
+    id="picture"
+    src=""
+    class="rounded-circle"
+    style="margin-right: 5px"
+    height="25"
+    alt=""
+    loading="lazy"
+  />` + name;
+    document.getElementById("picture").src = picture;
+    document.cookie = `token=${token};expires=${expiry}`;
+    console.log(`${name} signed in successfully.`);
+  } else {
+    profile.style.display = "none";
+    signInContainer.style.display = "inline";
+  }
+};
 
-async function submitRegisterInfo(){
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const passwordConf = document.getElementById("passwordConf").value;
-    const name = document.getElementById("name").value;
-    const surname = document.getElementById("surname").value;
-    
-    const url = "http://localhost:3001/register?email="+email+"&password="+password + "&passwordConf="+ passwordConf +"&name="+name+"&surname="+surname;
+async function loadGoogleLogin() {
+  let session = document.cookie;
+  if (session && session.includes("token")) {
+    authenticateReq(session.split("token=")[1].split(";")[0]);
+  } else {
+    profile.style.display = "none";
+    signInContainer.style.display = "inline";
+  }
 
-    const headers = {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": true,
-    };
-
-    if(validateEmail(email) && password === passwordConf){
-        const response = await axios.post(url, {}, {headers});
-        if(response.data.results ==="success"){
-            console.log("Hello " + response.data.name);
-        }else{
-            console.log(response.data.results + ": " + response.data.reason);
-        }
-    }else{
-        console.log("Password do not match!");
-    }
-    
-}
-
-const validateEmail = (email) => {
-    return String(email)
-      .toLowerCase()
-      .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      );
+  const signOut = () => {
+    let auth2 = gapi.auth2.getAuthInstance();
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    auth2
+      .signOut()
+      .then(() => {
+        profile.style.display = "none";
+        signInContainer.style.display = "inline";
+        console.log("User signed out.");
+      })
+      .catch((error) => alert(error));
   };
 
-  function onSignIn(googleUser) {
-    var profile = googleUser.getBasicProfile();
-    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-    console.log('Name: ' + profile.getName());
-    console.log('Image URL: ' + profile.getImageUrl());
-    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-  }
+  signOutButton.addEventListener("click", () => signOut());
 
-  function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
+  gapi.load("auth2", () => {
+    // Retrieve the singleton for the GoogleAuth library and set up the client.
+    let auth2 = gapi.auth2.init({
+      client_id:
+        "578170717869-2lhitb57p9b5vj11u63vu6or2os38a7f.apps.googleusercontent.com",
+      cookiepolicy: "single_host_origin",
+      scope: "profile",
     });
-  }
+
+    auth2.attachClickHandler(
+      signInButton,
+      {},
+      function (googleUser) {
+        authenticateReq(googleUser.getAuthResponse().id_token);
+      },
+      function (error) {
+        alert(
+          "Error: " + JSON.parse(JSON.stringify(error, undefined, 2)).error
+        );
+      }
+    );
+  });
+}
