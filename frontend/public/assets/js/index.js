@@ -67,7 +67,7 @@ async function loadGoogleLogin() {
     // Retrieve the singleton for the GoogleAuth library and set up the client.
     let auth2 = gapi.auth2.init({
       client_id:
-        "578170717869-2lhitb57p9b5vj11u63vu6or2os38a7f.apps.googleusercontent.com",
+        "943607083854-u6u1k67lph43ad6u66qq0mdf4d3uingk.apps.googleusercontent.com",
       cookiepolicy: "single_host_origin",
       scope: "profile",
     });

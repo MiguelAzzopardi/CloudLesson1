@@ -19,7 +19,7 @@ import upload from "./routes/upload.js";
 import { start } from "repl";
 
 //Used to quickly switch between local dev & online dev
-const DEV_USINGLOCAL = true;
+const DEV_USINGLOCAL = false;
 const PORT = DEV_USINGLOCAL ? 80 : 443;
 
 const sm = new SecretManagerServiceClient({
