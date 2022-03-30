@@ -66,7 +66,7 @@ if(!DEV_USINGLOCAL){
   });
 }
 //server static files
-app.use(Express.static(path.join(_dirname, "../frontend/public/")));
+app.use(Express.static(path.join(_dirname, "../frontend/public")));
 
 //allow cross-origin reqs
 app.use(cors());
