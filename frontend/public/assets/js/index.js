@@ -98,7 +98,7 @@ async function loadGoogleLogin() {
               console.log(`Email not found in database, account has been created for ${email}`);
             }
 
-            accountCreditsTxt.innerHTML = "Credits: Still figuring it out!";
+            accountCreditsTxt.innerHTML = "Credits: " + response.data.credits;
           }          
         },
         function (error) {

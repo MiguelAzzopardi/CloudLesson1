@@ -96,14 +96,14 @@ app.post("/login", (req, res) => {
     if(r.length > 0){
       console.log(`Data in r:\nr[0].credits]: ${r[0].credits}`);
 
-      res.send({ result: "success", reason: "Found email in database", credits: r.credits});
+      res.send({ result: "success", reason: "Found email in database", credits: r[0].credits});
     }else{
       console.log(`Email ${email} not found, creating account in database!`);
       CreateUser(email);
 
       console.log(`Data in r:\nr[0].credits]: ${r[0].credits}`);
 
-      res.send({ result: "fail", reason: "Email not found in database, account has been created!", credits: r.credits});
+      res.send({ result: "fail", reason: "Email not found in database, account has been created!", credits: r[0].credits});
     }
   });
 });
