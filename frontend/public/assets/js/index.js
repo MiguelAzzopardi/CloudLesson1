@@ -2,6 +2,7 @@ let signInButton = document.getElementById("signIn");
 let signOutButton = document.getElementById("signOut");
 let profile = document.getElementById("profile");
 let signInContainer = document.getElementById("signInContainer");
+let accountCreditsTxt = document.getElementById("accountTokens");
 
 /*const authenticateReq = async (token) => {*/
 async function authenticateReq(token){
@@ -18,8 +19,6 @@ async function authenticateReq(token){
     const email = response.data.email;
     const picture = response.data.picture;
     const expiry = response.data.expiry;
-
-
 
     profile.style.display = "inline";
     signInContainer.style.display = "none";
@@ -98,7 +97,7 @@ async function loadGoogleLogin() {
             } else {
               console.log(`Email not found in database, account has been created for ${email}`);
               //Account created from backend
-
+              accountTokenTxt.innerHTML = "Credits: Still figuring it out!";
             }
           }
           

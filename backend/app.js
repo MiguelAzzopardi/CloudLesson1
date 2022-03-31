@@ -98,7 +98,10 @@ app.post("/login", (req, res) => {
     }else{
       console.log(`Email ${email} not found, creating account in database!`);
       CreateUser(email);
-      res.send({ result: "fail", reason: "Email not found in database, account has been created!" });
+
+      console.log(`Data in r:\nr.credits: ${r.credits}\nr.query.credits:${r.query.credits}`);
+
+      res.send({ result: "fail", reason: "Email not found in database, account has been created!", credits: r.query.credits});
     }
   });
 });
