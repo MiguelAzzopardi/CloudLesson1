@@ -82,12 +82,7 @@ app.get("/", (req, res)=> {
   res.sendFile(path.join(_dirname, "../frontend/index.html"));
 });
 
+
 startServer();
 //--------------------------------
 //Delivering index.html
-async function loadGoogleLogin(){
-  let session = document.cookie;
-  if(session && session.includes("token")){
-    
-  }
-}
