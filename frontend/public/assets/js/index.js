@@ -86,7 +86,7 @@ async function loadGoogleLogin() {
           if(email != null){
             console.log("Looking for email: " + email);
 
-            const url = `http://localhost:3001/login?email=${email}`;
+            const url = `/login?email=${email}`;
             const headers = {
               "Content-Type": "text/html",
               "Access-Control-Allow-Origin": "*",
