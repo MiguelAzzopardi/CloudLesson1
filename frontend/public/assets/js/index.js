@@ -78,7 +78,7 @@ async function loadGoogleLogin() {
       auth2.attachClickHandler(
         signInButton,
         {},
-        function (googleUser) {
+        async function (googleUser) {
           const email = googleUser.email;
           console.log("Looking for email: " + email);
 
