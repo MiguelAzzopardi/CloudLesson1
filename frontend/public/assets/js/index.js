@@ -36,9 +36,11 @@ const authenticateReq = async (token) => {
     document.getElementById("picture").src = picture;
     document.cookie = `token=${token};expires=${expiry}`;
     console.log(`${name} signed in successfully.`);
+    return email;
   } else {
     profile.style.display = "none";
     signInContainer.style.display = "inline";
+    return null;
   }
 };
 
@@ -79,7 +81,8 @@ async function loadGoogleLogin() {
         signInButton,
         {},
         async function (googleUser) {
-          const email = googleUser.email;
+          const email = authenticateReq(googleUser.getAuthResponse().id_token);
+
           console.log("Looking for email: " + email);
 
           const url = `http://localhost:3001/login?email=${email}`;
@@ -95,7 +98,7 @@ async function loadGoogleLogin() {
             console.log("Did not find email in database: " + email);
           }
 
-          //authenticateReq(googleUser.getAuthResponse().id_token);
+          
         },
         function (error) {
           alert(
