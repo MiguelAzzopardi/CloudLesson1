@@ -9,6 +9,10 @@ import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 import auth from "./routes/auth.js";
 import upload from "./routes/upload.js";
 
+import {
+  GetUser,
+} from "./db.js"
+
 //Used to quickly switch between local dev & online dev
 const DEV_USINGLOCAL = false;
 const PORT = DEV_USINGLOCAL ? 80 : 443;
@@ -82,6 +86,17 @@ app.get("/", (req, res)=> {
   res.sendFile(path.join(_dirname, "../frontend/index.html"));
 });
 
+app.post("/login", (req, res) => {
+  const email = req.query.email;
+  GetUser(email).then((r) =>{
+    //r = returned array
+    if(r.length > 0){
+      res.send({ result: "success", reason: "Found email in database" });
+    }else{
+      res.send({ result: "fail", reason: "Email not found in database" });
+    }
+  });
+});
 
 startServer();
 //--------------------------------

@@ -1,5 +1,3 @@
-import GetUser from "./db.js"
-
 let signInButton = document.getElementById("signIn");
 let signOutButton = document.getElementById("signOut");
 let profile = document.getElementById("profile");
@@ -81,8 +79,23 @@ async function loadGoogleLogin() {
         signInButton,
         {},
         function (googleUser) {
-          GetUser(googleUser.email);
-          authenticateReq(googleUser.getAuthResponse().id_token);
+          const email = googleUser.email;
+          console.log("Looking for email: " + email);
+
+          const url = `http://localhost:3001/login?email=${email}`;
+          const headers = {
+            "Content-Type": "text/html",
+            "Access-Control-Allow-Origin": "*",
+          };
+
+          const response = await axios.post(url, headers);
+          if (response.data.result === "success") {
+            console.log("Found email in database: " + email);
+          } else {
+            console.log("Did not find email in database: " + email);
+          }
+
+          //authenticateReq(googleUser.getAuthResponse().id_token);
         },
         function (error) {
           alert(

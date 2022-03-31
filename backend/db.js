@@ -38,11 +38,5 @@ export async function GetUser(email){
     snapshot.forEach((doc) => {
         data.push(doc.data());
     });
-    if(data.length > 0){
-        console.log("Found email: " + email);
-    }
-    else{
-        console.log("Could not find email: " + email);
-    }
     return data;
 }
