@@ -88,6 +88,8 @@ app.get("/", (req, res)=> {
 
 app.post("/login", (req, res) => {
   const email = req.query.email;
+  console.log("Backend received email: " + email + ". \nCalling GetUser");
+
   GetUser(email).then((r) =>{
     //r = returned array
     if(r.length > 0){
