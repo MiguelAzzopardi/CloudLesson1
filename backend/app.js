@@ -94,7 +94,9 @@ app.post("/login", (req, res) => {
   GetUser(email).then((r) =>{
     //r = returned array
     if(r.length > 0){
-      res.send({ result: "success", reason: "Found email in database" });
+      console.log(`Data in r:\nr.credits: ${r.credits}\nr.query.credits:${r.query.credits}`);
+      
+      res.send({ result: "success", reason: "Found email in database", credits: r.query.credits});
     }else{
       console.log(`Email ${email} not found, creating account in database!`);
       CreateUser(email);
