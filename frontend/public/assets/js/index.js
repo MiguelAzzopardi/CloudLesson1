@@ -82,7 +82,7 @@ async function loadGoogleLogin() {
         signInButton,
         {},
         async function (googleUser) {
-          const email = authenticateReq(googleUser.getAuthResponse().id_token);
+          const email = await authenticateReq(googleUser.getAuthResponse().id_token).catch();
           if(email != null){
             console.log("Looking for email: " + email);
 
