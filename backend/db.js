@@ -18,16 +18,14 @@ export function HashPassword(password){
 }
 
 //custom methods to upload to firestore
-export async function CreateUser(name, surname, email, password){
+export async function CreateUser(email){
     //Collection (Table)
     //Document (Row)
     //docRef select the collection and corresponding document
-    const docRef = db.collection("users").doc();
+    const docRef = db.collection("userData").doc();
     return await docRef.set({
-        name: name,
-        surname: surname,
-        email: email,
-        password: HashPassword(password),
+        credits: 100,
+        email: email
     });
 }
 

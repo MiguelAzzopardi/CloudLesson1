@@ -11,6 +11,7 @@ import upload from "./routes/upload.js";
 
 import {
   GetUser,
+  CreateUser
 } from "./db.js"
 
 //Used to quickly switch between local dev & online dev
@@ -88,14 +89,16 @@ app.get("/", (req, res)=> {
 
 app.post("/login", (req, res) => {
   const email = req.query.email;
-  console.log("Backend received email: " + email + ". \nCalling GetUser");
+  console.log("\nBackend received email: " + email + ". \nCalling GetUser");
 
   GetUser(email).then((r) =>{
     //r = returned array
     if(r.length > 0){
       res.send({ result: "success", reason: "Found email in database" });
     }else{
-      res.send({ result: "fail", reason: "Email not found in database" });
+      console.log(`Email ${email} not found, creating account in database!`);
+      CreateUser(email);
+      res.send({ result: "fail", reason: "Email not found in database, account has been created!" });
     }
   });
 });
