@@ -96,9 +96,9 @@ async function loadGoogleLogin() {
               console.log("Found email in database: " + email);
             } else {
               console.log(`Email not found in database, account has been created for ${email}`);
-              //Account created from backend
-              accountTokenTxt.innerHTML = "Credits: Still figuring it out!";
             }
+            
+            accountTokenTxt.innerHTML = "Credits: Still figuring it out!";
           }
           
 
