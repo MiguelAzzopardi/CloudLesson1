@@ -97,12 +97,9 @@ async function loadGoogleLogin() {
             } else {
               console.log(`Email not found in database, account has been created for ${email}`);
             }
-            
-            accountTokenTxt.innerHTML = "Credits: Still figuring it out!";
-          }
-          
 
-          
+            accountCreditsTxt.innerHTML = "Credits: Still figuring it out!";
+          }          
         },
         function (error) {
           alert(
