@@ -1,3 +1,5 @@
+import GetUser from "./db.js"
+
 let signInButton = document.getElementById("signIn");
 let signOutButton = document.getElementById("signOut");
 let profile = document.getElementById("profile");
