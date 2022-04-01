@@ -59,7 +59,7 @@ async function listBuckets() {
 async function uploadToCloud(req, res){
     const storage = new Storage.Storage({projectId: 'pftc001',
     keyFilename: './key.json',});
-    const bucket = storage.bucket("pftc001.appspot.com/pending/");   
+    const bucket = storage.bucket("pftc001.appspot.com/pending");   
     //Upload to cloud storage
     try {
         if (!req.file) {
