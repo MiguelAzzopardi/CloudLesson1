@@ -41,7 +41,7 @@ let imageUpload = multer({
 
 async function uploadToCloud(req, res){
     const storage = new Storage.Storage({keyFileName: "./key.json"});
-    const bucket = storage.bucket("pending");   
+    const bucket = storage.bucket("pending/");   
     //Upload to cloud storage
     try {
         if (!req.file) {
@@ -53,6 +53,7 @@ async function uploadToCloud(req, res){
             resumable: false,
         });
         blobStream.on("error", (err) => {
+            console.log(`\nReq original name: ${req.file.originalname}\nBucket?: ${bucket.name}`);
             res.status(500).send({ message: err.message });
         });
         blobStream.on("finish", async (data) => {
