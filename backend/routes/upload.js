@@ -70,10 +70,6 @@ async function uploadToCloud(req, res){
         const blobStream = blob.createWriteStream({
             resumable: false,
         });
-        blobStream.on("error", (err) => {
-            console.log(`\nReq original name: ${req.file.originalname}\nBucket?: ${bucket.name}`);
-            res.status(500).send({ message: err.message });
-        });
         blobStream.on("finish", async (data) => {
             // Create URL for directly file access via HTTP.
             const publicUrl = format(
@@ -94,6 +90,12 @@ async function uploadToCloud(req, res){
             url: publicUrl,
             });
         });
+
+        blobStream.on("error", (err) => {
+            console.log(`\nReq original name: ${req.file.originalname}\nBucket?: ${bucket.name}\nBlob name: ${blob.name}`);
+            res.status(500).send({ message: err.message });
+        });
+        
         blobStream.end(req.file.buffer);
         } catch (err) {
         res.status(500).send({
