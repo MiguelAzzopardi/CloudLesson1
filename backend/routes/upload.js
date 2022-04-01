@@ -115,15 +115,26 @@ async function uploadFile2(file){
   });
 
   console.log(`${filePath} uploaded to ${bucketName}`);
+
+  const publicUrl = format(
+    `https://storage.googleapis.com/${bucketName}/${file.name}`
+  );
+
+  res.status(200).send({
+    message: "Uploaded the file successfully: " + file.originalname,
+    url: publicUrl,
+  });
 }
 
 upload.route("/").post(imageUpload.single("image"),async function (req, res){
   if (req.file) {
-    console.log("File downloaded at: " + req.file.path);
+    await listBuckets();
+
+    console.log("\nFile downloaded at: " + req.file.path);
 
     //const uploadResult = await uploadToCloud(req, res);    
     //const resp = await listBuckets();
-    const resp = await uploadFile2(req.file);
+    const resp = await uploadFile2(req.file).catch(console.error);
 
     console.log(uploadResult);
     //Convert to base64
