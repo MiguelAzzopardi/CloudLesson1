@@ -104,12 +104,27 @@ async function uploadToCloud(req, res){
     }
 }
 
+async function uploadFile2(file){
+  const storage = new Storage.Storage({projectId: 'pftc001',
+    keyFilename: './key.json',});  
+  const bucketName = "pftc001.appspot.com/pending";
+
+  console.log(`Attempting to upload file: ${file.path}, to bucket name: ${bucketName}. `);
+  await storage.bucket(bucketName).upload(file.path, {
+    destination: file.originalname,
+  });
+
+  console.log(`${filePath} uploaded to ${bucketName}`);
+}
+
 upload.route("/").post(imageUpload.single("image"),async function (req, res){
   if (req.file) {
     console.log("File downloaded at: " + req.file.path);
 
-    const uploadResult = await uploadToCloud(req, res);    
+    //const uploadResult = await uploadToCloud(req, res);    
     //const resp = await listBuckets();
+    const resp = await uploadFile2(req.file);
+
     console.log(uploadResult);
     //Convert to base64
     //Send to PDF Conversion API
