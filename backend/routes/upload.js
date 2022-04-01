@@ -48,15 +48,7 @@ async function uploadToCloud(req, res){
             return res.status(400).send({ message: "Please upload a file!" });
         }
         // Create a new blob in the bucket and upload the file data.
-        const filename = req.file.originalname;
-        const res = await bucket.upload('./' + filename);
-        // `mediaLink` is the URL for the raw contents of the file.
-        const url = res[0].metadata.mediaLink;
-
-        // Need to make the file public before you can access it.
-        await bucket.file(filename).makePublic();
-        res.status(500).send({message: "hello"});
-        /*const blob = bucket.file(req.file.originalname);
+        const blob = bucket.file(req.file.originalname);
         const blobStream = blob.createWriteStream({
             resumable: false,
         });
@@ -84,7 +76,7 @@ async function uploadToCloud(req, res){
             url: publicUrl,
             });
         });
-        blobStream.end(req.file.buffer);*/
+        blobStream.end(req.file.buffer);
         } catch (err) {
         res.status(500).send({
             message: `Could not upload the file: ${req.file.originalname}. ${err}`,
