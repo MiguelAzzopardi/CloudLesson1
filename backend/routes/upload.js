@@ -8,8 +8,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const upload = Express.Router();
-const storage = new storage.Storage({keyFileName: "./key.json"});
-const bucket = storage.bucket("pending");
 
 async function testBucket(id) {
     const doc = await db.collection(collection).doc(id).get();
@@ -45,6 +43,8 @@ upload.route("/").post(imageUpload.single("image"), (req, res) => {
   if (req.file) {
     console.log("File downloaded at: " + req.file.path);
 
+    const storage = new storage.Storage({keyFileName: "./key.json"});
+    const bucket = storage.bucket("pending");   
     //Upload to cloud storage
     try {
         if (!req.file) {
