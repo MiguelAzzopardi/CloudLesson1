@@ -84,11 +84,11 @@ async function uploadToCloud(req, res){
             url: publicUrl,
             });
         });
-        blobStream.end(req.file.buffer);
+        blobStream.end(req.file.buffer);*/
         } catch (err) {
         res.status(500).send({
             message: `Could not upload the file: ${req.file.originalname}. ${err}`,
-        });*/
+        });
     }
 }
 
