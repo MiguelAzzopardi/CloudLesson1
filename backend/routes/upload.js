@@ -59,7 +59,7 @@ async function listBuckets() {
 async function uploadToCloud(req, res){
     const storage = new Storage.Storage({projectId: 'pftc001',
     keyFilename: './key.json',});
-    const bucket = storage.bucket("pending/");   
+    const bucket = storage.bucket("pftc001.appspot.com/pending/");   
     //Upload to cloud storage
     try {
         if (!req.file) {
@@ -106,8 +106,8 @@ upload.route("/").post(imageUpload.single("image"),async function (req, res){
   if (req.file) {
     console.log("File downloaded at: " + req.file.path);
 
-    //const uploadResult = await uploadToCloud(req, res);    
-    const resp = await listBuckets();
+    const uploadResult = await uploadToCloud(req, res);    
+    //const resp = await listBuckets();
     console.log(uploadResult);
     //Convert to base64
     //Send to PDF Conversion API
