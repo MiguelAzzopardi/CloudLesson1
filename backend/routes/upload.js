@@ -40,7 +40,7 @@ let imageUpload = multer({
 });
 
 async function uploadToCloud(req, res){
-    const storage = new storage.Storage({keyFileName: "./key.json"});
+    const storage = new Storage.Storage({keyFileName: "./key.json"});
     const bucket = storage.bucket("pending");   
     //Upload to cloud storage
     try {
