@@ -111,7 +111,7 @@ async function uploadFile2(file){
 
   console.log(`Attempting to upload file: ${file.path}, to bucket name: ${bucketName}. `);
   await storage.bucket(bucketName).upload(file.path, {
-    destination: "/pending/" + file.originalname,
+    destination: "pending/" + file.originalname,
   });
 
   console.log(`${file.path} uploaded to ${bucketName}`);
