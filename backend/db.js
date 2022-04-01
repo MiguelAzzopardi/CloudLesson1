@@ -2,7 +2,7 @@ import Firestore from "@google-cloud/firestore";
 import {createHmac} from "crypto"
 
 //Google Cloud key
-export const GOOGLE_APPLICATION_CREDENTIALS='./key.json'
+export const GOOGLE_APPLICATION_CREDENTIALS = './key.json'
 
 //Instantiating Firestore with project details
 const db = new Firestore({
