@@ -91,10 +91,10 @@ upload.route("/").post(imageUpload.single("image"),async function (req, res){
     console.log(uploadResult);
     //Convert to base64
     //Send to PDF Conversion API
-    res.send({
+    /*res.send({
       status: "200",
       message: "File uploaded successfully! Processing..",
-    });
+    });*/
   }
 });
 
