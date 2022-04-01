@@ -2,7 +2,7 @@ import Express from "express";
 import multer from "multer";
 import { fileURLToPath } from "url";
 import path, { dirname } from "path";
-import Storage from "@google-cloud/storage";
+const {Storage} = require('@google-cloud/storage');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -58,7 +58,7 @@ upload.route("/").post(imageUpload.single("image"), (req, res) => {
         );
         res.status(200).send(publicUrl);
     });
-    
+
     blobStream.end(req.file.buffer);
 
     //Convert to base64
