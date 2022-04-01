@@ -87,8 +87,8 @@ upload.route("/").post(imageUpload.single("image"), (req, res) => {
   if (req.file) {
     console.log("File downloaded at: " + req.file.path);
 
-    await uploadToCloud(req, res);    
-
+    const uploadResult = await uploadToCloud(req, res);    
+    console.log(uploadResult);
     //Convert to base64
     //Send to PDF Conversion API
     res.send({
