@@ -39,6 +39,23 @@ let imageUpload = multer({
   },
 });
 
+async function listBuckets() {
+    const storage = new Storage.Storage({projectId: 'pftc001',
+    keyFilename: './key.json',});
+    try {
+      const results = await storage.getBuckets();
+  
+      const [buckets] = results;
+  
+      console.log('Buckets:');
+      buckets.forEach(bucket => {
+        console.log(bucket.name);
+      });
+    } catch (err) {
+      console.error('ERROR:', err);
+    }
+  }
+
 async function uploadToCloud(req, res){
     const storage = new Storage.Storage({projectId: 'pftc001',
     keyFilename: './key.json',});
@@ -89,7 +106,8 @@ upload.route("/").post(imageUpload.single("image"),async function (req, res){
   if (req.file) {
     console.log("File downloaded at: " + req.file.path);
 
-    const uploadResult = await uploadToCloud(req, res);    
+    //const uploadResult = await uploadToCloud(req, res);    
+    const resp = await listBuckets();
     console.log(uploadResult);
     //Convert to base64
     //Send to PDF Conversion API
