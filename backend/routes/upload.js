@@ -2,13 +2,13 @@ import Express from "express";
 import multer from "multer";
 import { fileURLToPath } from "url";
 import path, { dirname } from "path";
-const {Storage} = require('@google-cloud/storage');
+import storage from "@google-cloud/storage";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const upload = Express.Router();
-const storage = new Storage();
+//const storage = new Storage();
 const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
 
 async function testBucket(id) {
@@ -58,7 +58,7 @@ upload.route("/").post(imageUpload.single("image"), (req, res) => {
         );
         res.status(200).send(publicUrl);
     });
-
+    
     blobStream.end(req.file.buffer);
 
     //Convert to base64
