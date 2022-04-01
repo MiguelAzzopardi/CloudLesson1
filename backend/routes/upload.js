@@ -110,8 +110,8 @@ async function uploadFile2(file){
   const bucketName = "pftc001.appspot.com";
 
   console.log(`Attempting to upload file: ${file.path}, to bucket name: ${bucketName}. `);
-  await storage.bucket(bucketName).upload("/pending" + file.path, {
-    destination: file.originalname,
+  await storage.bucket(bucketName).upload(file.path, {
+    destination: "/pending/" + file.originalname,
   });
 
   console.log(`${file.path} uploaded to ${bucketName}`);
