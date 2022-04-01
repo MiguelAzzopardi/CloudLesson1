@@ -28,7 +28,7 @@ auth.route("/").post((req, res) => {
           email: payload.email,
           picture: payload.picture,
           token: token,
-          expiry: 99999999,
+          expiry: payload.exp,
         });
         console.log(`${payload.name} has logged in.`);
       } else {

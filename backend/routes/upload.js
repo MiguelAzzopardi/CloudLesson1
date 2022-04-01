@@ -2,12 +2,23 @@ import Express from "express";
 import multer from "multer";
 import { fileURLToPath } from "url";
 import path, { dirname } from "path";
-import storage from "@google-cloud/storage";
+import Storage from "@google-cloud/storage";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const upload = Express.Router();
+const storage = new Storage();
+const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
+
+async function testBucket(id) {
+    const doc = await db.collection(collection).doc(id).get();
+
+    if (!doc.exists) {
+        throw new Error('No such document!');
+    }
+    return doc.data();
+}
 
 let imageUpload = multer({
   storage: multer.diskStorage({
@@ -33,7 +44,23 @@ let imageUpload = multer({
 upload.route("/").post(imageUpload.single("image"), (req, res) => {
   if (req.file) {
     console.log("File downloaded at: " + req.file.path);
-    //Upload to google cloud
+
+    //Upload to cloud storage
+    const blob = bucket.file(req.file.originalname);
+    const blobStream = blob.createWriteStream();
+    blobStream.on('error', err => {
+        next(err);
+    });
+    blobStream.on('finish', () => {
+        // The public URL can be used to directly access the file via HTTP.
+        const publicUrl = format(
+          `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+        );
+        res.status(200).send(publicUrl);
+    });
+    
+    blobStream.end(req.file.buffer);
+
     //Convert to base64
     //Send to PDF Conversion API
     res.send({
