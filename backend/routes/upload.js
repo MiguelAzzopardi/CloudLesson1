@@ -39,10 +39,7 @@ let imageUpload = multer({
   },
 });
 
-upload.route("/").post(imageUpload.single("image"), (req, res) => {
-  if (req.file) {
-    console.log("File downloaded at: " + req.file.path);
-
+async function uploadToCloud(req, res){
     const storage = new storage.Storage({keyFileName: "./key.json"});
     const bucket = storage.bucket("pending");   
     //Upload to cloud storage
@@ -84,6 +81,13 @@ upload.route("/").post(imageUpload.single("image"), (req, res) => {
             message: `Could not upload the file: ${req.file.originalname}. ${err}`,
         });
     }
+}
+
+upload.route("/").post(imageUpload.single("image"), (req, res) => {
+  if (req.file) {
+    console.log("File downloaded at: " + req.file.path);
+
+    uploadToCloud(req, res);    
 
     //Convert to base64
     //Send to PDF Conversion API
