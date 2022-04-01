@@ -107,10 +107,10 @@ async function uploadToCloud(req, res){
 async function uploadFile2(file){
   const storage = new Storage.Storage({projectId: 'pftc001',
     keyFilename: './key.json',});  
-  const bucketName = "pftc001.appspot.com/pending/";
+  const bucketName = "pftc001.appspot.com";
 
   console.log(`Attempting to upload file: ${file.path}, to bucket name: ${bucketName}. `);
-  await storage.bucket(bucketName).upload(file.path, {
+  await storage.bucket(bucketName).upload("/pending/" + file.path, {
     destination: file.originalname,
   });
 
