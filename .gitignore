@@ -2,3 +2,4 @@
 /backend/node_modules
 /backend/key.json
 .DS_Store
+node_modules

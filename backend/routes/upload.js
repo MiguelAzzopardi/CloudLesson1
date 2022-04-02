@@ -3,6 +3,9 @@ import multer from "multer";
 import { fileURLToPath } from "url";
 import path, { dirname } from "path";
 import * as Storage from "@google-cloud/storage";
+import ConvertAPI from 'convertapi';
+
+const convertapi = new ConvertAPI('8hfr6FeNB9QiLhvK');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -57,7 +60,24 @@ async function listBuckets() {
   }
 }
 
-async function uploadFile2(file){
+async function convertDOCorFILEtoPDF(){
+  convertapi.convert('pdf', { File: fileToConvertPath })
+  .then(function(result) {
+    // get converted file url
+    console.log("Converted file url: " + result.file.url);
+
+    // save to file
+    return result.file.save('/uploads/convertedFile.pdf');
+  })
+  .then(function(file) {
+    console.log("File saved: " + file);
+  })
+  .catch(function(e) {
+    console.error(e.toString());
+  });
+}
+
+async function uploadFile(file){
   const storage = new Storage.Storage({projectId: 'pftc001',
     keyFilename: './key.json',});  
   const bucketName = "pftc001.appspot.com";
@@ -67,7 +87,27 @@ async function uploadFile2(file){
     destination: "pending/" + file.originalname,
   });
 
+  fileToConvertPath = file.path;
   console.log(`${file.path} uploaded to ${bucketName}`);
+}
+
+var fileToConvertPath = "";
+var fileToDownloadName = "";
+async function downloadFile(filename){
+  if(fileToDownloadName == null || fileToDownloadName == ""){
+    return;
+  }
+  
+  const storage = new Storage.Storage({projectId: 'pftc001',
+    keyFilename: './key.json',});  
+  const bucketName = "pftc001.appspot.com";
+  const options = {
+    destination: `/uploads/${filename}`
+  }
+  console.log(`Attempting to download file`);
+  await storage.bucket(bucketName).file(`completed/${filename}`).downloadFile(options);
+
+  console.log(`file downloaded to /upload/${filename}`);
 }
 
 upload.route("/").post(imageUpload.single("image"), async function (req, res){
@@ -76,11 +116,10 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res){
 
     console.log("\nFile downloaded at: " + req.file.path);
 
-    const resp = await uploadFile2(req.file).catch(console.error);
+    const resp = await uploadFile(req.file).catch(console.error);
 
-    //Convert to base64
-
-    //Send to PDF Conversion API
+    await convertDOCorFILEtoPDF();
+    
     res.send({
       status: "200",
       message: "File uploaded successfully! Processing..",
