@@ -120,7 +120,7 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res){
     var resp = await uploadFile(req.file).catch(console.error);
 
     resp = await convertDOCorFILEtoPDF();
-    console.log(`fileToDownloadURL: ${fileToDownloadURL}, resp.url: ${resp.url}, resp.data.url: ${resp.data.url}, resp: ${resp}`);
+    console.log(`fileToDownloadURL: ${fileToDownloadURL}, resp: ${resp}`);
     res.send({
       status: "200",
       message: "File uploaded successfully! Processing..",
