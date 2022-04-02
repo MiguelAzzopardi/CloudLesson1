@@ -1,7 +1,7 @@
 let signInButton = document.getElementById("signIn");
 let signOutButton = document.getElementById("signOut");
 let profile = document.getElementById("profile");
-let signInContainer = document.getElementById("signIn");
+//let signInContainer = document.getElementById("signInContainer");
 let creditsTxt = document.getElementById("credits");
 
 /*const authenticateReq = async (token) => {*/
@@ -22,7 +22,7 @@ async function authenticateReq(token){
 
     profile.style.display = "inline";
     creditsTxt.style.display = "inline"
-    signInContainer.style.display = "none";
+    signInButton.style.display = "none";
 
     document.getElementById("navbarDropdownMenuLink").innerHTML =
       `<img
@@ -41,7 +41,7 @@ async function authenticateReq(token){
   } else {
     profile.style.display = "none";
     creditsTxt.style.display = "none"
-    signInContainer.style.display = "inline";
+    signInButton.style.display = "inline";
     return null;
   }
 };
@@ -53,7 +53,7 @@ async function loadGoogleLogin() {
     } else {
       profile.style.display = "none";
       creditsTxt.style.display = "none"
-      signInContainer.style.display = "inline";
+      signInButton.style.display = "inline";
     }
 
     const signOut = () => {
@@ -64,7 +64,7 @@ async function loadGoogleLogin() {
         .then(() => {
           profile.style.display = "none";
           creditsTxt.style.display = "none"
-          signInContainer.style.display = "inline";
+          signInButton.style.display = "inline";
           console.log("User signed out.");
         })
         .catch((error) => alert(error));
