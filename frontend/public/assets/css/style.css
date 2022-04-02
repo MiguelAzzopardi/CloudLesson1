@@ -1,0 +1,175 @@
+*{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+}
+
+body{
+    font-family: 'Roboto Mono';
+    /*overflow: hidden;*/
+}
+
+header{
+    width: 100vw;
+    height: 100px;
+    background-color: #1D1E18;
+    min-width: 575px;
+}
+
+header .inner{
+    width: 90%;
+    height: 100%;
+    display: block;
+    margin: 0 auto;
+}
+
+/*Logo Container for LEFT title*/
+header .logo_container{
+    display: table;
+    height: 100%;
+    float: left;
+}
+
+header .logo_container h1{
+    color:white;
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle;
+
+    font-size: 32px;
+    font-weight: 300;
+    word-spacing: -10px;
+}
+
+@media (max-width: 650px) {
+    header .logo_container h1{
+        font-size: 22px;
+        font-weight: 200;
+    }
+    
+}
+header .logo_container h1 span{
+    font-weight: 600;
+}
+
+/*Nav bar*/
+header nav{
+    float: right;
+    height: 100%;
+    /*background-color: rebeccapurple;*/
+}
+
+header nav li{
+    display: table;
+    height: 100%;
+    float: left;
+    margin-right: 30px;
+    /*background-color: #1ab26b;*/
+}
+
+header nav li:last-of-type{
+    margin-right: 0;
+}
+
+header nav span {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+header nav a{
+    color: white;
+}
+
+/*Main Body Section*/
+.main_content{
+    /*background-color: #1ab26b;*/
+    height: calc(100vh - 175px);
+    width: 100vw;
+
+    position: relative;
+}
+
+.upload_area{
+    margin: auto;
+    position: absolute;
+    width: 600px;
+    height: 200px;
+    top: calc(50% - 100px);
+    left: calc(50% - 300px);
+
+    display: table;
+    justify-content: center;
+
+    /*background-color: aqua;*/
+}
+
+.upload_file{
+    display: table-cell;
+    vertical-align: middle;
+    margin: auto;
+
+    /*background-color: blue;*/
+}
+
+.upload_file .form-control{
+    width: 100%;
+}
+
+.uploadbutton{
+    display: table-cell;
+    vertical-align: middle;
+    justify-content: center;
+    padding: 0px;
+
+    /*background-color:darkgreen;*/
+}
+
+#convert{
+    margin: auto;
+
+    border: 0ch;
+    color: white;
+    background-color: rgb(241, 98, 32);
+}
+
+.upload_area h1{
+    color: white;
+}
+/*Footer*/
+footer{
+    background-color: #1D1E18;
+    height: 75px;
+    width: 100vw;
+}
+
+footer .inner{
+    color:white;
+    height: 100%;
+    width: 90%;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    /*background-color: #63b21a;*/
+}
+
+footer .inner li{
+    display: table;
+    height: 100%;
+    margin: auto;
+    
+    /*background-color: aqua;*/
+}
+
+footer a{
+    font-weight: 300;
+}
+
+footer .footer_highlight{
+    font-weight: 600;
+}
+
+footer .footer_span{
+    display: table-cell;
+    vertical-align: middle;
+}

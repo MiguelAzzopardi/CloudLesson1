@@ -15,7 +15,7 @@ import {
 } from "./db.js"
 
 //Used to quickly switch between local dev & online dev
-const DEV_USINGLOCAL = false;
+const DEV_USINGLOCAL = true;
 const PORT = DEV_USINGLOCAL ? 80 : 443;
 
 const sm = new SecretManagerServiceClient({
