@@ -134,6 +134,7 @@ header nav a{
     font-weight: 400;
     margin: auto;
 
+    border-color: #1D1E18;
     color: white;
     background-color: rgb(241, 98, 32);
 }
@@ -141,7 +142,7 @@ header nav a{
     margin: auto;
 
     color: #1D1E18;
-    background-color: rgb(243, 165, 129);
+    background-color: white;
 }
 
 .upload_area h1{
