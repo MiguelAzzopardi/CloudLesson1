@@ -67,7 +67,8 @@ async function convertDOCorFILEtoPDF(){
     console.log("Converted file url: " + result.file.url);
 
     // save to file
-    window.open(result.file.url, "_blank");
+    //global.window.open(result.file.url, "_blank");
+    fileToDownloadName = result.file.url;
     return result.file.save('/uploads');
   })
   .then(function(file) {
@@ -119,7 +120,7 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res){
 
     var resp = await uploadFile(req.file).catch(console.error);
 
-    resp = await convertDOCorFILEtoPDF();
+    //resp = await convertDOCorFILEtoPDF();
     
     res.send({
       status: "200",
