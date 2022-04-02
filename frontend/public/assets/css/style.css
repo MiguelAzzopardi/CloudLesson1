@@ -133,9 +133,18 @@ header nav a{
 #convert{
     margin: auto;
 
-    border: 0ch;
+    border: 2px;
+    border-color: #1D1E18;
     color: white;
     background-color: rgb(241, 98, 32);
+}
+#convert:hover{
+    margin: auto;
+
+    border: 2px;
+    border-color: #1D1E18;
+    color: #1D1E18;
+    background-color: white;
 }
 
 .upload_area h1{
