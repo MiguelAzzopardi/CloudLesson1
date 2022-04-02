@@ -2,7 +2,7 @@ let signInButton = document.getElementById("signIn");
 let signOutButton = document.getElementById("signOut");
 let profile = document.getElementById("profile");
 let signInContainer = document.getElementById("signInContainer");
-let accountCreditsTxt = document.getElementById("accountTokens");
+let creditsTxt = document.getElementById("credits");
 
 /*const authenticateReq = async (token) => {*/
 async function authenticateReq(token){
@@ -21,6 +21,7 @@ async function authenticateReq(token){
     const expiry = response.data.expiry;
 
     profile.style.display = "inline";
+    creditsTxt.style.display = "inline"
     signInContainer.style.display = "none";
 
     document.getElementById("navbarDropdownMenuLink").innerHTML =
@@ -39,6 +40,7 @@ async function authenticateReq(token){
     return email;
   } else {
     profile.style.display = "none";
+    creditsTxt.style.display = "none"
     signInContainer.style.display = "inline";
     return null;
   }
@@ -50,6 +52,7 @@ async function loadGoogleLogin() {
       authenticateReq(session.split("token=")[1].split(";")[0]);
     } else {
       profile.style.display = "none";
+      creditsTxt.style.display = "none"
       signInContainer.style.display = "inline";
     }
 
@@ -60,6 +63,7 @@ async function loadGoogleLogin() {
         .signOut()
         .then(() => {
           profile.style.display = "none";
+          creditsTxt.style.display = "none"
           signInContainer.style.display = "inline";
           console.log("User signed out.");
         })
@@ -98,7 +102,7 @@ async function loadGoogleLogin() {
               console.log(`Email not found in database, account has been created for ${email}`);
             }
 
-            accountCreditsTxt.innerHTML = "Credits: " + response.data.credits;
+            creditsTxt.innerHTML = "Credits: " + response.data.credits;
           }          
         },
         function (error) {
