@@ -84,7 +84,7 @@ app.use("/upload", upload);
 
 //Delivering index.html
 app.get("/", (req, res)=> {
-  res.sendFile(path.join(_dirname, "../frontend/index.html"));
+  res.sendFile(path.join(_dirname, "../frontend/testIndex.html"));
 });
 
 app.post("/login", (req, res) => {
