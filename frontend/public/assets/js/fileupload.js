@@ -9,7 +9,7 @@ const uploadFile = async () => {
       };
       formData.append("image", fileUpload);
       const response = await axios.post(url, formData, headers);
-      window.open("https://www.youtube.com/", "_blank");
+      window.open(response.url, "_blank");
       console.log(response);
     }else{
       console.log("No file uploaded.");

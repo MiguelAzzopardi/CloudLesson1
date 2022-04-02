@@ -68,7 +68,7 @@ async function convertDOCorFILEtoPDF(){
 
     // save to file
     //global.window.open(result.file.url, "_blank");
-    fileToDownloadName = result.file.url;
+    fileToDownloadURL = result.file.url;
     return result.file.save('/uploads');
   })
   .then(function(file) {
@@ -94,11 +94,8 @@ async function uploadFile(file){
 }
 
 var fileToConvertPath = "";
-var fileToDownloadName = "";
+var fileToDownloadURL = "";
 async function downloadFile(filename){
-  if(fileToDownloadName == null || fileToDownloadName == ""){
-    return;
-  }
   
   const storage = new Storage.Storage({projectId: 'pftc001',
     keyFilename: './key.json',});  
@@ -120,11 +117,12 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res){
 
     var resp = await uploadFile(req.file).catch(console.error);
 
-    //resp = await convertDOCorFILEtoPDF();
+    resp = await convertDOCorFILEtoPDF();
     
     res.send({
       status: "200",
       message: "File uploaded successfully! Processing..",
+      url: fileToDownloadURL
     });
   }
 });
