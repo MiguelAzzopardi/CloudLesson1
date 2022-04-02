@@ -79,6 +79,7 @@ header nav span {
 }
 
 header nav a{
+    text-decoration: none;
     color: white;
 }
 
