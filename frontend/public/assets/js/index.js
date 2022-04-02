@@ -1,7 +1,7 @@
 let signInButton = document.getElementById("signIn");
 let signOutButton = document.getElementById("signOut");
 let profile = document.getElementById("profile");
-let signInContainer = document.getElementById("signInContainer");
+let signInContainer = document.getElementById("signIn");
 let creditsTxt = document.getElementById("credits");
 
 /*const authenticateReq = async (token) => {*/
