@@ -83,6 +83,9 @@ header nav a{
     color: white;
 }
 
+#signIn:hover{
+    color: rgb(241, 98, 32);
+}
 /*Main Body Section*/
 .main_content{
     /*background-color: #1ab26b;*/
