@@ -74,7 +74,7 @@ async function convertDOCorFILEtoPDF(){
   })
   .then(function(file) {
     console.log("File saved: " + file);
-    return file.url;
+    return file;
   })
   .catch(function(e) {
     console.error(e.toString());
