@@ -61,7 +61,7 @@ async function listBuckets() {
 }
 
 async function convertDOCorFILEtoPDF(){
-  convertapi.convert('pdf', { File: fileToConvertPath })
+  await convertapi.convert('pdf', { File: fileToConvertPath })
   .then(function(result) {
     // get converted file url
     console.log("Converted file url: " + result.file.url);
@@ -70,11 +70,9 @@ async function convertDOCorFILEtoPDF(){
     //global.window.open(result.file.url, "_blank");
     fileToDownloadURL = result.file.url;
     //return result.file.save('/uploads');
-    return result.file.url;
   })
   .then(function(file) {
     console.log("File saved: " + file);
-    return file;
   })
   .catch(function(e) {
     console.error(e.toString());
