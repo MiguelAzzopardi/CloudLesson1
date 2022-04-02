@@ -1,3 +1,5 @@
+import { stat } from "fs";
+
 let signInButton = document.getElementById("signIn");
 let signOutButton = document.getElementById("signOut");
 let profile = document.getElementById("profile");
@@ -6,6 +8,8 @@ let creditsTxt = document.getElementById("credits");
 
 /*const authenticateReq = async (token) => {*/
 async function authenticateReq(token){
+  console.log("Authenticating Req token");
+
   const url = `/auth?token=${token}`;
   const headers = {
     "Content-Type": "text/html",
@@ -37,16 +41,23 @@ async function authenticateReq(token){
     document.getElementById("picture").src = picture;
     document.cookie = `token=${token};expires=${expiry}`;
     console.log(`${name} signed in successfully.`);
+
+    console.log(`Status 200`);
     return email;
   } else {
     profile.style.display = "none";
     creditsTxt.style.display = "none"
     signInButton.style.display = "inline";
+
+    console.log(`Status ${status}`);
     return null;
   }
+  
 };
 
 async function loadGoogleLogin() {
+    console.log("Loading google login");
+
     let session = document.cookie;
     if (session && session.includes("token")) {
       authenticateReq(session.split("token=")[1].split(";")[0]);
@@ -55,6 +66,8 @@ async function loadGoogleLogin() {
       creditsTxt.style.display = "none"
       signInButton.style.display = "inline";
     }
+
+    console.log("Token checked");
 
     const signOut = () => {
       let auth2 = gapi.auth2.getAuthInstance();
