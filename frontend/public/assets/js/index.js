@@ -37,7 +37,9 @@ async function authenticateReq(token){
     loading="lazy"
   />` + name;
     document.getElementById("picture").src = picture;
-    document.cookie = `token=${token};expires=${expiry}`;
+    let date = new Date();
+    date.setTime(date.getTime() + expiry);
+    document.cookie = `token=${token};expires=${date.toUTCString()}`;
     console.log(`${name} signed in successfully.`);
 
     console.log(`Status 200`);

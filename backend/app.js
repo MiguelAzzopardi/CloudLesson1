@@ -8,6 +8,7 @@ import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 
 import auth from "./routes/auth.js";
 import upload from "./routes/upload.js";
+import home from "./routes/home.js";
 
 import {
   GetUser,
@@ -81,6 +82,8 @@ app.use("/auth", auth);
 
 //route upload traffic to upload.js
 app.use("/upload", upload);
+
+app.use("/home", home);
 
 //Delivering index.html
 app.get("/", (req, res)=> {
