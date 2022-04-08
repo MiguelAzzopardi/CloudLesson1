@@ -38,7 +38,7 @@ async function authenticateReq(token){
     alt=""
     loading="lazy"
   />` + name;
-    home.innerHTML = `<a style="display: inline" id="home" href="/frontend/home?token=${token}">Home</a>`;
+    home.innerHTML = `<a style="display: inline" id="home" href="/home?token=${token}">Home</a>`;
     document.getElementById("picture").src = picture;
     let date = new Date();
     date.setTime(date.getTime() + expiry);
