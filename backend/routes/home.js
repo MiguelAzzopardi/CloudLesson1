@@ -8,4 +8,8 @@ const __dirname = dirname(__filename);
 
 const home = Express.Router();
 
+home.route("/").get((req, res) => {
+    
+});
+
 export default home;

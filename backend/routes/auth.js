@@ -32,6 +32,7 @@ auth.route("/").post((req, res) => {
         });
         console.log(`${payload.name} has logged in.`);
       } else {
+        
         res.send({ status: "401" });
       }
     });

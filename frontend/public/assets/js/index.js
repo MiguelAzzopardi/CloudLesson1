@@ -1,6 +1,7 @@
 let signInButton = document.getElementById("signIn");
 let signOutButton = document.getElementById("signOut");
 let profile = document.getElementById("profile");
+let home = document.getElementById("homeSpan");
 //let signInContainer = document.getElementById("signInContainer");
 let creditsTxt = document.getElementById("credits");
 
@@ -23,7 +24,8 @@ async function authenticateReq(token){
     const expiry = response.data.expiry;
 
     profile.style.display = "inline";
-    creditsTxt.style.display = "inline"
+    creditsTxt.style.display = "inline";
+    //home.style.display = "inline";
     signInButton.style.display = "none";
 
     document.getElementById("navbarDropdownMenuLink").innerHTML =
@@ -36,6 +38,7 @@ async function authenticateReq(token){
     alt=""
     loading="lazy"
   />` + name;
+    home.innerHTML = `<a style="display: inline" id="home" href="/frontend/home?token=${token}">Home</a>`;
     document.getElementById("picture").src = picture;
     let date = new Date();
     date.setTime(date.getTime() + expiry);
@@ -46,6 +49,7 @@ async function authenticateReq(token){
     return email;
   } else {
     profile.style.display = "none";
+    //home.style.display = "none";
     creditsTxt.style.display = "none"
     signInButton.style.display = "inline";
 
@@ -63,6 +67,7 @@ async function loadGoogleLogin() {
       authenticateReq(session.split("token=")[1].split(";")[0]);
     } else {
       profile.style.display = "none";
+      //home.style.display = "none";
       creditsTxt.style.display = "none"
       signInButton.style.display = "inline";
     }
@@ -76,6 +81,7 @@ async function loadGoogleLogin() {
         .signOut()
         .then(() => {
           profile.style.display = "none";
+          //home.style.display = "none";
           creditsTxt.style.display = "none"
           signInButton.style.display = "inline";
           console.log("User signed out.");
