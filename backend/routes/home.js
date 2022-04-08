@@ -10,7 +10,7 @@ const __dirname = dirname(__filename);
 const home = Express.Router();
 
 home.route("/").get((req, res) => {
-    const token = res.query.token;
+    const token = req.query.token;
 
     //Before we send the page to the use, we verify that the token is valid
     validateToken(token).then((ticket) =>{
