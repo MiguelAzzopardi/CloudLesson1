@@ -56,7 +56,6 @@ header .logo_container h1 span{
 
 /*Nav bar*/
 header nav{
-    float: right;
     height: 100%;
     /*background-color: rebeccapurple;*/
 }
