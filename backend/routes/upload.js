@@ -5,6 +5,8 @@ import path, { dirname } from "path";
 import * as Storage from "@google-cloud/storage";
 import ConvertAPI from 'convertapi';
 
+import {PubSub} from "pubsub"
+
 const convertapi = new ConvertAPI('8hfr6FeNB9QiLhvK');
 
 const __filename = fileURLToPath(import.meta.url);
