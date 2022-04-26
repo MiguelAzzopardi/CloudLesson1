@@ -154,7 +154,7 @@ async function loadGoogleLogin() {
     });
 }
 
-function DebugCreditsRuntime(){
+async function DebugCreditsRuntime(){
   const url = `/credits`;
   const headers = {
     "Content-Type": "text/html",
