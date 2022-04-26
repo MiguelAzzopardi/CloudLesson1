@@ -111,6 +111,8 @@ async function loadGoogleLogin() {
         creditsTxt.innerHTML = "Credits: " + response.data.credits;
         if(response.data.admin){
           editPricesBtn.style.display = "inline";
+        }else{
+          editPricesBtn.style.display = "none";
         }
       } 
     } else {
@@ -166,6 +168,8 @@ async function loadGoogleLogin() {
             creditsTxt.innerHTML = "Credits: " + response.data.credits;
             if(response.data.admin){
               editPricesBtn.style.display = "inline";
+            }else{
+              editPricesBtn.style.display = "none";
             }
           }          
         },
