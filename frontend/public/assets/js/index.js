@@ -73,24 +73,8 @@ async function loadGoogleLogin() {
 
     let session = document.cookie;
     if (session && session.includes("token")) {
-      const email = authenticateReq(session.split("token=")[1].split(";")[0]);
-      if(email != null){
-
-        const url = `/login?email=${email}`;
-        const headers = {
-          "Content-Type": "text/html",
-          "Access-Control-Allow-Origin": "*",
-        };
-
-        const response = await axios.post(url, headers);
-        if (response.data.result === "success") {
-          //console.log("Found email in database: " + email);
-        } else {
-          //console.log(`Email not found in database, account has been created for ${email}`);
-        }
-
-        creditsTxt.innerHTML = "Credits: " + response.data.credits;
-      } 
+      authenticateReq(session.split("token=")[1].split(";")[0]);
+      
     } else {
       loggedOut();
     }
