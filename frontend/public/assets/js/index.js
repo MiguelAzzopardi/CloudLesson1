@@ -3,6 +3,7 @@ let signOutButton = document.getElementById("signOut");
 let profile = document.getElementById("profile");
 let home = document.getElementById("homeSpan");
 let uploadDiv = document.getElementById("uploadDiv");
+let paymentDiv = document.getElementById("payment_area");
 //let signInContainer = document.getElementById("signInContainer");
 let creditsTxt = document.getElementById("credits");
 
@@ -11,6 +12,7 @@ function loggedIn(){
   creditsTxt.style.display = "inline";
   uploadDiv.style.display = "inline";
   signInButton.style.display = "none";
+  paymentDiv.style.display = "none";
 }
 
 function loggedOut(){
@@ -18,6 +20,15 @@ function loggedOut(){
   creditsTxt.style.display = "none"
   uploadDiv.style.display = "none";
   signInButton.style.display = "inline";
+  paymentDiv.style.display = "none";
+}
+
+function purchaseCreditsScreen(){
+  profile.style.display = "inline";
+  creditsTxt.style.display = "inline";
+  uploadDiv.style.display = "none";
+  paymentDiv.style.display = "inline";
+  signInButton.style.display = "none";
 }
 
 /*const authenticateReq = async (token) => {*/

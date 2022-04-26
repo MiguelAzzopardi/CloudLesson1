@@ -78,11 +78,11 @@
                 </div>
 
                 <!-- Payment Area -->
-                <div class="container py-5">
+                <div class="container py-5" id="payment_area" style="display: none;">
                     <!-- For demo purpose -->
                     <div class="row mb-4">
                         <div class="col-lg-8 mx-auto text-center">
-                            <h1 class="display-6">Bootstrap Payment Forms</h1>
+                            <h1 class="display-6">Credits Payment Form</h1>
                         </div>
                     </div> <!-- End -->
                     <div class="row">
@@ -92,14 +92,16 @@
                                     <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
                                         <!-- Credit card form tabs -->
                                         <ul role="tablist" class="nav bg-light nav-pills rounded nav-fill mb-3">
-                                            <li class="nav-item"> <a data-toggle="pill" href="#credit-card" class="nav-link active "> <i class="fas fa-credit-card mr-2"></i> Credit Card </a> </li>
-                                            <li class="nav-item"> <a data-toggle="pill" href="#paypal" class="nav-link "> <i class="fab fa-paypal mr-2"></i> Paypal </a> </li>
-                                            <li class="nav-item"> <a data-toggle="pill" href="#net-banking" class="nav-link "> <i class="fas fa-mobile-alt mr-2"></i> Net Banking </a> </li>
+                                            <li class="nav-item"> <a data-toggle="pill" href="#option1" class="nav-link active "> <i class="fas fa-credit-card mr-2"></i> Option 1 </a> </li>
+                                            <li class="nav-item"> <a data-toggle="pill" href="#option2" class="nav-link "> <i class="fab fa-paypal mr-2"></i> Option 2 </a> </li>
+                                            <li class="nav-item"> <a data-toggle="pill" href="#option3" class="nav-link "> <i class="fas fa-mobile-alt mr-2"></i> Option 3 </a> </li>
                                         </ul>
                                     </div> <!-- End -->
                                     <!-- Credit card form content -->
                                     <div class="tab-content">
-                                        <h3>Is dis working?</h3>
+                                        <h3 id="option1">Is dis working?</h3>
+                                        <h3 id="option2">Is dis working?</h3>
+                                        <h3 id="option3">Is dis working?</h3>
                                         <!-- credit card info-->
                                         <div id="credit-card" class="tab-pane fade show active pt-3">
                                             <form role="form" onsubmit="event.preventDefault()">
