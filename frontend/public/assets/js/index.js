@@ -161,6 +161,6 @@ function DebugCreditsRuntime(){
     "Access-Control-Allow-Origin": "*",
   };
 
-  const response = axios.post(url, headers);
+  const response = await axios.post(url, headers);
   console.log(`Runtime credits: ${response.data.credits}`);
 }

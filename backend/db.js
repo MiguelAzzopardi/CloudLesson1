@@ -46,6 +46,6 @@ export async function GetUser(email){
     return data;
 }
 
-export function GetCurCredits(){
+export async function GetCurCredits(){
     return creditsOfCurUser;
 }
