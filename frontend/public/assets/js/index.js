@@ -73,7 +73,7 @@ async function loadGoogleLogin() {
 
     let session = document.cookie;
     if (session && session.includes("token")) {
-      const email = authenticateReq(session.split("token=")[1].split(";")[0]);
+      const email = await authenticateReq(session.split("token=")[1].split(";")[0]);
       if(email != null){
         console.log(`Email with token is: ${email}`);
         
