@@ -1,9 +1,14 @@
 let signInButton = document.getElementById("signIn");
 let signOutButton = document.getElementById("signOut");
+
 let profile = document.getElementById("profile");
 let home = document.getElementById("homeSpan");
+
+let editPricesBtn = document.getElementById("editPrices");
+
 let uploadDiv = document.getElementById("uploadDiv");
 let paymentDiv = document.getElementById("payment_area");
+
 //let signInContainer = document.getElementById("signInContainer");
 let creditsTxt = document.getElementById("credits");
 
@@ -21,6 +26,7 @@ function loggedOut(){
   uploadDiv.style.display = "none";
   signInButton.style.display = "inline";
   paymentDiv.style.display = "none";
+  editPricesBtn.style.display = "none"
 }
 
 function purchaseCreditsScreen(){
@@ -73,6 +79,7 @@ async function authenticateReq(token){
     return email;
   } else {
     loggedOut();
+    editPricesBtn.style.display = "none";
     console.log(`Status ${status}`);
     return null;
   }
@@ -102,6 +109,9 @@ async function loadGoogleLogin() {
         }
 
         creditsTxt.innerHTML = "Credits: " + response.data.credits;
+        if(response.data.admin){
+          editPricesBtn.style.display = "inline";
+        }
       } 
     } else {
       loggedOut();
@@ -154,6 +164,9 @@ async function loadGoogleLogin() {
             }
 
             creditsTxt.innerHTML = "Credits: " + response.data.credits;
+            if(response.data.admin){
+              editPricesBtn.style.display = "inline";
+            }
           }          
         },
         function (error) {
