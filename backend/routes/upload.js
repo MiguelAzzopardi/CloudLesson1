@@ -89,6 +89,9 @@ async function uploadFile(file){
     destination: "pending/" + file.originalname,
   });
 
+  //Create new conversion in firestore with appropriate data.
+  
+
   fileToConvertPath = file.path;
   console.log(`${file.path} uploaded to ${bucketName}`);
 }
