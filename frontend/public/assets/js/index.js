@@ -20,6 +20,11 @@ function loggedIn(){
   paymentDiv.style.display = "none";
 }
 
+function loadMainPage(){
+  uploadDiv.style.display = "inline";
+  paymentDiv.style.display = "none";
+}
+
 function loggedOut(){
   profile.style.display = "none";
   creditsTxt.style.display = "none"
