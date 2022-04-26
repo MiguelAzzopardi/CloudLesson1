@@ -10,6 +10,8 @@ const db = new Firestore({
     keyFilename: GOOGLE_APPLICATION_CREDENTIALS,
 });
 
+var creditsOfCurUser = 0;
+
 export function HashPassword(password){
     const secret = "hashDecodePass";
     return createHmac("sha256", password)
@@ -36,5 +38,14 @@ export async function GetUser(email){
     snapshot.forEach((doc) => {
         data.push(doc.data());
     });
+
+    if(data.length > 0){
+        creditsOfCurUser = data[0].credits;
+    }
+    
     return data;
+}
+
+export function GetCurCredits(){
+    return creditsOfCurUser;
 }

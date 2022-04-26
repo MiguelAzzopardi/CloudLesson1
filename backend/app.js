@@ -12,7 +12,8 @@ import home from "./routes/home.js";
 
 import {
   GetUser,
-  CreateUser
+  CreateUser,
+  GetCurCredits
 } from "./db.js"
 
 //Used to quickly switch between local dev & online dev
@@ -109,6 +110,11 @@ app.post("/login", (req, res) => {
       res.send({ result: "fail", reason: "Email not found in database, account has been created!", credits: r[0].credits});
     }
   });
+});
+
+app.post("/credits", (req, res) => {
+  var curCreds = GetCurCredits();
+  res.send({ result: "gotCredits", reason: "Credits received", credits: curCreds});
 });
 
 startServer();

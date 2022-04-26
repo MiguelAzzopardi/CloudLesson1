@@ -153,53 +153,14 @@ async function loadGoogleLogin() {
       );
     });
 }
-/*
-app.post("/login", (req, res) => {
-  const email = req.query.email;
-  const password = req.query.password;
-  requests++;
 
-  GetUser(email).then((r) =>{
-    if(r.length === 1){
-      if(r[0].password === HashPassword(password)){
-        //Password matched
-        console.log("Logged in");
-        res.send({results: "success", email:email, name:r[0].name});
-      }else{
-        //Password did not match
-        console.log("Login failed, invalid password!");
-        res.send({results: "fail", reason:"invalid password"});
-      }
-    }else{
-      console.log("Login failed, no account found!");
-      res.send({results: "fail", reason:"account does not exist"});
-    }
-  });
-});
+function DebugCreditsRuntime(){
+  const url = `/credits`;
+  const headers = {
+    "Content-Type": "text/html",
+    "Access-Control-Allow-Origin": "*",
+  };
 
-app.post("/register", (req, res) => {
-  const email = req.query.email;
-  const password = req.query.password;
-  const name = req.query.name;
-  const surname = req.query.surname;
-  requests++;
-
-  //Step 1: Check if that email address already exits
-  //Step 2: If the email is not registered in the database, we create it.
-  //Step 3: If the account was created successfully, we inform the user.
-
-  GetUser(email).then((r) =>{
-    if(r.length === 0){
-      //Save the user to the database
-      CreateUser(name, surname, email, password).then((r) =>{
-        console.log(r);
-        res.send({results: "success", email:email, name:name});
-      });
-    }else{
-      res.send({results: "fail", reason:"account already exists"});
-    }
-  });
-  
-});
-*/
-
+  const response = axios.post(url, headers);
+  console.log(`Runtime credits: ${response.data.credits}`);
+}
