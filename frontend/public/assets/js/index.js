@@ -90,6 +90,7 @@ async function GetCreditOptions(){
   console.log("CREDIT PRICES: " + response.data.creditPrices);
 
   var prices = JSON.parse(response.data.creditPrices);
+  console.log("Json: " + prices);
   var o1 = prices.options1;
   var o2 = prices.options2;
   var o3 = prices.options3;
