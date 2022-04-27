@@ -8,7 +8,8 @@ console.log("Hi!");
 redisClient.on("connect", async() =>{
     console.log("Redis connected!");
     GetCreditPrices().then((data)=>{
-        console.log(JSON.parse(data));
+        if(data!=undefined)
+            console.log(JSON.parse(data));
     });
 });
 
