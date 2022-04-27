@@ -3,7 +3,7 @@ import {createHmac} from "crypto"
 import Redis from "redis";
 
 export let redisClient = new Redis.createClient({
-    host: '35.246.149.18',
+    host: '10.156.0.2',
     port: 443
 });
 
