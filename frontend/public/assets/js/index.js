@@ -55,6 +55,25 @@ function purchaseCreditsScreen(){
   adminDiv.style.display = "none";
 }
 
+let creditsOption1 = document.getElementById("o1");
+let creditsOption2 = document.getElementById("o2");
+let creditsOption3 = document.getElementById("o3");
+
+function UpdateCreditOptions(){
+  var o1 = creditsOption1.value;
+  var o2 = creditsOption2.value;
+  var o3 = creditsOption3.value;
+
+  const json = JSON.stringify({ option1: o1, option2: o2, option3: o3 });
+  const url = `/setCredits`;
+  const headers = {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+  };
+  const response = await axios.post(url, json, headers);
+  console.log(response);
+}
+
 /*const authenticateReq = async (token) => {*/
 async function authenticateReq(token){
   console.log("Authenticating Req token");

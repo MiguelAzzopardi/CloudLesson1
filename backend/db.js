@@ -1,5 +1,29 @@
 import Firestore from "@google-cloud/firestore";
 import {createHmac} from "crypto"
+import Redis from "redis";
+
+export let redisClient = new Redis.createClient();
+
+redisClient.on("connect", () =>{
+    console.log("Redis connected!");
+    GetCreditPrices().then((data)=>{
+        console.log(Json.parse(data));
+    });
+});
+
+const GetCreditPrices = async()=>{
+    return redisClient.get("credits");
+}
+
+const SetCreditPrices = async(payload)=>{
+    return await redisClient.set("credits", JSON.stringify(payload));
+}
+
+export async function SetCreditsPrices(payload){
+    const resp = await SetCreditPrices();
+
+    return creditsOfCurUser;
+}
 
 //Google Cloud key
 export const GOOGLE_APPLICATION_CREDENTIALS = './key.json'

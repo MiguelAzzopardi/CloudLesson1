@@ -13,7 +13,8 @@ import home from "./routes/home.js";
 import {
   GetUser,
   CreateUser,
-  GetCurCredits
+  GetCurCredits,
+  SetCreditsPrices
 } from "./db.js"
 
 //Used to quickly switch between local dev & online dev
@@ -115,6 +116,13 @@ app.post("/login", (req, res) => {
 app.post("/credits", (req, res) => {
   GetCurCredits().then((methodResult)=>{
     res.send({ result: "gotCredits", reason: "Credits received", credits: methodResult});
+  }); 
+});
+
+app.post("/setCredits", (req, res) => {
+  console.log(`.data: ${req.data}, .data.options1: ${req.data.option1}`);
+  SetCreditsPrices(req.data).then((methodResult)=>{
+    res.send({ result: "setCreditPrices", reason: "Credits set!"});
   }); 
 });
 
