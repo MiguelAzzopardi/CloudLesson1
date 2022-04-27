@@ -64,13 +64,9 @@ async function UpdateCreditOptions(){
   var o2 = creditsOption2.value;
   var o3 = creditsOption3.value;
 
-  const json = JSON.stringify({ option1: o1, option2: o2, option3: o3 });
-  console.log(`JSON Stringified: ${json}\nJSON Alone: { option1: o1, option2: o2, option3: o3 }`);
+  //const json = JSON.stringify({ option1: o1, option2: o2, option3: o3 });
+  //console.log(`JSON Stringified: ${json}\nJSON Alone: { option1: o1, option2: o2, option3: o3 }`);
   const url = `/setCredits`;
-  const headers = {
-    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-    "Access-Control-Allow-Origin": "*",
-  };
   const response = await axios.post(url,{
     option1: o1,
     option2: o2,
@@ -79,6 +75,19 @@ async function UpdateCreditOptions(){
   console.log(response);
 }
 
+async function GetCreditOptions(){
+  var o1 = creditsOption1.value;
+  var o2 = creditsOption2.value;
+  var o3 = creditsOption3.value;
+
+  const url = `/getCredits`;
+  const response = await axios.post(url,{
+    option1: o1,
+    option2: o2,
+    option3: o3
+  });
+  console.log("CREDIT PRICES: " + response);
+}
 /*const authenticateReq = async (token) => {*/
 async function authenticateReq(token){
   console.log("Authenticating Req token");

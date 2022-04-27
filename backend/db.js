@@ -7,7 +7,6 @@ export let redisClient = new Redis.createClient();
 console.log("Hi!");
 redisClient.on("connect", async() =>{
     console.log("Redis connected!");
-    
 });
 
 redisClient.on("error", function(error) {
@@ -19,15 +18,28 @@ const GetCreditPrices = async()=>{
 }
 
 const SetCreditPrices = async(payload)=>{
-    console.log(`Setting credits to: ${JSON.stringify(payload)}`);
+    //console.log(`Setting credits to: ${JSON.stringify(payload)}`);
     return await redisClient.set("credits", JSON.stringify(payload));
 }
 
 export async function SetCreditsPrices(payload){
-    await redisClient.connect();
-    console.log(`Redis open: ${redisClient.isOpen}`);
+    if(!redisClient.isOpen){
+        await redisClient.connect();
+    }
+    //console.log(`Redis open: ${redisClient.isOpen}`);
     const resp = await SetCreditPrices(payload);
-    console.log("2: " + resp);
+    //console.log("2: " + resp);
+
+    return resp;
+}
+
+export async function GetCreditsPrices(){
+    if(!redisClient.isOpen){
+        await redisClient.connect();
+    }
+    
+    const resp = await GetCreditPrices();
+    //console.log("2: " + resp);
 
     return resp;
 }

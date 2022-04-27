@@ -14,7 +14,8 @@ import {
   GetUser,
   CreateUser,
   GetCurCredits,
-  SetCreditsPrices
+  SetCreditsPrices,
+  GetCreditsPrices
 } from "./db.js"
 
 //Used to quickly switch between local dev & online dev
@@ -125,6 +126,13 @@ app.post("/setCredits", (req, res) => {
   //console.log(`123: .body: ${req.body}, data: ${req.data}`);
   SetCreditsPrices(req.body).then((methodResult)=>{
     res.send({ result: "setCreditPrices", reason: "Credits set!"});
+  }); 
+});
+
+app.post("/getCredits", (req, res) => {
+  //console.log(`123: .body: ${req.body}, data: ${req.data}`);
+  GetCreditsPrices().then((methodResult)=>{
+    res.send({ result: "setCreditPrices", reason: "Credits set!", creditPrices: JSON.stringify(methodResult)});
   }); 
 });
 
