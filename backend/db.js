@@ -25,7 +25,8 @@ const SetCreditPrices = async(payload)=>{
 }
 
 export async function SetCreditsPrices(payload){
-    redisClient = new Redis.createClient();
+    await redisClient.connect();
+    console.log(`Redis open: ${redisClient.isOpen}`);
     const resp = await SetCreditPrices();
 
     return creditsOfCurUser;
