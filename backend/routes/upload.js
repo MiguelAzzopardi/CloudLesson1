@@ -113,6 +113,7 @@ async function downloadFile(filename){
 }
 
 upload.route("/").post(imageUpload.single("image"), async function (req, res){
+  console.log("Jimmy went to Canada: " + req.file);
   if (req.file) {
     await listBuckets();
 
@@ -120,8 +121,8 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res){
 
     var resp = await uploadFile(req.file).catch(console.error);
 
-    resp = await convertDOCorFILEtoPDF();
-    console.log(`fileToDownloadURL: ${fileToDownloadURL}, resp: ${resp}`);
+    //resp = await convertDOCorFILEtoPDF();
+    //console.log(`fileToDownloadURL: ${fileToDownloadURL}, resp: ${resp}`);
     res.send({
       status: "200",
       message: "File uploaded successfully! Processing..",
