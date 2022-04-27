@@ -54,7 +54,7 @@
                             <a class="dropdown-item" id="editPrices" href="#">Edit prices</a>
                           </li>
                           <li>
-                            <a class="dropdown-item" id="purchaseCredits" href="#" onclick="purchaseCreditsScreen()">Purchase Credits</a>
+                            <a class="dropdown-item" id="purchaseCredits" href="#" onclick="DebugCreditsRuntime()">Purchase Credits</a>
                           </li>
                           <li>
                             <a class="dropdown-item" id="signOut" href="#">Sign Out</a>
@@ -95,16 +95,16 @@
                                     <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
                                         <!-- Credit card form tabs -->
                                         <ul role="tablist" class="nav bg-light nav-pills rounded nav-fill mb-3">
-                                            <li class="nav-item"> <a data-toggle="pill" href="#option-1" class="nav-link active "> <i class="fas fa-credit-card mr-2"></i> Credit Card </a> </li>
-                                            <li class="nav-item"> <a data-toggle="pill" href="#option-2" class="nav-link "> <i class="fab fa-paypal mr-2"></i> Paypal </a> </li>
-                                            <li class="nav-item"> <a data-toggle="pill" href="#option-3" class="nav-link "> <i class="fas fa-mobile-alt mr-2"></i> Net Banking </a> </li>
+                                            <li class="nav-item"> <a data-toggle="pill" href="#credit-card" class="nav-link active "> <i class="fas fa-credit-card mr-2"></i> Credit Card </a> </li>
+                                            <li class="nav-item"> <a data-toggle="pill" href="#paypal" class="nav-link "> <i class="fab fa-paypal mr-2"></i> Paypal </a> </li>
+                                            <li class="nav-item"> <a data-toggle="pill" href="#net-banking" class="nav-link "> <i class="fas fa-mobile-alt mr-2"></i> Net Banking </a> </li>
                                         </ul>
                                     </div> <!-- End -->
                                     <!-- Credit card form content -->
                                     <div class="tab-content">
                                         <!-- credit card info-->
                                         <h1>Pp</h1>
-                                        <div id="option-1" class="tab-pane fade show active pt-3">
+                                        <div id="credit-card" class="tab-pane fade show active pt-3">
                                             <form role="form" onsubmit="event.preventDefault()">
                                                 <div class="form-group"> <label for="username">
                                                         <h6>Card Owner</h6>
@@ -135,7 +135,7 @@
                                         </div>
                                     </div> <!-- End -->
                                     <!-- Paypal info -->
-                                    <div id="option-2" class="tab-pane fade pt-3">
+                                    <div id="paypal" class="tab-pane fade pt-3">
                                         <form role="form" onsubmit="event.preventDefault()">
                                             <div class="form-group"> <label for="username">
                                                     <h6>Card Owner</h6>
@@ -165,7 +165,7 @@
                                         </form>
                                     </div>
                                     <!-- bank transfer info -->
-                                    <div id="option-3" class="tab-pane fadept-3">
+                                    <div id="net-banking" class="tab-pane fadept-3">
                                         <form role="form" onsubmit="event.preventDefault()">
                                             <div class="form-group"> <label for="username">
                                                     <h6>Card Owner</h6>

@@ -115,8 +115,7 @@ app.post("/login", (req, res) => {
 app.post("/credits", (req, res) => {
   GetCurCredits().then((methodResult)=>{
     res.send({ result: "gotCredits", reason: "Credits received", credits: methodResult});
-  });
-  
+  }); 
 });
 
 startServer();
