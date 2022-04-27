@@ -76,9 +76,7 @@ async function UpdateCreditOptions(){
 }
 
 async function GetCreditOptions(){
-  var o1 = creditsOption1.value;
-  var o2 = creditsOption2.value;
-  var o3 = creditsOption3.value;
+  
 
   const url = `/getCredits`;
   const response = await axios.post(url,{
@@ -86,7 +84,16 @@ async function GetCreditOptions(){
     option2: o2,
     option3: o3
   });
-  console.log("CREDIT PRICES: " + response);
+
+  console.log("CREDIT PRICES: " + response.data);
+
+  var o1 = response.data.options1;
+  var o2 = response.data.options2;
+  var o3 = response.data.options3;
+  
+  document.getElementById("credit01").innerHTML = "Credit Option 10: " + o1;
+  document.getElementById("credit02").innerHTML = "Credit Option 20: " + o2;
+  document.getElementById("credit03").innerHTML = "Credit Option 30: " + o3;
 }
 /*const authenticateReq = async (token) => {*/
 async function authenticateReq(token){
