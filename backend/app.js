@@ -122,8 +122,8 @@ app.post("/credits", (req, res) => {
 });
 
 app.post("/setCredits", (req, res) => {
-  console.log(`123: .body: ${req.body}, data: ${req.data}`);
-  SetCreditsPrices(req.data).then((methodResult)=>{
+  //console.log(`123: .body: ${req.body}, data: ${req.data}`);
+  SetCreditsPrices(req.body).then((methodResult)=>{
     res.send({ result: "setCreditPrices", reason: "Credits set!"});
   }); 
 });
