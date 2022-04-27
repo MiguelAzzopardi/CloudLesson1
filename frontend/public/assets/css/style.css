@@ -95,6 +95,7 @@ header nav a{
 }
 
 .upload_area{
+    font-family: 'Roboto Mono';
     margin: auto;
     position: absolute;
     width: 600px;
