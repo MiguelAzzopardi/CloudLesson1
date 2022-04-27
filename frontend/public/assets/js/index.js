@@ -89,13 +89,14 @@ async function GetCreditOptions(){
 
   console.log("CREDIT PRICES: " + response.data.creditPrices);
 
-  var o1 = response.data.creditPrices.options1;
-  var o2 = response.data.creditPrices.options2;
-  var o3 = response.data.creditPrices.options3;
+  var prices = JSON.parse(response.data.creditPrices);
+  var o1 = prices.options1;
+  var o2 = prices.options2;
+  var o3 = prices.options3;
   
   credit1Label.innerHTML = "Credit Option 10: " + o1;
-  credit1Labe2.innerHTML = "Credit Option 20: " + o2;
-  credit1Labe3.innerHTML = "Credit Option 30: " + o3;
+  credit1Label.innerHTML = "Credit Option 20: " + o2;
+  credit1Label.innerHTML = "Credit Option 30: " + o3;
 }
 /*const authenticateReq = async (token) => {*/
 async function authenticateReq(token){
