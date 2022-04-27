@@ -94,9 +94,9 @@ async function GetCreditOptions(){
   var o2 = prices.options2;
   var o3 = prices.options3;
   
-  credit1Label.innerHTML = "Credit Option 10: " + o1;
-  credit1Label.innerHTML = "Credit Option 20: " + o2;
-  credit1Label.innerHTML = "Credit Option 30: " + o3;
+  credit1Label.innerHTML = "Price of 10: " + o1;
+  credit2Label.innerHTML = "Price of 20: " + o2;
+  credit3Label.innerHTML = "Price of 30: " + o3;
 }
 /*const authenticateReq = async (token) => {*/
 async function authenticateReq(token){
