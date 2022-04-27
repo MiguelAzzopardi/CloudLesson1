@@ -7,12 +7,7 @@ export let redisClient = new Redis.createClient();
 console.log("Hi!");
 redisClient.on("connect", async() =>{
     console.log("Redis connected!");
-    GetCreditPrices().then((data)=>{
-        if(data!=undefined && data != null){
-            console.log(JSON.parse(data));
-        }
-            
-    });
+    
 });
 
 redisClient.on("error", function(error) {
