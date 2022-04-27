@@ -21,6 +21,7 @@ const GetCreditPrices = async()=>{
 }
 
 const SetCreditPrices = async(payload)=>{
+    console.log(`Setting credits to: ${JSON.stringify(payload)}`);
     return await redisClient.set("credits", JSON.stringify(payload));
 }
 
