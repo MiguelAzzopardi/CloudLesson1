@@ -2,10 +2,7 @@ import Firestore from "@google-cloud/firestore";
 import {createHmac} from "crypto"
 import Redis from "redis";
 
-export let redisClient = new Redis.createClient({
-    host: '10.156.0.2',
-    port: 443
-});
+export let redisClient = new Redis.createClient();
 
 console.log("Hi!");
 redisClient.on("connect", () =>{
@@ -28,6 +25,7 @@ const SetCreditPrices = async(payload)=>{
 }
 
 export async function SetCreditsPrices(payload){
+    redisClient = new Redis.createClient();
     const resp = await SetCreditPrices();
 
     return creditsOfCurUser;
