@@ -85,11 +85,11 @@ async function GetCreditOptions(){
     option3: o3
   });
 
-  console.log("CREDIT PRICES: " + response.data);
+  console.log("CREDIT PRICES: " + response.data.creditPrices);
 
-  var o1 = response.data.options1;
-  var o2 = response.data.options2;
-  var o3 = response.data.options3;
+  var o1 = response.data.creditPrices.options1;
+  var o2 = response.data.creditPrices.options2;
+  var o3 = response.data.creditPrices.options3;
   
   document.getElementById("credit01").innerHTML = "Credit Option 10: " + o1;
   document.getElementById("credit02").innerHTML = "Credit Option 20: " + o2;
