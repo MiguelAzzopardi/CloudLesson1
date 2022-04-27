@@ -2,7 +2,10 @@ import Firestore from "@google-cloud/firestore";
 import {createHmac} from "crypto"
 import Redis from "redis";
 
-export let redisClient = new Redis.createClient();
+export let redisClient = new Redis.createClient({
+    host: '35.246.149.18',
+    port: 443
+});
 
 console.log("Hi!");
 redisClient.on("connect", () =>{
