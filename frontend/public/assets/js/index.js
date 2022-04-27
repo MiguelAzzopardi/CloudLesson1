@@ -255,3 +255,7 @@ async function DebugCreditsRuntime() {
   const response = await axios.post(url, headers);
   console.log(`Runtime credits: ${response.data.credits}`);
 }
+
+function myFunction() {
+  alert("Page is loaded");
+}
