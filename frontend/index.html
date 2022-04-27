@@ -51,7 +51,7 @@
                             <a class="dropdown-item" id="convertFile" href="#" onclick="loadMainPage()">Convert File</a>
                           </li>
                           <li>
-                            <a class="dropdown-item" id="editPrices" href="#">Edit prices</a>
+                            <a class="dropdown-item" id="editPrices" href="#" onclick="adminScreen()">Edit prices</a>
                           </li>
                           <li>
                             <a class="dropdown-item" id="purchaseCredits" href="#" onclick="purchaseCreditsScreen()">Purchase Credits</a>
@@ -71,6 +71,16 @@
             <div class="main_content">
                 <!-- Upload Area -->
                 <div class="upload_area" id="uploadDiv" style="display: none;">
+                    <div class="upload_file">
+                        <input id="fileInput" class="form-control" type="file" id="formFile" accept="image/*">
+                    </div>
+                    
+                    <div class="uploadbutton">
+                        <button id="convert" type="button" class="btn btn-primary" onclick="uploadFile()">Convert</button>
+                    </div>
+                </div>
+
+                <div class="admin_area" id="uploadDiv" style="display: none;">
                     <div class="upload_file">
                         <input id="fileInput" class="form-control" type="file" id="formFile" accept="image/*">
                     </div>
@@ -226,4 +236,28 @@
     <!--Payment Bootstrap Refs-->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Lots of scripts so sorry -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js%22%3E"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js%22%3E"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js%22%3E"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+        <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"
+      ></script>
+    
+        <script src="./assets/js/index.js"></script>
+        <script src="./assets/js/fileupload.js"></script>
+        <script
+          src="https://apis.google.com/js/platform.js?onload=loadGoogleLogin"
+          async
+          defer
+        ></script>
 </html>

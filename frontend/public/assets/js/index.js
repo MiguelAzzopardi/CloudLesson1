@@ -8,7 +8,7 @@ let editPricesBtn = document.getElementById("editPrices");
 
 let uploadDiv = document.getElementById("uploadDiv");
 let paymentDiv = document.getElementById("payment_area");
-
+let adminDiv = document.getElementById("admin_area");
 //let signInContainer = document.getElementById("signInContainer");
 let creditsTxt = document.getElementById("credits");
 
@@ -18,11 +18,13 @@ function loggedIn(){
   uploadDiv.style.display = "inline";
   signInButton.style.display = "none";
   paymentDiv.style.display = "none";
+  adminDiv.style.display = "none";
 }
 
 function loadMainPage(){
   uploadDiv.style.display = "inline";
   paymentDiv.style.display = "none";
+  adminDiv.style.display = "none";
 }
 
 function loggedOut(){
@@ -32,6 +34,16 @@ function loggedOut(){
   signInButton.style.display = "inline";
   paymentDiv.style.display = "none";
   editPricesBtn.style.display = "none"
+  adminDiv.style.display = "none";
+}
+
+function adminScreen(){
+  profile.style.display = "inline";
+  creditsTxt.style.display = "inline";
+  uploadDiv.style.display = "none";
+  paymentDiv.style.display = "none";
+  signInButton.style.display = "none";
+  adminDiv.style.display = "inline";
 }
 
 function purchaseCreditsScreen(){
@@ -40,6 +52,7 @@ function purchaseCreditsScreen(){
   uploadDiv.style.display = "none";
   paymentDiv.style.display = "inline";
   signInButton.style.display = "none";
+  adminDiv.style.display = "none";
 }
 
 /*const authenticateReq = async (token) => {*/
