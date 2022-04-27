@@ -73,7 +73,7 @@ if(!DEV_USINGLOCAL){
   app.use((req, res, next) => {
     req.secure ? next() : res.redirect("https://" + req.headers.host + req.url);
   });
-  app.use(express.json());
+  app.use(Express.json());
 }
 //server static files
 app.use(Express.static(path.join(_dirname, "../frontend/public")));
