@@ -65,6 +65,7 @@ async function UpdateCreditOptions(){
   var o3 = creditsOption3.value;
 
   const json = JSON.stringify({ option1: o1, option2: o2, option3: o3 });
+  console.log(`JSON Stringified: ${json}\nJSON Alone: { option1: o1, option2: o2, option3: o3 }`);
   const url = `/setCredits`;
   const headers = {
     "Content-Type": "application/json",
