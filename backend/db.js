@@ -4,6 +4,7 @@ import Redis from "redis";
 
 export let redisClient = new Redis.createClient();
 
+console.log("Hi!");
 redisClient.on("connect", () =>{
     console.log("Redis connected!");
     GetCreditPrices().then((data)=>{
