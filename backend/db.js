@@ -5,7 +5,7 @@ import Redis from "redis";
 export let redisClient = new Redis.createClient();
 
 console.log("Hi!");
-redisClient.on("connect", () =>{
+redisClient.on("connect", async() =>{
     console.log("Redis connected!");
     GetCreditPrices().then((data)=>{
         console.log(JSON.parse(data));
@@ -28,8 +28,9 @@ export async function SetCreditsPrices(payload){
     await redisClient.connect();
     console.log(`Redis open: ${redisClient.isOpen}`);
     const resp = await SetCreditPrices(payload);
+    console.log("2: " + resp);
 
-    return creditsOfCurUser;
+    return resp;
 }
 
 //Google Cloud key
