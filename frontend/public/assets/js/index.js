@@ -59,7 +59,7 @@ let creditsOption1 = document.getElementById("o1");
 let creditsOption2 = document.getElementById("o2");
 let creditsOption3 = document.getElementById("o3");
 
-function UpdateCreditOptions(){
+async function UpdateCreditOptions(){
   var o1 = creditsOption1.value;
   var o2 = creditsOption2.value;
   var o3 = creditsOption3.value;
