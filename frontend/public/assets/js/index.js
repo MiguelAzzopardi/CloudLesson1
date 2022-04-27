@@ -72,7 +72,7 @@ async function UpdateCreditOptions(){
     option2: o2,
     option3: o3
   });
-  console.log(response);
+  //console.log(response);
 }
 
 async function GetCreditOptions(){
