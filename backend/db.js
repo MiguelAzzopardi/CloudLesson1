@@ -12,6 +12,10 @@ redisClient.on("connect", () =>{
     });
 });
 
+redisClient.on("error", function(error) {
+    console.error(error);
+});
+
 const GetCreditPrices = async()=>{
     return redisClient.get("credits");
 }
