@@ -71,7 +71,11 @@ async function UpdateCreditOptions(){
     "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
     "Access-Control-Allow-Origin": "*",
   };
-  const response = await axios.post(url,json, headers);
+  const response = await axios.post(url,{
+    option1: o1,
+    option2: o2,
+    option3: o3
+  }, headers);
   console.log(response);
 }
 
