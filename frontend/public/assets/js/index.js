@@ -72,7 +72,7 @@ async function UpdateCreditOptions(){
     "Access-Control-Allow-Origin": "*",
   };
   const response = await axios.post({
-    url: `/setCredits`,
+    url: "/setCredits",
     headers: JSON.stringify(headers),
     body: json
   });
