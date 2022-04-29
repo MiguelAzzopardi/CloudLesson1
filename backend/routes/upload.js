@@ -166,5 +166,6 @@ const callbackPubSub = (error, msgId)=>{
 }
 
 async function publishMessage(payload){
-  pubsub.topic("queue-sub").publish(payload, {}, callbackPubSub);
+  const dataBuffer = Buffer.from(JSON.stringify(payload), "utf8");
+  pubsub.topic("queue").publish(dataBuffer, {}, callbackPubSub);
 }
