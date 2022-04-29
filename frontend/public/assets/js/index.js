@@ -73,6 +73,27 @@ let pay1Rad = document.getElementById("paymentOption1Rad");
 let pay2Rad = document.getElementById("paymentOption2Rad");
 let pay3Rad = document.getElementById("paymentOption3Rad");
 
+function SetRadCheck(i){
+  switch(i){
+    case 1:
+      pay1Rad.checked = true;
+      pay2Rad.checked = false;
+      pay3Rad.checked = false;
+    break;
+
+    case 2:
+      pay1Rad.checked = false;
+      pay2Rad.checked = true;
+      pay3Rad.checked = false;
+    break;
+
+    case 3:
+      pay1Rad.checked = false;
+      pay2Rad.checked = false;
+      pay3Rad.checked = true;
+    break;
+  }
+}
 async function PurchaseCredits(){
   if(email == ""){
     console.log("No Email Set!");

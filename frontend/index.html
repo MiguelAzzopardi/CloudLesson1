@@ -96,15 +96,15 @@
                     <div class="row d-flex justify-content-center">
                         <div class="col-sm-12">
                             <label class="container" id="paymentOption1">10 Credits : $10
-                                <input type="radio" checked="checked" name="radio" id="paymentOption1Rad">
+                                <input type="radio" checked="checked" name="radio" id="paymentOption1Rad" onclick="SetRadCheck(1)">
                                 <span class="checkmark"></span>
                             </label>
                             <label class="container" id="paymentOption2">20 Credits : $20
-                                <input type="radio" name="radio" id="paymentOption2Rad">
+                                <input type="radio" name="radio" id="paymentOption2Rad" onclick="SetRadCheck(2)">
                                 <span class="checkmark"></span>
                             </label>
                             <label class="container" id="paymentOption3">30 Credits : $30
-                                <input type="radio" name="radio" id="paymentOption3Rad">
+                                <input type="radio" name="radio" id="paymentOption3Rad" onclick="SetRadCheck(3)">
                                 <span class="checkmark"></span>
                             </label>
                             <input type="button" value="Purchase" onclick="PurchaseCredits()"><br><br>
