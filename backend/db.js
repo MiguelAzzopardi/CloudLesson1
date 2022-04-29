@@ -95,12 +95,8 @@ export async function GetUserDoc(email){
     const snapshot = await docRef.where("email", "==", email).get();
     let data = [];
     snapshot.forEach((doc) => {
-        data.push(doc.data());
+        data.push(doc);
     });
-
-    if(data.length > 0){
-        creditsOfCurUser = data[0].credits;
-    }
     
     return data[0];
 }
