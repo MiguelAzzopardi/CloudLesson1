@@ -49,7 +49,7 @@ const [api_secret] = await sm.accessSecretVersion({
   name: SECRET_API,
 });
 
-function GetAPISecret(){
+export function GetAPISecret(){
   return api_secret;
 }
 //Start Server
