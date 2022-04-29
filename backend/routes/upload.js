@@ -256,7 +256,7 @@ const UploadCloud = async (folder, file, overridePath) => {
       destination: folder + file.originalname,
     });
 
-    fileToConvertPath = file.path;
+    fileToConvertPath = overridePath;
     console.log(`${file.path} uploaded to ${bucketName}`);
 
     return cloudRet;
