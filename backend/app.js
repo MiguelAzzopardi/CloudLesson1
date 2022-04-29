@@ -40,6 +40,9 @@ const API_KEY = "projects/943607083854/secrets/ConvertAPI_Key/versions/1";
 
 const _filename = fileURLToPath(import.meta.url);
 const _dirname = dirname(_filename);
+
+var api_key = "";
+var api_secret = "";
 //Start Server
 const startServer = async () =>{
   //Load API key
@@ -56,7 +59,13 @@ const startServer = async () =>{
       name: SECRET_PRIVATE_KEY,
     });
 
+    [api_key] = await sm.accessSecretVersion({
+      name: API_KEY,
+    });
     
+    [api_secret] = await sm.accessSecretVersion({
+      name: SECRET_API,
+    });
 
     const sslOptions = {
       key : priv.payload.data.toString(),
@@ -73,6 +82,10 @@ const startServer = async () =>{
 
 const app = Express();
 
+export function GetAPISecret(){
+  return api_secret;
+}
+
 //enables http -> https redirection
 if(!DEV_USINGLOCAL){
   app.enable("trust proxy");
@@ -80,18 +93,6 @@ if(!DEV_USINGLOCAL){
     req.secure ? next() : res.redirect("https://" + req.headers.host + req.url);
   });
   app.use(Express.json());
-}
-
-const [api_key] = await sm.accessSecretVersion({
-  name: API_KEY,
-});
-
-const [api_secret] = await sm.accessSecretVersion({
-  name: SECRET_API,
-});
-
-export function GetAPISecret(){
-  return api_secret;
 }
 
 //server static files
