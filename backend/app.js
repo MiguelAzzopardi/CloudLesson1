@@ -13,7 +13,10 @@ import clean from "./routes/clean.js";
 
 import {
   GetUser,
-  CreateUser
+  CreateUser,
+  GetCurCredits,
+  SetCreditsPrices,
+  GetCreditsPrices
 } from "./db.js"
 
 //Used to quickly switch between local dev & online dev
@@ -65,12 +68,14 @@ const startServer = async () =>{
 }
 
 const app = Express();
+
 //enables http -> https redirection
 if(!DEV_USINGLOCAL){
   app.enable("trust proxy");
   app.use((req, res, next) => {
     req.secure ? next() : res.redirect("https://" + req.headers.host + req.url);
   });
+  app.use(Express.json());
 }
 //server static files
 app.use(Express.static(path.join(_dirname, "../frontend/public")));
@@ -102,16 +107,36 @@ app.post("/login", (req, res) => {
     if(r.length > 0){
       console.log(`Data in r:\nr[0].credits]: ${r[0].credits}`);
 
-      res.send({ result: "success", reason: "Found email in database", credits: r[0].credits});
+      res.send({ result: "success", reason: "Found email in database", credits: r[0].credits, admin: r[0].admin});
     }else{
       console.log(`Email ${email} not found, creating account in database!`);
       CreateUser(email);
 
       console.log(`Data in r:\nr[0].credits]: ${r[0].credits}`);
 
-      res.send({ result: "fail", reason: "Email not found in database, account has been created!", credits: r[0].credits});
+      res.send({ result: "fail", reason: "Email not found in database, account has been created!", credits: r[0].credits, admin: r[0].admin});
     }
   });
+});
+
+app.post("/credits", (req, res) => {
+  GetCurCredits().then((methodResult)=>{
+    res.send({ result: "gotCredits", reason: "Credits received", credits: methodResult});
+  }); 
+});
+
+app.post("/setCredits", (req, res) => {
+  //console.log(`123: .body: ${req.body}, data: ${req.data}`);
+  SetCreditsPrices(req.body).then((methodResult)=>{
+    res.send({ result: "setCreditPrices", reason: "Credits set!"});
+  }); 
+});
+
+app.post("/getCredits", (req, res) => {
+  //console.log(`123: .body: ${req.body}, data: ${req.data}`);
+  GetCreditsPrices().then((methodResult)=>{
+    res.send({ result: "setCreditPrices", reason: "Credits set!", creditPrices: JSON.stringify(methodResult)});
+  }); 
 });
 
 startServer();

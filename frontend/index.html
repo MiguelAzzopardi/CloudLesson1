@@ -8,21 +8,25 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;600&display=swap" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        
+        <!--Bootstrap Payment refs-->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"></link>
+        <link href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" rel="stylesheet"></link>
 
         <title>Miguel Cloud Assignment</title>
     </head>
-    <body>
+    <body onload="myFunction()">
         <!-- Start of the header -->
         <header class="header">
             <div class="inner">
                 <div class="logo_container">
-                    <h1>MIGUEL<span> AZZOPARDI</span></h1>
+                    <h1 href="#" onclick="loadMainPage()">MIGUEL<span> AZZOPARDI</span></h1>
                     <li><span id="homeSpan"></span></li>
                     <!-- MAKE TOKEN CHANGE WITH INNER HTML FROM JS SO U CAN USE TOKEN $ -->
                 </div>
                 
                 <nav style="float: left; margin-left: 20px;">
-                    <li><span><a style="display: inline">Upload</a></span></li>
+                    <!--<li><span><a style="display: inline">Upload</a></span></li>-->
                 </nav>
 
                 <nav style="float: right">
@@ -44,6 +48,15 @@
                           aria-labelledby="navbarDropdownMenuLink"
                         >
                           <li>
+                            <a class="dropdown-item" id="convertFile" href="#" onclick="loadMainPage()">Convert File</a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" id="editPrices" href="#" onclick="adminScreen()">Edit prices</a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" id="purchaseCredits" href="#" onclick="purchaseCreditsScreen()">Purchase Credits</a>
+                          </li>
+                          <li>
                             <a class="dropdown-item" id="signOut" href="#">Sign Out</a>
                           </li>
                         </ul>
@@ -56,7 +69,8 @@
         <!-- Start of main body -->
         <section>
             <div class="main_content">
-                <div class="upload_area" id="uploadDiv">
+                <!-- Upload Area -->
+                <div class="upload_area" id="uploadDiv" style="display: none;">
                     <div class="upload_file">
                         <input id="fileInput" class="form-control" type="file" id="formFile" accept="image/*">
                     </div>
@@ -65,6 +79,30 @@
                         <button id="convert" type="button" class="btn btn-primary" onclick="uploadFile()">Convert</button>
                     </div>
                 </div>
+
+                <div class="upload_area" id="admin_area" style="display: none;">
+                    <label for="o1">Credit Option 1:</label>
+                    <input type="text" id="o1" name="o1"><br><br>
+
+                    <label for="o2">Credit Option 2:</label>
+                    <input type="text" id="o2" name="o2"><br><br>
+
+                    <label for="o3">Credit Option 3:</label>
+                    <input type="text" id="o3" name="o3"><br><br>
+                    <input type="button" value="Set Credit Options" onclick="UpdateCreditOptions()"><br><br>
+                </div>
+                
+                <!-- Payment Area -->
+                <div class="upload_area" id="payment_area" style="display: none;">
+                    <label id="credit01">Credit Option 1:</label>
+
+                    <label id="credit02">Credit Option 2:</label>
+
+                    <label id="credit03">Credit Option 3:</label>
+
+                    <input type="button" value="Get Credit Options" onclick="GetCreditOptions()"><br><br>
+                </div>
+                
             </div>
         </section>
         <!-- End of main body -->
@@ -89,4 +127,7 @@
       defer
     ></script>
     
+    <!--Payment Bootstrap Refs-->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </html>
