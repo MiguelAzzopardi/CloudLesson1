@@ -236,6 +236,7 @@ const storage = new Storage({
 });
 
 const UploadCloud = async (folder, file) => {
+  console.log(`!!File: ${file} + file path: ${file.path}`);
   const cloudRet = await storage.bucket(bucketName).upload(file.path, {
     destination: folder + file.originalname,
   });
