@@ -12,7 +12,7 @@ const uploadFile = async () => {
 
     console.log(`response: ${response}, responseURL: ${response.data.url}`);
     window.open(response.data.url, "_blank");
-
+    RemoveCredit();
     console.log(response);
   } else {
     console.log("No file uploaded.");

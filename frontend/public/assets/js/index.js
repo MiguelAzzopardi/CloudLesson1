@@ -69,11 +69,18 @@ async function purchaseCreditsScreen() {
   pay3.innerHTML = `€${prices.option3}\t\t : 30 Credits`+payHTML;
 }
 
+let pay1Rad = document.getElementById("paymentOption1Rad");
+let pay2Rad = document.getElementById("paymentOption2Rad");
+let pay3Rad = document.getElementById("paymentOption3Rad");
+
 async function PurchaseCredits(){
   if(email == ""){
     console.log("No Email Set!");
     return;
   }
+  var amountToPurchase = 0;
+  
+  console.log(`1: ${pay1Rad.value} 2: ${pay2Rad.value}`);
   const url = `/setUserCredits?email=${email}&amount=10`;
   const response = await axios.post(url);
 
@@ -106,13 +113,12 @@ let credit1Label = document.getElementById("credit01");
 let credit2Label = document.getElementById("credit02");
 let credit3Label = document.getElementById("credit03");
 
+var officialPricesFor10Credits = 0;
+var officialPricesFor20Credits = 0;
+var officialPricesFor30Credits = 0;
 async function GetCreditOptions() {
   const url = `/getCredits`;
-  const response = await axios.post(url, {
-    option1: o1,
-    option2: o2,
-    option3: o3
-  });
+  const response = await axios.post(url);
 
   console.log("CREDIT PRICES: " + response.data.creditPrices);
 
@@ -122,6 +128,10 @@ async function GetCreditOptions() {
   var o1 = prices.option1;
   var o2 = prices.option2;
   var o3 = prices.option3;
+
+  officialPricesFor10Credits = o1;
+  officialPricesFor20Credits = o2;
+  officialPricesFor30Credits = o3;
 
   credit1Label.innerHTML = "Price of 10: " + o1;
   credit2Label.innerHTML = "Price of 20: " + o2;
@@ -135,6 +145,11 @@ async function UpdateCreditAmount(){
   const curCredits = resp.data.credits;
   creditsTxt.innerHTML = "Credits: " + curCredits;
 }
+
+async function RemoveCredit(){
+
+}
+
 /*const authenticateReq = async (token) => {*/
 var email = "";
 async function authenticateReq(token) {
