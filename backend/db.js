@@ -108,6 +108,7 @@ export async function SetCurCredits(email, amount){
     console.log("Getting user doc of email: " + email);
     const userDoc = await GetUserDoc(email);
 
+    console.log(userDoc);
     var newCredits = userDoc.credits + amount;
 
     const userRef = db.collection('userData').doc(userDoc);
