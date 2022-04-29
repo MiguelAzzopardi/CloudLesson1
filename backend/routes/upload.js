@@ -2,8 +2,8 @@ import Express from "express";
 import multer from "multer";
 import { fileURLToPath } from "url";
 import path, { dirname } from "path";
-import * as Storage from "@google-cloud/storage";
 import ConvertAPI from 'convertapi';
+import { Storage }from "@google-cloud/pubsub";
 import { PubSub}from "@google-cloud/pubsub";
 import { validateToken } from "./auth.js";
 import fs from "fs"
@@ -151,6 +151,11 @@ export default upload;
 //Pubsub
 
 const pubsub = new PubSub({
+  projectId: 'pftc001',
+  keyFilename: './key.json'
+});
+
+const storage = new Storage({
   projectId: 'pftc001',
   keyFilename: './key.json'
 });
