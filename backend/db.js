@@ -101,6 +101,12 @@ export async function GetUserDoc(email){
     return data[0];
 }
 
+export async function GetCurCredits(email){
+    const userDoc = await GetUserDoc(email);
+    
+    return userDoc.credits;
+}
+
 export async function SetCurCredits(email, amount){
     //Would confirm payment here
     
@@ -115,7 +121,6 @@ export async function SetCurCredits(email, amount){
     const res = await userRef.update({
         credits: newCredits,
     });
-
 }
 
 export async function GetCurCredits(){

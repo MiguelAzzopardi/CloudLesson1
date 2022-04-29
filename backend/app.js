@@ -138,6 +138,12 @@ app.post("/getCredits", (req, res) => {
   }); 
 });
 
+app.post("/getUserCredits", (req, res) => {
+  GetCurCredits(req.query.email).then((methodResult)=>{
+    res.send({ result: "setUserCredits", reason: "Credits set!", credits: methodResult});
+  }); 
+});
+
 app.post("/setUserCredits", (req, res) => {
   console.log(`Setting user credits: ${req.query.email} plus: ${req.query.amount}`);
   SetCurCredits(req.query.email, req.query.amount).then((methodResult)=>{
