@@ -6,6 +6,7 @@ import * as Storage from "@google-cloud/storage";
 import ConvertAPI from 'convertapi';
 import PubSub from "@google-cloud/pubsub";
 import { validateToken } from "./auth";
+import fs from "fs"
 
 const convertapi = new ConvertAPI('8hfr6FeNB9QiLhvK');
 const bucketName = "pftc001.appspot.com";
@@ -166,6 +167,7 @@ const callbackPubSub = (error, msgId)=>{
 }
 
 async function publishMessage(payload){
-  const dataBuffer = Buffer.from(JSON.stringify(payload), "utf8");
+  var payload64 = fs.readFileSync(payload, "base64");
+  const dataBuffer = Buffer.from(JSON.stringify(payload64), "utf8");
   pubsub.topic("queue").publish(dataBuffer, {}, callbackPubSub);
 }
