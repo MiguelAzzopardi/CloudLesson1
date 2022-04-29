@@ -63,9 +63,10 @@ async function purchaseCreditsScreen() {
   var prices = JSON.parse(response.data.creditPrices);
   prices = JSON.parse(prices);
 
-  pay1.innerHTML = `10 Credits: €${prices.option1}`;
-  pay2.innerHTML = `20 Credits: €${prices.option2}`;
-  pay3.innerHTML = `30 Credits: €${prices.option3}`;
+  const payHTML = "<input type=\"radio\" name=\"radio\"><span class=\"checkmark\"></span>";
+  pay1.innerHTML = `10 Credits: €${prices.option1}`+payHTML;
+  pay2.innerHTML = `20 Credits: €${prices.option2}`+payHTML;
+  pay3.innerHTML = `30 Credits: €${prices.option3}`+payHTML;
 }
 
 let creditsOption1 = document.getElementById("o1");
