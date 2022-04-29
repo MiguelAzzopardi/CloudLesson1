@@ -80,7 +80,7 @@ async function PurchaseCredits(){
   }
   var amountToPurchase = 0;
   
-  console.log(`1: ${pay1Rad.value} 2: ${pay2Rad.value}`);
+  console.log(`1: ${pay1Rad.checked} 2: ${pay2Rad.checked}`);
   const url = `/setUserCredits?email=${email}&amount=10`;
   const response = await axios.post(url);
 
