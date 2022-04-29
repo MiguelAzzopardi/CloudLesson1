@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 import path, { dirname } from "path";
 import * as Storage from "@google-cloud/storage";
 import ConvertAPI from 'convertapi';
-import PubSub from "@google-cloud/pubsub";
+import { PubSub}from "@google-cloud/pubsub";
 import { validateToken } from "./auth.js";
 import fs from "fs"
 
