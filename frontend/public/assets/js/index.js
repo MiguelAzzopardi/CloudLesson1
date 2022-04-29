@@ -61,9 +61,10 @@ async function purchaseCreditsScreen() {
   const response = await axios.post(url);
 
   console.log(response);
-  pay1.innerHTML = `10 Credits: €${response.data.option1}`;
-  pay2.innerHTML = `20 Credits: €${response.data.option2}`;
-  pay3.innerHTML = `30 Credits: €${response.data.option3}`;
+  const creditsPrices = JSON.stringify(response.data);
+  pay1.innerHTML = `10 Credits: €${creditsPrices.option1}`;
+  pay2.innerHTML = `20 Credits: €${creditsPrices.option2}`;
+  pay3.innerHTML = `30 Credits: €${creditsPrices.option3}`;
 }
 
 let creditsOption1 = document.getElementById("o1");
