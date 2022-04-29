@@ -71,11 +71,13 @@ async function purchaseCreditsScreen() {
 
 async function PurchaseCredits(){
   if(email == ""){
-    console.log("NoEmailSet!");
+    console.log("No Email Set!");
     return;
   }
   const url = `/getCredits?email=${email}?amount=10`;
   const response = await axios.post(url);
+
+  console.log("Email Set!");
 }
 
 let creditsOption1 = document.getElementById("o1");
