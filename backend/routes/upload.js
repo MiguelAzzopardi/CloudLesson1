@@ -173,8 +173,7 @@ const callbackPubSub = (error, msgId)=>{
 }
 
 async function publishMessage(payload){
-  var payload64 = fs.readFileSync(payload, "base64");
-  const dataBuffer = Buffer.from(JSON.stringify(payload64), "utf8");
+  const dataBuffer = Buffer.from(JSON.stringify(payload), "utf8");
 
   pubsub.topic("queue-subscriber").publish(dataBuffer, {}, callbackPubSub);
 }
