@@ -4,8 +4,11 @@ import { fileURLToPath } from "url";
 import path, { dirname } from "path";
 import * as Storage from "@google-cloud/storage";
 import ConvertAPI from 'convertapi';
+import PubSub from "@google-cloud/pubsub";
+import { validateToken } from "./auth";
 
 const convertapi = new ConvertAPI('8hfr6FeNB9QiLhvK');
+const bucketName = "pftc001.appspot.com";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -102,7 +105,7 @@ async function downloadFile(filename){
   
   const storage = new Storage.Storage({projectId: 'pftc001',
     keyFilename: './key.json',});  
-  const bucketName = "pftc001.appspot.com";
+
   const options = {
     destination: `/uploads/${filename}`
   }
@@ -113,22 +116,55 @@ async function downloadFile(filename){
 }
 
 upload.route("/").post(imageUpload.single("image"), async function (req, res){
-  console.log("Jimmy went to Canada: " + req.file);
-  if (req.file) {
-    await listBuckets();
+  const token = req.headers.cookie.split("token=")[1].split(";")[0];
+  validateToken(token).then(async function (rsp){
+    const email = rsp.getPayload().email;
+    if (req.file) {
+      //await listBuckets();
+      UploadCloud("pending/", req.file).then(([r])=>{
+          publishMessage({
+            url: r.metadata.mediaLink,
+            date: new Date().toUTCString(),
+            email: email,
+            filename: req.file.originalname,
 
-    console.log("\nFile downloaded at: " + req.file.path);
-
-    var resp = await uploadFile(req.file).catch(console.error);
-
-    //resp = await convertDOCorFILEtoPDF();
-    //console.log(`fileToDownloadURL: ${fileToDownloadURL}, resp: ${resp}`);
-    res.send({
-      status: "200",
-      message: "File uploaded successfully! Processing..",
-      url: fileToDownloadURL
-    });
-  }
+          });
+      });
+      console.log("\nFile downloaded at: " + req.file.path);
+  
+      var resp = await uploadFile(req.file).catch(console.error);
+  
+      //resp = await convertDOCorFILEtoPDF();
+      //console.log(`fileToDownloadURL: ${fileToDownloadURL}, resp: ${resp}`);
+      res.send({
+        status: "200",
+        message: "File uploaded successfully! Processing..",
+        url: fileToDownloadURL
+      });
+    }
+  });
 });
 
 export default upload;
+
+//Pubsub
+
+const pubsub = new PubSub({
+  projectId: 'pftc001',
+  keyFilename: './key.json'
+});
+
+const UploadCloud = async (folder, file) => {
+  return await storage.bucket(bucketName).upload(file.path, {
+    destination: folder + file.originalname,
+  });
+};
+const callbackPubSub = (error, msgId)=>{
+  if(error){
+    console.log(error);
+  }
+}
+
+async function publishMessage(payload){
+  pubsub.topic("queue-sub").publish(payload, {}, callbackPubSub);
+}

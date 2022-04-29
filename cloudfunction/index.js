@@ -19,6 +19,7 @@ exports.helloPubSub = (event, context)=>{
         email:jsonData.email,
         filename:jsonData.filename,
         data: jsonData.date,
-        pending: jsonData.url
+        pending: jsonData.url,
+        completed: ""
     });
 }
