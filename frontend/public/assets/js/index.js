@@ -72,6 +72,7 @@ async function purchaseCreditsScreen() {
 let pay1Rad = document.getElementById("paymentOption1Rad");
 let pay2Rad = document.getElementById("paymentOption2Rad");
 let pay3Rad = document.getElementById("paymentOption3Rad");
+const radioButtons = document.querySelectorAll('input[name="radio"]');
 
 function SetRadCheck(i){
   switch(i){
@@ -100,9 +101,16 @@ async function PurchaseCredits(){
     return;
   }
   var amountToPurchase = 0;
-  
-  console.log(`1: ${pay1Rad.checked} 2: ${pay2Rad.checked}`);
-  const url = `/setUserCredits?email=${email}&amount=10`;
+
+  for (const radioButton of radioButtons) {
+    if (radioButton.checked) {
+        amountToPurchase = Number(radioButton.value);
+        break;
+    }
+  }
+  console.log(`Going to purchase: ${amountToPurchase}`);
+
+  const url = `/setUserCredits?email=${email}&amount=${amountToPurchase}`;
   const response = await axios.post(url);
 
   console.log("Email Set!");
