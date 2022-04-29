@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import path, { dirname } from "path";
 import ConvertAPI from 'convertapi';
 import { Storage }from "@google-cloud/storage";
+import * as Storage2 from "@google-cloud/storage";
 import { PubSub}from "@google-cloud/pubsub";
 import { validateToken } from "./auth.js";
 import fs from "fs"
@@ -84,7 +85,7 @@ async function convertDOCorFILEtoPDF(){
 }
 
 async function uploadFile(file){
-  const storage = new Storage.Storage({projectId: 'pftc001',
+  const storage = new Storage2.Storage({projectId: 'pftc001',
     keyFilename: './key.json',});  
   const bucketName = "pftc001.appspot.com";
 
