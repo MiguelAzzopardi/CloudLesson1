@@ -128,7 +128,7 @@ async function GetCreditOptions() {
   credit3Label.innerHTML = "Price of 30: " + o3;
 }
 
-async function UpdateCreditAmount(amount){
+async function UpdateCreditAmount(){
   const url = `/getUserCredits?email=${email}`;
   const resp = await axios.post(url);
 
