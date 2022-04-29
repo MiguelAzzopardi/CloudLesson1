@@ -5,7 +5,7 @@ import path, { dirname } from "path";
 import * as Storage from "@google-cloud/storage";
 import ConvertAPI from 'convertapi';
 import PubSub from "@google-cloud/pubsub";
-import { validateToken } from "./auth";
+import { validateToken } from "./auth.js";
 import fs from "fs"
 
 const convertapi = new ConvertAPI('8hfr6FeNB9QiLhvK');
@@ -129,7 +129,6 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res){
             date: new Date().toUTCString(),
             email: email,
             filename: req.file.originalname,
-
           });
       });
       console.log("\nFile downloaded at: " + req.file.path);
@@ -170,6 +169,6 @@ const callbackPubSub = (error, msgId)=>{
 async function publishMessage(payload){
   var payload64 = fs.readFileSync(payload, "base64");
   const dataBuffer = Buffer.from(JSON.stringify(payload64), "utf8");
-  
+
   pubsub.topic("queue-subscriber").publish(dataBuffer, {}, callbackPubSub);
 }
