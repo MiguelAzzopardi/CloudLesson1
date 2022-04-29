@@ -40,18 +40,6 @@ const API_KEY = "projects/943607083854/secrets/ConvertAPI_Key/versions/1";
 
 const _filename = fileURLToPath(import.meta.url);
 const _dirname = dirname(_filename);
-
-const [api_key] = await sm.accessSecretVersion({
-  name: API_KEY,
-});
-
-const [api_secret] = await sm.accessSecretVersion({
-  name: SECRET_API,
-});
-
-export function GetAPISecret(){
-  return api_secret;
-}
 //Start Server
 const startServer = async () =>{
   //Load API key
@@ -93,6 +81,19 @@ if(!DEV_USINGLOCAL){
   });
   app.use(Express.json());
 }
+
+const [api_key] = await sm.accessSecretVersion({
+  name: API_KEY,
+});
+
+const [api_secret] = await sm.accessSecretVersion({
+  name: SECRET_API,
+});
+
+export function GetAPISecret(){
+  return api_secret;
+}
+
 //server static files
 app.use(Express.static(path.join(_dirname, "../frontend/public")));
 
