@@ -104,6 +104,7 @@ export async function GetUserDoc(email){
 export async function GetCurUserCredits(email){
     const userDoc = await GetUserDoc(email);
     
+    console.log(`Doc: ${userDoc}`);
     console.log(`Got email of ${email}, credits: ${userDoc.credits}`);
     return userDoc.credits;
 }
