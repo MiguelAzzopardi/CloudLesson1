@@ -12,6 +12,8 @@ let adminDiv = document.getElementById("admin_area");
 //let signInContainer = document.getElementById("signInContainer");
 let creditsTxt = document.getElementById("credits");
 
+var myAccountCredits = 0;
+
 function loggedIn() {
   profile.style.display = "inline";
   creditsTxt.style.display = "inline";
@@ -74,10 +76,12 @@ async function PurchaseCredits(){
     console.log("No Email Set!");
     return;
   }
-  const url = `/getCredits?email=${email}?amount=10`;
+  const url = `/setUserCredits?email=${email}?amount=10`;
   const response = await axios.post(url);
 
   console.log("Email Set!");
+  UpdateCreditAmount(myAccountCredits+10);
+
 }
 
 let creditsOption1 = document.getElementById("o1");
@@ -124,6 +128,11 @@ async function GetCreditOptions() {
   credit1Label.innerHTML = "Price of 10: " + o1;
   credit2Label.innerHTML = "Price of 20: " + o2;
   credit3Label.innerHTML = "Price of 30: " + o3;
+}
+
+async function UpdateCreditAmount(amount){
+  creditsTxt.innerHTML = "Credits: " + amount;
+  myAccountCredits = myAccountCredits + amount;
 }
 /*const authenticateReq = async (token) => {*/
 var email = "";
@@ -197,7 +206,8 @@ async function loadGoogleLogin() {
         //console.log(`Email not found in database, account has been created for ${email}`);
       }
 
-      creditsTxt.innerHTML = "Credits: " + response.data.credits;
+      UpdateCreditAmount(respone.data.credits);
+
       if (response.data.admin) {
         editPricesBtn.style.display = "inline";
       } else {
@@ -254,7 +264,8 @@ async function loadGoogleLogin() {
             console.log(`Email not found in database, account has been created for ${email}`);
           }
 
-          creditsTxt.innerHTML = "Credits: " + response.data.credits;
+          UpdateCreditAmount(respone.data.credits);
+          
           if (response.data.admin) {
             editPricesBtn.style.display = "inline";
           } else {
