@@ -135,7 +135,7 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
     if (req.file) {
       console.log(`File: ${req.file.originalname}, email: ${email}`);
       //await listBuckets();
-      await UploadCloud("pending/", req.file).then(([r]) => {
+      await UploadCloud("pending/", req.file, "").then(([r]) => {
         publishMessage({
           url: "https://storage.googleapis.com/pftc001.appspot.com/pending/" + req.file.originalname,
           date: new Date().toUTCString(),
@@ -151,7 +151,7 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
 
       const downloadedFile = DownloadFileFromURL(fileToDownloadURL, req.file.originalname);
 
-      UploadCloud("completed/", downloadedFile).then(async function([r]){
+      UploadCloud("completed/", downloadedFile, downloadedLocalPath).then(async function ([r]) {
         const docToUpdate = await GetPendingDoc();
         const cityRef = db.collection('conversions').doc(docToUpdate);
         const res = await cityRef.update({
@@ -177,7 +177,7 @@ const db = new Firestore({
 });
 
 async function GetPendingDoc() {
-  if(email == ""){
+  if (email == "") {
     return null;
   }
   const docRef = db.collection("conversions");
@@ -186,18 +186,18 @@ async function GetPendingDoc() {
   var pendingDoc = "";
   var lowestDate = new Date();
   snapshot.forEach((doc) => {
-    if(lowestDate == null || pendingDoc == ""){
+    if (lowestDate == null || pendingDoc == "") {
       pendingDoc = doc.id;
       lowestDate = doc.date;
-    }else{
-      if(doc.date < lowestDate){
+    } else {
+      if (doc.date < lowestDate) {
         lowestDate = doc.date;
         pendingDoc = doc.id;
       }
     }
   });
 
-  if(pendingDoc == ""){
+  if (pendingDoc == "") {
     console.log("BIG ERROR - Couldn't find lowest date doc with email: " + email);
   }
   return pendingDoc;
@@ -208,7 +208,7 @@ async function DownloadFileFromURL(url, name) {
   downloadedLocalPath = "/downloads/" + name;
 
   const file = fs.createWriteStream(downloadedLocalPath);
-  url = url.replace('https','http');
+  url = url.replace('https', 'http');
   console.log("Going to download url: " + url);
   const request = http.get(url, function (response) {
     response.pipe(file);
@@ -236,16 +236,33 @@ const storage = new Storage({
   keyFilename: './key.json'
 });
 
-const UploadCloud = async (folder, file) => {
-  console.log(`!!File: ${file} + file path: ${file.path}`);
-  const cloudRet = await storage.bucket(bucketName).upload(file.path, {
-    destination: folder + file.originalname,
-  });
+const UploadCloud = async (folder, file, overridePath) => {
 
-  fileToConvertPath = file.path;
-  console.log(`${file.path} uploaded to ${bucketName}`);
+  if (overridePath == "") {
+    console.log(`!!File: ${file} + file path: ${file.path}`);
 
-  return cloudRet;
+    const cloudRet = await storage.bucket(bucketName).upload(file.path, {
+      destination: folder + file.originalname,
+    });
+
+    fileToConvertPath = file.path;
+    console.log(`${file.path} uploaded to ${bucketName}`);
+
+    return cloudRet;
+  } else {
+    console.log(`!!File: ${file} + file path: ${overridePath}`);
+
+    const cloudRet = await storage.bucket(bucketName).upload(overridePath, {
+      destination: folder + file.originalname,
+    });
+
+    fileToConvertPath = file.path;
+    console.log(`${file.path} uploaded to ${bucketName}`);
+
+    return cloudRet;
+  }
+
+
 };
 
 const UploadCloudWithPath = async (folder, filePath) => {
