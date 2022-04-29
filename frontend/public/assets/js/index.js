@@ -112,7 +112,7 @@ async function PurchaseCredits(){
   const url = `/setUserCredits?email=${email}&amount=${amountToPurchase}`;
   const response = await axios.post(url);
 
-  console.log("Email Set!");
+  console.log("Credits Set!");
   UpdateCreditAmount();
 
 }
@@ -175,7 +175,11 @@ async function UpdateCreditAmount(){
 }
 
 async function RemoveCredit(){
+  const url = `/setUserCredits?email=${email}&amount=${-1}`;
+  const response = await axios.post(url);
 
+  console.log("Credit removed!");
+  UpdateCreditAmount();
 }
 
 /*const authenticateReq = async (token) => {*/
