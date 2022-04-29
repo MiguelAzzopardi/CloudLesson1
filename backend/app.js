@@ -9,6 +9,7 @@ import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 import auth from "./routes/auth.js";
 import upload from "./routes/upload.js";
 import home from "./routes/home.js";
+import clean from "./routes/clean.js";
 
 import {
   GetUser,
@@ -84,6 +85,8 @@ app.use("/auth", auth);
 app.use("/upload", upload);
 
 app.use("/home", home);
+
+app.use("/clean", clean);
 
 //Delivering index.html
 app.get("/", (req, res)=> {
