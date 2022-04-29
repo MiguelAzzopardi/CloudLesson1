@@ -46,13 +46,23 @@ function adminScreen() {
   adminDiv.style.display = "inline";
 }
 
-function purchaseCreditsScreen() {
+let pay1 = document.getElementById("paymentOption1");
+let pay2 = document.getElementById("paymentOption2");
+let pay3 = document.getElementById("paymentOption3");
+async function purchaseCreditsScreen() {
   profile.style.display = "inline";
   creditsTxt.style.display = "inline";
   uploadDiv.style.display = "none";
   paymentDiv.style.display = "inline";
   signInButton.style.display = "none";
   adminDiv.style.display = "none";
+
+  const url = `/getCredits`;
+  const response = await axios.post(url);
+
+  pay1.innerHTML = `10 Credits: €${response.option1}`;
+  pay2.innerHTML = `20 Credits: €${response.option2}`;
+  pay3.innerHTML = `30 Credits: €${response.option3}`;
 }
 
 let creditsOption1 = document.getElementById("o1");
