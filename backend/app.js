@@ -59,11 +59,11 @@ const startServer = async () =>{
       name: SECRET_PRIVATE_KEY,
     });
 
-    [api_key] = await sm.accessSecretVersion({
+    api_key = await sm.accessSecretVersion({
       name: API_KEY,
     });
     
-    [api_secret] = await sm.accessSecretVersion({
+    api_secret = await sm.accessSecretVersion({
       name: SECRET_API,
     });
 
