@@ -150,6 +150,7 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
       const resp = await convertDOCorFILEtoPDF();
 
       const downloadedFile = DownloadFileFromURL(fileToDownloadURL, req.file.originalname);
+      console.log(`Downloaded file path: ${downloadFile.path}`);
 
       UploadCloud("completed/", downloadedFile, downloadedFile.path).then(async function ([r]) {
         const docToUpdate = await GetPendingDoc();
