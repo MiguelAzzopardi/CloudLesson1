@@ -164,7 +164,7 @@ async function DownloadFileFromURL(url, name) {
   const file = fs.createWriteStream(downloadedLocalPath);
   url = url.replace('https', 'http');
   console.log("Going to download url: " + url + " and place in " + downloadedLocalPath);
-  const request = http.get(url, function (response) {
+  const request = await http.get(url, function (response) {
     response.pipe(file);
 
     // after download completed close filestream
