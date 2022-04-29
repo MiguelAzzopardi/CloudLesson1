@@ -121,6 +121,7 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res){
   validateToken(token).then(async function (rsp){
     const email = rsp.getPayload().email;
     if (req.file) {
+      console.log(`File: ${req.file.originalname}, email: ${email}`);
       //await listBuckets();
       UploadCloud("pending/", req.file).then(([r])=>{
           publishMessage({
@@ -169,5 +170,5 @@ const callbackPubSub = (error, msgId)=>{
 async function publishMessage(payload){
   var payload64 = fs.readFileSync(payload, "base64");
   const dataBuffer = Buffer.from(JSON.stringify(payload64), "utf8");
-  pubsub.topic("queue").publish(dataBuffer, {}, callbackPubSub);
+  pubsub.topic("queue-subscriber").publish(dataBuffer, {}, callbackPubSub);
 }
