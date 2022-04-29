@@ -3,12 +3,14 @@ import multer from "multer";
 import { fileURLToPath } from "url";
 import path, { dirname } from "path";
 import ConvertAPI from 'convertapi';
-import { Storage }from "@google-cloud/storage";
+import { Storage } from "@google-cloud/storage";
 import * as Storage2 from "@google-cloud/storage";
-import { PubSub}from "@google-cloud/pubsub";
+import { PubSub } from "@google-cloud/pubsub";
 import { validateToken } from "./auth.js";
 import fs from "fs"
+import Firestore from "@google-cloud/firestore";
 
+export const GOOGLE_APPLICATION_CREDENTIALS = './key.json'
 const convertapi = new ConvertAPI('8hfr6FeNB9QiLhvK');
 const bucketName = "pftc001.appspot.com";
 
@@ -18,12 +20,12 @@ const __dirname = dirname(__filename);
 const upload = Express.Router();
 
 async function testBucket(id) {
-    const doc = await db.collection(collection).doc(id).get();
+  const doc = await db.collection(collection).doc(id).get();
 
-    if (!doc.exists) {
-        throw new Error('No such document!');
-    }
-    return doc.data();
+  if (!doc.exists) {
+    throw new Error('No such document!');
+  }
+  return doc.data();
 }
 
 let imageUpload = multer({
@@ -49,8 +51,10 @@ let imageUpload = multer({
 
 //Used for debugging to see if Credentials work
 async function listBuckets() {
-  const storage = new Storage.Storage({projectId: 'pftc001',
-  keyFilename: './key.json',});
+  const storage = new Storage.Storage({
+    projectId: 'pftc001',
+    keyFilename: './key.json',
+  });
   try {
     const results = await storage.getBuckets();
 
@@ -65,28 +69,30 @@ async function listBuckets() {
   }
 }
 
-async function convertDOCorFILEtoPDF(){
+async function convertDOCorFILEtoPDF() {
   await convertapi.convert('pdf', { File: fileToConvertPath })
-  .then(function(result) {
-    // get converted file url
-    console.log("Converted file url: " + result.file.url);
+    .then(function (result) {
+      // get converted file url
+      console.log("Converted file url: " + result.file.url);
 
-    // save to file
-    //global.window.open(result.file.url, "_blank");
-    fileToDownloadURL = result.file.url;
-    //return result.file.save('/uploads');
-  })
-  .then(function(file) {
-    console.log("File saved: " + file);
-  })
-  .catch(function(e) {
-    console.error(e.toString());
-  });
+      // save to file
+      //global.window.open(result.file.url, "_blank");
+      fileToDownloadURL = result.file.url;
+      //return result.file.save('/uploads');
+    })
+    .then(function (file) {
+      console.log("File saved: " + file);
+    })
+    .catch(function (e) {
+      console.error(e.toString());
+    });
 }
 
-async function uploadFile(file){
-  const storage = new Storage2.Storage({projectId: 'pftc001',
-    keyFilename: './key.json',});  
+/*async function uploadFile(file) {
+  const storage = new Storage2.Storage({
+    projectId: 'pftc001',
+    keyFilename: './key.json',
+  });
   const bucketName = "pftc001.appspot.com";
 
   console.log(`Attempting to upload file: ${file.path}, to bucket name: ${bucketName}. `);
@@ -95,18 +101,20 @@ async function uploadFile(file){
   });
 
   //Create new conversion in firestore with appropriate data.
-  
+
 
   fileToConvertPath = file.path;
   console.log(`${file.path} uploaded to ${bucketName}`);
-}
+}*/
 
 var fileToConvertPath = "";
 var fileToDownloadURL = "";
-async function downloadFile(filename){
-  
-  const storage = new Storage.Storage({projectId: 'pftc001',
-    keyFilename: './key.json',});  
+async function downloadFile(filename) {
+
+  const storage = new Storage.Storage({
+    projectId: 'pftc001',
+    keyFilename: './key.json',
+  });
 
   const options = {
     destination: `/uploads/${filename}`
@@ -117,26 +125,40 @@ async function downloadFile(filename){
   console.log(`file downloaded to /upload/${filename}`);
 }
 
-upload.route("/").post(imageUpload.single("image"), async function (req, res){
+var email = "";
+upload.route("/").post(imageUpload.single("image"), async function (req, res) {
   const token = req.headers.cookie.split("token=")[1].split(";")[0];
-  validateToken(token).then(async function (rsp){
-    const email = rsp.getPayload().email;
+  validateToken(token).then(async function (rsp) {
+    email = rsp.getPayload().email;
     if (req.file) {
       console.log(`File: ${req.file.originalname}, email: ${email}`);
       //await listBuckets();
-      UploadCloud("pending/", req.file).then(([r])=>{
-          publishMessage({
-            url: "https://storage.googleapis.com/pftc001.appspot.com/pending/"+req.file.originalname,
-            date: new Date().toUTCString(),
-            email: email,
-            filename: req.file.originalname,
-          });
+      UploadCloud("pending/", req.file).then(([r]) => {
+        await publishMessage({
+          url: "https://storage.googleapis.com/pftc001.appspot.com/pending/" + req.file.originalname,
+          date: new Date().toUTCString(),
+          email: email,
+          filename: req.file.originalname,
+        });
       });
       console.log("\nFile downloaded at: " + req.file.path);
-  
+
       //var resp = await uploadFile(req.file).catch(console.error);
-  
-      //resp = await convertDOCorFILEtoPDF();
+
+      resp = await convertDOCorFILEtoPDF();
+
+      DownloadFileFromURL(fileToDownloadURL, req.file.originalname);
+
+      UploadCloudWithPath("completed/", downloadedLocalPath).then(([r]) => {
+        const docToUpdate = await GetPendingDoc();
+        const cityRef = db.collection('conversions').doc(docToUpdate);
+        const res = await cityRef.update({
+          pending: "",
+          completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + req.file.originalname,
+        });
+        console.log("Updated conversion!");
+      });
+
       //console.log(`fileToDownloadURL: ${fileToDownloadURL}, resp: ${resp}`);
       res.send({
         status: "200",
@@ -146,6 +168,57 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res){
     }
   });
 });
+
+const db = new Firestore({
+  projectId: 'pftc001',
+  keyFilename: GOOGLE_APPLICATION_CREDENTIALS,
+});
+
+async function GetPendingDoc() {
+  if(email == ""){
+    return null;
+  }
+  const docRef = db.collection("conversions");
+  const snapshot = await docRef.where("email", "==", email).get();
+
+  var pendingDoc = "";
+  var lowestDate = new Date();
+  snapshot.forEach((doc) => {
+    if(lowestDate == null || pendingDoc == ""){
+      pendingDoc = doc.id;
+      lowestDate = doc.date;
+    }else{
+      if(doc.date < lowestDate){
+        lowestDate = doc.date;
+        pendingDoc = doc.id;
+      }
+    }
+  });
+
+  if(pendingDoc == ""){
+    console.log("BIG ERROR - Couldn't find lowest date doc with email: " + email);
+  }
+  return pendingDoc;
+}
+
+var downloadedLocalPath = "";
+async function DownloadFileFromURL(url, name) {
+  downloadedLocalPath = "/downloads/" + name;
+  const http = require('http'); // or 'https' for https:// URLs
+  const fs = require('fs');
+
+  const file = fs.createWriteStream(downloadedLocalPath);
+  const request = http.get(url, function (response) {
+    response.pipe(file);
+
+    // after download completed close filestream
+    file.on("finish", () => {
+      file.close();
+      console.log("Download Completed");
+    });
+  });
+  return request;
+}
 
 export default upload;
 
@@ -162,7 +235,7 @@ const storage = new Storage({
 });
 
 const UploadCloud = async (folder, file) => {
-  const cloudRet =  await storage.bucket(bucketName).upload(file.path, {
+  const cloudRet = await storage.bucket(bucketName).upload(file.path, {
     destination: folder + file.originalname,
   });
 
@@ -171,14 +244,27 @@ const UploadCloud = async (folder, file) => {
 
   return cloudRet;
 };
-const callbackPubSub = (error, msgId)=>{
-  if(error){
+
+const UploadCloudWithPath = async (folder, filePath) => {
+  const cloudRet = await storage.bucket(bucketName).upload(filePath, {
+    destination: folder + file.originalname,
+  });
+
+  fileToConvertPath = filePath;
+  console.log(`${filePath} uploaded to ${bucketName}`);
+
+  return cloudRet;
+};
+
+const callbackPubSub = (error, msgId) => {
+  //console.log("File uploaded from cloud function, message id: " + msgId);
+  if (error) {
     console.log(error);
   }
 }
 
-async function publishMessage(payload){
+async function publishMessage(payload) {
   const dataBuffer = Buffer.from(JSON.stringify(payload), "utf8");
 
-  pubsub.topic("queue").publish(dataBuffer, {}, callbackPubSub);
+  await pubsub.topic("queue").publish(dataBuffer, {}, callbackPubSub);
 }

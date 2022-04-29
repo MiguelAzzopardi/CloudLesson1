@@ -19,7 +19,7 @@ exports.helloPubSub = (event, context)=>{
     AddDocument("conversions",{
         email:jsonData.email,
         filename:jsonData.filename,
-        data: jsonData.date,
+        date: jsonData.date,
         pending: jsonData.url,
         completed: ""
     });
