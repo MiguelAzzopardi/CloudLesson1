@@ -109,6 +109,7 @@ export async function SetCurCredits(email, amount){
     //Would confirm payment here
     
     //Add credits
+    console.log("Getting user doc of email: " + email);
     const userDoc = await GetUserDoc(email);
 
     var newCredits = userDoc.credits + amount;

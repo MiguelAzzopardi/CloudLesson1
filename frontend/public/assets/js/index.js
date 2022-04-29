@@ -76,7 +76,7 @@ async function PurchaseCredits(){
     console.log("No Email Set!");
     return;
   }
-  const url = `/setUserCredits?email=${email}?amount=10`;
+  const url = `/setUserCredits?email=${email}&amount=10`;
   const response = await axios.post(url);
 
   console.log("Email Set!");
