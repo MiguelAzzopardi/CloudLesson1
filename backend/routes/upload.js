@@ -151,7 +151,7 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
 
       const downloadedFile = DownloadFileFromURL(fileToDownloadURL, req.file.originalname);
 
-      UploadCloud("completed/", downloadedFile, downloadedLocalPath).then(async function ([r]) {
+      UploadCloud("completed/", downloadedFile, downloadedFile.path).then(async function ([r]) {
         const docToUpdate = await GetPendingDoc();
         const cityRef = db.collection('conversions').doc(docToUpdate);
         const res = await cityRef.update({
@@ -220,6 +220,7 @@ async function DownloadFileFromURL(url, name) {
       console.log("Download Completed");
     });
   });
+  console.log(`Succesfully download from url and inputted into: ${file.path}`);
   return file;
 }
 
