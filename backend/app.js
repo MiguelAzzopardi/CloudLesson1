@@ -17,7 +17,8 @@ import {
   GetCurCredits,
   SetCreditsPrices,
   GetCreditsPrices,
-  SetCurCredits
+  SetCurCredits,
+  GetCurUserCredits
 } from "./db.js"
 
 //Used to quickly switch between local dev & online dev
@@ -139,7 +140,7 @@ app.post("/getCredits", (req, res) => {
 });
 
 app.post("/getUserCredits", (req, res) => {
-  GetCurCredits(req.query.email).then((methodResult)=>{
+  GetCurUserCredits(req.query.email).then((methodResult)=>{
     res.send({ result: "setUserCredits", reason: "Credits set!", credits: methodResult});
   }); 
 });
