@@ -206,7 +206,8 @@ async function loadGoogleLogin() {
         //console.log(`Email not found in database, account has been created for ${email}`);
       }
 
-      UpdateCreditAmount(respone.data.credits);
+      console.log(`setting credits to : ${response.data.credits}`);
+      UpdateCreditAmount(response.data.credits);
 
       if (response.data.admin) {
         editPricesBtn.style.display = "inline";
@@ -264,7 +265,7 @@ async function loadGoogleLogin() {
             console.log(`Email not found in database, account has been created for ${email}`);
           }
 
-          UpdateCreditAmount(respone.data.credits);
+          UpdateCreditAmount(response.data.credits);
           
           if (response.data.admin) {
             editPricesBtn.style.display = "inline";
