@@ -3,7 +3,7 @@ import multer from "multer";
 import { fileURLToPath } from "url";
 import path, { dirname } from "path";
 import ConvertAPI from 'convertapi';
-import { Storage }from "@google-cloud/pubsub";
+import { Storage }from "@google-cloud/storage";
 import { PubSub}from "@google-cloud/pubsub";
 import { validateToken } from "./auth.js";
 import fs from "fs"
