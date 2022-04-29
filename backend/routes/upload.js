@@ -206,7 +206,7 @@ async function GetPendingDoc() {
 var downloadedLocalPath = "";
 async function DownloadFileFromURL(url, name) {
   name = name.replace('.jpg', '.pdf');
-  downloadedLocalPath = "/downloads/" + name;
+  downloadedLocalPath = "./downloads/" + name;
 
   const file = fs.createWriteStream(downloadedLocalPath);
   url = url.replace('https', 'http');
