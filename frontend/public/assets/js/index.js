@@ -132,7 +132,7 @@ async function GetCreditOptions() {
 
 async function UpdateCreditAmount(amount){
   creditsTxt.innerHTML = "Credits: " + amount;
-  myAccountCredits = myAccountCredits + amount;
+  myAccountCredits = amount;
 }
 /*const authenticateReq = async (token) => {*/
 var email = "";
