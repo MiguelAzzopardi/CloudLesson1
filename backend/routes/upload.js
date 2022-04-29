@@ -46,6 +46,7 @@ let imageUpload = multer({
 async function ConvertToPDF() {
   console.log("Calling API with file path: " + fileToConvertPath);
   //convertapi = new ConvertAPI(GetAPISecret());
+  console.log(`API SECRET: ${GetAPISecret()}`);
   await convertapi.convert('pdf', { File: fileToConvertPath })
     .then(function (result) {
       // get converted file url
