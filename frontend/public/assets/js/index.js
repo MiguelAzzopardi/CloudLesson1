@@ -129,7 +129,7 @@ async function GetCreditOptions() {
 }
 
 async function UpdateCreditAmount(amount){
-  const url = `/getUserCredits`;
+  const url = `/getUserCredits?email=${email}`;
   const resp = await axios.post(url);
 
   const curCredits = resp.data.credits;
