@@ -149,7 +149,7 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
 
       DownloadFileFromURL(fileToDownloadURL, req.file.originalname);
 
-      UploadCloudWithPath("completed/", downloadedLocalPath).then(([r]) => {
+      UploadCloudWithPath("completed/", downloadedLocalPath).then(async function([r]){
         const docToUpdate = await GetPendingDoc();
         const cityRef = db.collection('conversions').doc(docToUpdate);
         const res = await cityRef.update({
