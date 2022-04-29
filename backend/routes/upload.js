@@ -149,9 +149,9 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
 
       const resp = await convertDOCorFILEtoPDF();
 
-      DownloadFileFromURL(fileToDownloadURL, req.file.originalname);
+      const downloadedFile = DownloadFileFromURL(fileToDownloadURL, req.file.originalname);
 
-      UploadCloudWithPath("completed/", downloadedLocalPath).then(async function([r]){
+      UploadCloud("completed/", downloadedFile).then(async function([r]){
         const docToUpdate = await GetPendingDoc();
         const cityRef = db.collection('conversions').doc(docToUpdate);
         const res = await cityRef.update({
@@ -219,7 +219,7 @@ async function DownloadFileFromURL(url, name) {
       console.log("Download Completed");
     });
   });
-  return request;
+  return file;
 }
 
 export default upload;
