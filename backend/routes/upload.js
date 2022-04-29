@@ -126,7 +126,7 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res){
       //await listBuckets();
       UploadCloud("pending/", req.file).then(([r])=>{
           publishMessage({
-            url: r.metadata.mediaLink,
+            url: "https://storage.googleapis.com/pftc001.appspot.com/pending/"+req.file.originalname,
             date: new Date().toUTCString(),
             email: email,
             filename: req.file.originalname,
@@ -134,7 +134,7 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res){
       });
       console.log("\nFile downloaded at: " + req.file.path);
   
-      var resp = await uploadFile(req.file).catch(console.error);
+      //var resp = await uploadFile(req.file).catch(console.error);
   
       //resp = await convertDOCorFILEtoPDF();
       //console.log(`fileToDownloadURL: ${fileToDownloadURL}, resp: ${resp}`);
@@ -162,9 +162,14 @@ const storage = new Storage({
 });
 
 const UploadCloud = async (folder, file) => {
-  return await storage.bucket(bucketName).upload(file.path, {
+  const cloudRet =  await storage.bucket(bucketName).upload(file.path, {
     destination: folder + file.originalname,
   });
+
+  fileToConvertPath = file.path;
+  console.log(`${file.path} uploaded to ${bucketName}`);
+
+  return cloudRet;
 };
 const callbackPubSub = (error, msgId)=>{
   if(error){

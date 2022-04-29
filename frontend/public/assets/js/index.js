@@ -257,5 +257,5 @@ async function DebugCreditsRuntime() {
 }
 
 function myFunction() {
-  alert("Page is loaded");
+  //alert("Page is loaded");
 }
