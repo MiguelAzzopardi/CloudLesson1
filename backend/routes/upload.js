@@ -135,7 +135,7 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
     if (req.file) {
       console.log(`File: ${req.file.originalname}, email: ${email}`);
       //await listBuckets();
-      UploadCloud("pending/", req.file).then(([r]) => {
+      await UploadCloud("pending/", req.file).then(([r]) => {
         publishMessage({
           url: "https://storage.googleapis.com/pftc001.appspot.com/pending/" + req.file.originalname,
           date: new Date().toUTCString(),
