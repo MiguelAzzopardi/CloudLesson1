@@ -41,7 +41,7 @@ let imageUpload = multer({
   },
 });
 
-async function convertDOCorFILEtoPDF() {
+async function ConvertToPDF() {
   console.log("Calling API with file path: " + fileToConvertPath);
   await convertapi.convert('pdf', { File: fileToConvertPath })
     .then(function (result) {
@@ -99,15 +99,15 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
 
       //var resp = await uploadFile(req.file).catch(console.error);
 
-      const resp = await convertDOCorFILEtoPDF();
+      const resp = await ConvertToPDF();
 
       const downloadedFile = await DownloadFileFromURL(fileToDownloadURL, req.file.originalname);
       console.log(`Downloaded file path: ${downloadFile.path}`);
 
       await UploadCloud("completed/", downloadedFile, downloadedFile.path).then(async function ([r]) {
-        const docToUpdate = await GetPendingDoc();
-        const cityRef = db.collection('conversions').doc(docToUpdate);
-        const res = await cityRef.update({
+        const docToUpdate = await GetPendingDocumentReference();
+        const docReff = db.collection('conversions').doc(docToUpdate);
+        const res = await docReff.update({
           pending: "",
           completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + req.file.originalname,
         });
@@ -129,7 +129,7 @@ const db = new Firestore({
   keyFilename: GOOGLE_APPLICATION_CREDENTIALS,
 });
 
-async function GetPendingDoc() {
+async function GetPendingDocumentReference() {
   if (email == "") {
     return null;
   }

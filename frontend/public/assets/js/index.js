@@ -69,6 +69,15 @@ async function purchaseCreditsScreen() {
   pay3.innerHTML = `€${prices.option3}\t\t : 30 Credits`+payHTML;
 }
 
+async function PurchaseCredits(){
+  if(email == ""){
+    console.log("NoEmailSet!");
+    return;
+  }
+  const url = `/getCredits?email=${email}?amount=10`;
+  const response = await axios.post(url);
+}
+
 let creditsOption1 = document.getElementById("o1");
 let creditsOption2 = document.getElementById("o2");
 let creditsOption3 = document.getElementById("o3");
@@ -115,6 +124,7 @@ async function GetCreditOptions() {
   credit3Label.innerHTML = "Price of 30: " + o3;
 }
 /*const authenticateReq = async (token) => {*/
+var email = "";
 async function authenticateReq(token) {
   console.log("Authenticating Req token");
 
@@ -128,7 +138,7 @@ async function authenticateReq(token) {
 
   if (status == 200) {
     const name = response.data.name;
-    const email = response.data.email;
+    email = response.data.email;
     const picture = response.data.picture;
     const expiry = response.data.expiry;
 
@@ -168,7 +178,7 @@ async function loadGoogleLogin() {
 
   let session = document.cookie;
   if (session && session.includes("token")) {
-    const email = await authenticateReq(session.split("token=")[1].split(";")[0]);
+    email = await authenticateReq(session.split("token=")[1].split(";")[0]);
     if (email != null) {
       console.log(`Email with token is: ${email}`);
 
@@ -225,7 +235,7 @@ async function loadGoogleLogin() {
       signInButton,
       {},
       async function (googleUser) {
-        const email = await authenticateReq(googleUser.getAuthResponse().id_token).catch();
+        email = await authenticateReq(googleUser.getAuthResponse().id_token).catch();
         if (email != null) {
           console.log("Looking for email: " + email);
 

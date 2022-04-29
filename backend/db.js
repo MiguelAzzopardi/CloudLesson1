@@ -90,6 +90,36 @@ export async function GetUser(email){
     return data;
 }
 
+export async function GetUserDoc(email){
+    const docRef = db.collection("userData");
+    const snapshot = await docRef.where("email", "==", email).get();
+    let data = [];
+    snapshot.forEach((doc) => {
+        data.push(doc.data());
+    });
+
+    if(data.length > 0){
+        creditsOfCurUser = data[0].credits;
+    }
+    
+    return data[0];
+}
+
+export async function SetCurCredits(email, amount){
+    //Would confirm payment here
+    
+    //Add credits
+    const userDoc = await GetUserDoc(email);
+
+    var newCredits = userDoc.credits + amount;
+
+    const userRef = db.collection('userData').doc(userDoc);
+    const res = await userRef.update({
+        credits: newCredits,
+    });
+
+}
+
 export async function GetCurCredits(){
     return creditsOfCurUser;
 }
