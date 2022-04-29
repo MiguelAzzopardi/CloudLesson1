@@ -71,6 +71,7 @@ async function listBuckets() {
 }
 
 async function convertDOCorFILEtoPDF() {
+  console.log("Calling API with file path: " + fileToConvertPath);
   await convertapi.convert('pdf', { File: fileToConvertPath })
     .then(function (result) {
       // get converted file url
@@ -142,7 +143,7 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
           filename: req.file.originalname,
         });
       });
-      console.log("\nFile downloaded at: " + req.file.path);
+      //console.log("\nFile downloaded at: " + req.file.path);
 
       //var resp = await uploadFile(req.file).catch(console.error);
 
