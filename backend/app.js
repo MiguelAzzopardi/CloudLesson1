@@ -36,11 +36,22 @@ const SECRET_PRIVATE_KEY = "projects/943607083854/secrets/PrivateKey/versions/1"
 const SECRET_PUBLIC_KEY = "projects/943607083854/secrets/publickey/versions/1";
 
 const SECRET_API = "projects/943607083854/secrets/ConvertAPI_Secret/versions/1";
-export let API_KEY = "570878769";//Get from secret manager ideally
+const API_KEY = "projects/943607083854/secrets/ConvertAPI_Key/versions/1";
 
 const _filename = fileURLToPath(import.meta.url);
 const _dirname = dirname(_filename);
 
+const [api_key] = await sm.accessSecretVersion({
+  name: API_KEY,
+});
+
+const [api_secret] = await sm.accessSecretVersion({
+  name: SECRET_API,
+});
+
+function GetAPISecret(){
+  return api_secret;
+}
 //Start Server
 const startServer = async () =>{
   //Load API key
@@ -56,6 +67,9 @@ const startServer = async () =>{
     const [priv] = await sm.accessSecretVersion({
       name: SECRET_PRIVATE_KEY,
     });
+
+    
+
     const sslOptions = {
       key : priv.payload.data.toString(),
       cert: pub.payload.data.toString()

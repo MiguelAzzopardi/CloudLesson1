@@ -10,9 +10,11 @@ import { validateToken } from "./auth.js";
 import fs from "fs"
 import Firestore from "@google-cloud/firestore";
 import http from 'http';
+import {GetAPISecret} from "../app.js"
 
 export const GOOGLE_APPLICATION_CREDENTIALS = './key.json'
-const convertapi = new ConvertAPI('8hfr6FeNB9QiLhvK');
+const convertapi = new ConvertAPI(GetAPISecret());
+
 const bucketName = "pftc001.appspot.com";
 
 const __filename = fileURLToPath(import.meta.url);
