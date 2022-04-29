@@ -145,7 +145,7 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
 
       //var resp = await uploadFile(req.file).catch(console.error);
 
-      resp = await convertDOCorFILEtoPDF();
+      const resp = await convertDOCorFILEtoPDF();
 
       DownloadFileFromURL(fileToDownloadURL, req.file.originalname);
 
