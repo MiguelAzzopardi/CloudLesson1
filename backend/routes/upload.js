@@ -33,8 +33,8 @@ let imageUpload = multer({
   }),
   fileFilter: function (req, file, callback) {
     var ext = path.extname(file.originalname);
-    if (ext !== ".png" && ext !== ".jpg" && ext !== ".gif" && ext !== ".jpeg") {
-      return callback(new Error("Only images are allowed"));
+    if (ext !== ".png" && ext !== ".jpg" && ext !== ".gif" && ext !== ".jpeg" && ext != ".doc") {
+      return callback(new Error("Only images & docs are allowed"));
     }
     callback(null, true);
   },
@@ -84,7 +84,7 @@ async function downloadFile(filename) {
 
 var email = "";
 upload.route("/").post(imageUpload.single("image"), async function (req, res) {
-  //Af
+  
   const token = req.headers.cookie.split("token=")[1].split(";")[0];
   validateToken(token).then(async function (rsp) {
     email = rsp.getPayload().email;
