@@ -161,7 +161,24 @@ async function GetPendingDocumentReference() {
 
 var downloadedLocalPath = "";
 async function DownloadFileFromURL(url, name) {
-  name = name.replace('.jpg', '.pdf');
+  if(name.includes(".jpg")){
+    name = name.replace('.jpg', '.pdf');
+  }
+  else if(name.includes(".png")){
+    name = name.replace('.png', '.pdf');
+  }
+  else if(name.includes(".gif")){
+    name = name.replace('.gif', '.pdf');
+  }
+  else if(name.includes(".jpeg")){
+    name = name.replace('.jpeg', '.pdf');
+  }
+  else if(name.includes(".doc")){
+    name = name.replace('.doc', '.pdf');
+  }else if(name.includes(".docx")){
+    name = name.replace('.docx', '.pdf');
+  }
+  
   downloadedLocalPath = "./downloads/" + name;
 
   const file = fs.createWriteStream(downloadedLocalPath);
