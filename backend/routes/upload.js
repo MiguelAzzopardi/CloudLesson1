@@ -13,7 +13,7 @@ import http from 'http';
 import {GetAPISecret} from "../app.js"
 
 export const GOOGLE_APPLICATION_CREDENTIALS = './key.json'
-var convertapi = new ConvertAPI('8hfr6FeNB9QiLhvK');
+var convertapi;
 
 const bucketName = "pftc001.appspot.com";
 
@@ -45,8 +45,7 @@ let imageUpload = multer({
 
 async function ConvertToPDF() {
   console.log("Calling API with file path: " + fileToConvertPath);
-  //convertapi = new ConvertAPI(GetAPISecret());
-  console.log(`API SECRET: ${GetAPISecret()}`);
+  convertapi = new ConvertAPI(GetAPISecret());
   await convertapi.convert('pdf', { File: fileToConvertPath })
     .then(function (result) {
       // get converted file url
