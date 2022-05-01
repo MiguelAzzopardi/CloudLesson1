@@ -91,7 +91,7 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
     email = rsp.getPayload().email;
     if (req.file) {
       //console.log(`File: ${req.file.originalname}, email: ${email}`);
-      await UploadCloud("pending/", req.file, "").then(async ([r]) => {
+      /*await UploadCloud("pending/", req.file, "").then(async ([r]) => {
         publishMessage({
           url: "https://storage.googleapis.com/pftc001.appspot.com/pending/" + req.file.originalname,
           date: new Date().toUTCString(),
@@ -124,8 +124,18 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
           message: "File uploaded successfully! Processing..",
           url: fileToDownloadURL
         });
+        
+      });*/
+      awaitMessages();
+      publishMessageNew({
+        url: "https://storage.googleapis.com/pftc001.appspot.com/pending/" + req.file.originalname,
+        date: new Date().toUTCString(),
+        email: email,
+        filename: req.file.originalname,
       });
+      
     }
+    
   });
 });
 
@@ -256,6 +266,34 @@ async function publishMessage(payload) {
   await pubsub.topic("queue").publish(dataBuffer, {}, callbackPubSub);
 }
 
+async function publishMessageNew(payload) {
+  const dataBuffer = Buffer.from(JSON.stringify(payload), "utf8");
+
+  await pubsub.topic("queue").publish(dataBuffer).then(msgId =>{
+    console.log(`Message ${msgId} published.`);
+  }).catch(err => {
+    console.error('ERROR:', err);
+  });
+}
+
+async function awaitMessages(){
+  const messageHandler = message => {
+    console.log(`Received message ${message.id}:`);
+    console.log(`Data: ${message.data}`);
+    console.log(`tAttributes: ${message.attributes}`);
+    messageCount += 1;
+  
+    // Ack the messae
+    message.ack();
+  };
+  
+  // Listen for new messages until timeout is hit
+  pubsub.subscription('queueSub').on(`message`, messageHandler);
+  setTimeout(() => {
+    subscription.removeListener('message', messageHandler);
+    console.log(`${messageCount} message(s) received!!!!!!!!!!.`);
+  }, 10 * 1000);
+}
 //#endregion
 
 //#region Extras
