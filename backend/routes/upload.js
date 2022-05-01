@@ -92,7 +92,7 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
     if (req.file) {
       //console.log(`File: ${req.file.originalname}, email: ${email}`);
       await UploadCloud("pending/", req.file, "").then(async ([r]) => {
-        await publishMessage({
+        publishMessage({
           url: "https://storage.googleapis.com/pftc001.appspot.com/pending/" + req.file.originalname,
           date: new Date().toUTCString(),
           email: email,
@@ -244,7 +244,7 @@ const UploadCloud = async (folder, file, overridePath) => {
 };
 
 const callbackPubSub = (error, msgId) => {
-  //console.log("File uploaded from cloud function, message id: " + msgId);
+  console.log("File uploaded from cloud function, message id: " + msgId);
   if (error) {
     console.log(error);
   }
