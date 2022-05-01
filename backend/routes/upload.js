@@ -90,42 +90,8 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
   validateToken(token).then(async function (rsp) {
     email = rsp.getPayload().email;
     if (req.file) {
-      //console.log(`File: ${req.file.originalname}, email: ${email}`);
-      /*await UploadCloud("pending/", req.file, "").then(async ([r]) => {
-        publishMessage({
-          url: "https://storage.googleapis.com/pftc001.appspot.com/pending/" + req.file.originalname,
-          date: new Date().toUTCString(),
-          email: email,
-          filename: req.file.originalname,
-        });
-      }).then(async function () {
-        //console.log("\nFile downloaded at: " + req.file.path);
 
-        //var resp = await uploadFile(req.file).catch(console.error);
-
-        const resp = await ConvertToPDF();
-
-        const downloadedFile = await DownloadFileFromURL(fileToDownloadURL, req.file.originalname);
-        console.log(`Downloaded file path: ${downloadFile.path}`);
-
-        await UploadCloud("completed/", downloadedFile, downloadedFile.path).then(async function ([r]) {
-          const docToUpdate = await GetPendingDocumentReference();
-          const docReff = db.collection('conversions').doc(docToUpdate);
-          const res = await docReff.update({
-            pending: "",
-            completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + req.file.originalname,
-          });
-          console.log("Updated conversion!");
-        });
-
-        //console.log(`fileToDownloadURL: ${fileToDownloadURL}, resp: ${resp}`);
-        res.send({
-          status: "200",
-          message: "File uploaded successfully! Processing..",
-          url: fileToDownloadURL
-        });
-        
-      });*/
+      console.log("Initial retrieved file name: " + req.file.originalname);
       awaitMessages(req, res, email);
       await UploadCloud("pending/", req.file, "").then(async ([r]) => {
         publishMessageNew({
@@ -135,7 +101,6 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
         filename: req.file.originalname,
       });
       });
-      
       
     }
     
@@ -161,7 +126,7 @@ async function GetPendingDocumentReference() {
       pendingDoc = doc.id;
       lowestDate = doc.date;
     } else {
-      if (doc.date < lowestDate) {
+      if (doc.date > lowestDate) {
         lowestDate = doc.date;
         pendingDoc = doc.id;
       }
@@ -193,7 +158,7 @@ async function DownloadFileFromURL(url, name) {
   } else if (name.includes(".docx")) {
     name = name.replace('.docx', '.pdf');
   }
-
+  
   downloadedLocalPath = "./downloads/" + name;
 
   const file = fs.createWriteStream(downloadedLocalPath);
@@ -293,13 +258,12 @@ async function awaitMessages(req, res, email){
       const resp = await ConvertToPDF();
       console.log("URL IS: ");
       const downloadedFile = await DownloadFileFromURL(fileToDownloadURL, req.file.originalname);
-      console.log(`Downloaded file path: ${downloadFile.path}`);
+      console.log(`Downloaded file path: ${downloadedFile.path}`);
 
       await UploadCloud("completed/", downloadedFile, downloadedFile.path).then(async function ([r]) {
         const docToUpdate = await GetPendingDocumentReference();
         const docReff = db.collection('conversions').doc(docToUpdate);
         const res = await docReff.update({
-          pending: "",
           completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + req.file.originalname,
         });
         console.log("Updated conversion!");
@@ -321,9 +285,6 @@ async function awaitMessages(req, res, email){
   setTimeout(() => {
     pubsub.subscription('queue-sub').removeListener('message', messageHandler);
     console.log(`${messageCount} message(s) received!!!!!!!!!!.`);
-
-    
-
   }, 10 * 1000);
 }
 //#endregion
