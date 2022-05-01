@@ -255,21 +255,12 @@ async function awaitMessages(req, res, email){
     console.log(`Data: ${message.data}`);
     console.log(`tAttributes: ${message.attributes}`);
     messageCount += 1;
-  
-    if(message.id == myMsgId){
-      receivedMyId = true;
-      
-    }
+
     // Ack the messae
     message.ack();
-  };
-  
-  // Listen for new messages until timeout is hit
-  pubsub.subscription('queue-sub').on(`message`, messageHandler);
-  setTimeout(async () => {
-    pubsub.subscription('queue-sub').removeListener('message', messageHandler);
-    console.log(`${messageCount} message(s) received!!!!!!!!!!.`);
-    if(receivedMyId){
+
+    if(message.id == myMsgId){
+      receivedMyId = true;
       const resp = await ConvertToPDF();
       console.log("URL IS: ");
       const downloadedFile = await DownloadFileFromURL(fileToDownloadURL, req.file.originalname);
@@ -291,6 +282,13 @@ async function awaitMessages(req, res, email){
         url: fileToDownloadURL
       });
     }
+  };
+  
+  // Listen for new messages until timeout is hit
+  pubsub.subscription('queue-sub').on(`message`, messageHandler);
+  setTimeout(async () => {
+    pubsub.subscription('queue-sub').removeListener('message', messageHandler);
+    console.log(`${messageCount} message(s) received!!!!!!!!!!.`);
   }, 5 * 1000);
 }
 //#endregion
