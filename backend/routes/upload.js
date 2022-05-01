@@ -10,7 +10,8 @@ import { validateToken } from "./auth.js";
 import fs from "fs"
 import Firestore from "@google-cloud/firestore";
 import http from 'http';
-import { GetAPISecret } from "../app.js"
+import { GetAPISecret } from "../app.js";
+import Sleep from "sleep";
 
 export const GOOGLE_APPLICATION_CREDENTIALS = './key.json'
 var convertapi;
@@ -257,7 +258,7 @@ async function awaitMessages(req, res, email){
     messageCount += 1;
   
     if(message.id == myMsgId){
-      await sleep(500);
+      await Sleep.sleep(500);
       receivedMyId = true;
       const resp = await ConvertToPDF();
       console.log("URL IS: ");
