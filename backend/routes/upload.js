@@ -127,7 +127,7 @@ async function GetPendingDocumentReference() {
       pendingDoc = doc.id;
       lowestDate = doc.date;
     } else {
-      if (doc.date > lowestDate) {
+      if (doc.date < lowestDate) {
         lowestDate = doc.date;
         pendingDoc = doc.id;
       }
