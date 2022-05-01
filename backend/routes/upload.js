@@ -91,6 +91,7 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
     email = rsp.getPayload().email;
     if (req.file) {
 
+      receivedMyId = false;
       console.log("Initial retrieved file name: " + req.file.originalname);
       awaitMessages(req, res, email);
       await UploadCloud("pending/", req.file, "").then(async ([r]) => {
@@ -247,6 +248,7 @@ async function publishMessageNew(payload) {
 
 let myMsgId = 0;
 let messageCount = 0;
+let receivedMyId = false;
 async function awaitMessages(req, res, email){
   const messageHandler = async message => {
     console.log(`Received message ${message.id}:`);
@@ -255,6 +257,18 @@ async function awaitMessages(req, res, email){
     messageCount += 1;
   
     if(message.id == myMsgId){
+      receivedMyId = true;
+    }
+    // Ack the messae
+    message.ack();
+  };
+  
+  // Listen for new messages until timeout is hit
+  pubsub.subscription('queue-sub').on(`message`, messageHandler);
+  setTimeout(() => {
+    pubsub.subscription('queue-sub').removeListener('message', messageHandler);
+    console.log(`${messageCount} message(s) received!!!!!!!!!!.`);
+    if(receivedMyId){
       const resp = await ConvertToPDF();
       console.log("URL IS: ");
       const downloadedFile = await DownloadFileFromURL(fileToDownloadURL, req.file.originalname);
@@ -276,16 +290,7 @@ async function awaitMessages(req, res, email){
         url: fileToDownloadURL
       });
     }
-    // Ack the messae
-    message.ack();
-  };
-  
-  // Listen for new messages until timeout is hit
-  pubsub.subscription('queue-sub').on(`message`, messageHandler);
-  setTimeout(() => {
-    pubsub.subscription('queue-sub').removeListener('message', messageHandler);
-    console.log(`${messageCount} message(s) received!!!!!!!!!!.`);
-  }, 10 * 1000);
+  }, 5 * 1000);
 }
 //#endregion
 
