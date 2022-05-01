@@ -50,6 +50,7 @@ header .logo_container h1{
     }
     
 }
+
 header .logo_container h1 span{
     font-weight: 600;
 }
@@ -107,6 +108,11 @@ header nav a{
     justify-content: center;
     text-align: center;
     /*background-color: aqua;*/
+}
+
+table{
+    text-align: center;
+    justify-content: center;
 }
 
 .upload_file{
