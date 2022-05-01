@@ -243,7 +243,12 @@ async function awaitMessages(req, res, email) {
 
     if (message.id == myMsgId) {
       receivedMyId = true;
-      const doc = await GetDocWithMessageID(message.id);
+    }
+
+    // Ack the message
+    message.ack();
+
+    const doc = await GetDocWithMessageID(message.id);
 
       const downloadedFile = await DownloadFileFromURL(doc.data().completed, doc.data().filename);
 
@@ -262,10 +267,6 @@ async function awaitMessages(req, res, email) {
         message: "File uploaded successfully! Processing..",
         url: fileToDownloadURL
       });
-    }
-
-    // Ack the message
-    message.ack();
   };
   // Listen for new messages until timeout is hit
   pubsub.subscription('queue-sub').on(`message`, messageHandler);
