@@ -89,18 +89,9 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
   validateToken(token).then(async function (rsp) {
     email = rsp.getPayload().email;
     if (req.file) {
-
       receivedMyId = false;
-      /*console.log("Initial retrieved file name: " + req.file.originalname);
+
       awaitMessages(req, res, email);
-      await UploadCloud("pending/", req.file, "").then(async ([r]) => {
-        publishMessageNew({
-        url: "https://storage.googleapis.com/pftc001.appspot.com/pending/" + req.file.originalname,
-        date: new Date().toUTCString(),
-        email: email,
-        filename: req.file.originalname,
-      });
-      });*/
 
       await UploadCloud("pending/", req.file, "").then(async ([r]) => {
         publishMessage({
@@ -224,12 +215,11 @@ const UploadCloud = async (folder, file, overridePath) => {
 
     return cloudRet;
   }
-
-
 };
 
 const callbackPubSub = (error, msgId) => {
   console.log("File uploaded from cloud function, message id: " + msgId);
+  myMsgId = msgId;
   if (error) {
     console.log(error);
   }
@@ -239,17 +229,6 @@ async function publishMessage(payload) {
   const dataBuffer = Buffer.from(JSON.stringify(payload), "utf8");
 
   await pubsub.topic("queue").publish(dataBuffer, {}, callbackPubSub);
-}
-
-async function publishMessageNew(payload) {
-  const dataBuffer = Buffer.from(JSON.stringify(payload), "utf8");
-
-  await pubsub.topic("queue").publish(dataBuffer).then(msgId => {
-    myMsgId = msgId;
-    console.log(`Message ${msgId} published.`);
-  }).catch(err => {
-    console.error('ERROR:', err);
-  });
 }
 
 let myMsgId = 0;
@@ -264,18 +243,17 @@ async function awaitMessages(req, res, email) {
 
     if (message.id == myMsgId) {
       receivedMyId = true;
-      const resp = await ConvertToPDF();
-      console.log("URL IS: ");
-      const downloadedFile = await DownloadFileFromURL(fileToDownloadURL, req.file.originalname);
-      console.log(`Downloaded file path: ${downloadedFile.path}`);
+      const doc = await GetDocWithMessageID(message.id);
 
+      const downloadedFile = await DownloadFileFromURL(doc.data().completed, doc.data().filename);
+
+      fileToDownloadURL = "https://storage.googleapis.com/pftc001.appspot.com/completed/" + path.basename(downloadedFile.path);
       await UploadCloud("completed/", downloadedFile, downloadedFile.path).then(async function ([r]) {
-        const docToUpdate = await GetPendingDocumentReference();
-        const docReff = db.collection('conversions').doc(docToUpdate);
+        const docReff = db.collection('conversions').doc(doc.id);
         const res = await docReff.update({
-          completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + path.basename(downloadedFile.path),
+          completed: fileToDownloadURL,
         });
-        console.log("Updated conversion!");
+        console.log("Updated completed file!");
       });
 
       //console.log(`fileToDownloadURL: ${fileToDownloadURL}, resp: ${resp}`);
@@ -289,13 +267,24 @@ async function awaitMessages(req, res, email) {
     // Ack the message
     message.ack();
   };
-
   // Listen for new messages until timeout is hit
   pubsub.subscription('queue-sub').on(`message`, messageHandler);
   setTimeout(async () => {
     pubsub.subscription('queue-sub').removeListener('message', messageHandler);
     console.log(`${messageCount} message(s) received!!!!!!!!!!.`);
   }, 5 * 1000);
+}
+
+async function GetDocWithMessageID(id) {
+  const docRef = db.collection("conversions");
+  const snapshot = await docRef.where("messageId", "==", id).get();
+
+  var pendingDoc = null;
+  snapshot.forEach((doc) => {
+    pendingDoc = doc;
+  });
+
+  return pendingDoc;
 }
 //#endregion
 
