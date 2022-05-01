@@ -201,7 +201,7 @@ async function authenticateReq(token) {
     const picture = response.data.picture;
     const expiry = response.data.expiry;
 
-    loggedIn();
+    loggedIn();//XXXX
 
     document.getElementById("navbarDropdownMenuLink").innerHTML =
       `<img
@@ -221,7 +221,7 @@ async function authenticateReq(token) {
     document.cookie = `token=${token};expires=${date.toUTCString()}`;
     console.log(`${name} signed in successfully.`);
 
-    console.log(`Status 200`);
+    //console.log(`Status 200`);
     return email;
   } else {
     loggedOut();

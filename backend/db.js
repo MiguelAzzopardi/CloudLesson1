@@ -13,35 +13,20 @@ redisClient.on("error", function(error) {
     console.error(error);
 });
 
-const GetCreditPrices = async()=>{
-    return redisClient.get("credits");
-}
-
-const SetCreditPrices = async(payload)=>{
-    //console.log(`Setting credits to: ${JSON.stringify(payload)}`);
-    return await redisClient.set("credits", JSON.stringify(payload));
-}
-
 export async function SetCreditsPrices(payload){
     if(!redisClient.isOpen){
         await redisClient.connect();
     }
-    //console.log(`Redis open: ${redisClient.isOpen}`);
-    const resp = await SetCreditPrices(payload);
-    //console.log("2: " + resp);
 
-    return resp;
+    return await redisClient.set("credits", JSON.stringify(payload));
 }
 
 export async function GetCreditsPrices(){
     if(!redisClient.isOpen){
         await redisClient.connect();
     }
-    
-    const resp = await GetCreditPrices();
-    //console.log("2: " + resp);
 
-    return resp;
+    return await redisClient.get("credits");
 }
 
 //Google Cloud key

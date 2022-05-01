@@ -132,7 +132,7 @@ app.post("/login", (req, res) => {
 
       console.log(`Data in r:\nr[0].credits]: ${r[0].credits}`);
 
-      res.send({ result: "fail", reason: "Email not found in database, account has been created!", credits: r[0].credits, admin: r[0].admin});
+      res.send({ result: "fail", reason: "Email not found in database, account has been created!", credits: "10", admin:"false"});
     }
   });
 });
