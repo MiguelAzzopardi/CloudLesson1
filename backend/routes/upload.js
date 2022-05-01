@@ -126,7 +126,7 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
         });
         
       });*/
-      awaitMessages(res);
+      awaitMessages(req, res, email);
       publishMessageNew({
         url: "https://storage.googleapis.com/pftc001.appspot.com/pending/" + req.file.originalname,
         date: new Date().toUTCString(),
@@ -279,7 +279,7 @@ async function publishMessageNew(payload) {
 
 let myMsgId = 0;
 let messageCount = 0;
-async function awaitMessages(res){
+async function awaitMessages(req, res, email){
   const messageHandler = async message => {
     console.log(`Received message ${message.id}:`);
     console.log(`Data: ${message.data}`);
