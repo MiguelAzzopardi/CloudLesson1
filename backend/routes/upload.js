@@ -243,11 +243,13 @@ async function awaitMessages(req, res, email) {
 
     if (message.id == myMsgId) {
       receivedMyId = true;
-      res.send({
+      try{res.send({
         status: "200",
         message: "File uploaded successfully! Processing..",
         url: fileToDownloadURL
-      });
+      });}catch(error){
+        console.log("Await Messages err: " + error);
+      }
     }
 
     // Ack the message
