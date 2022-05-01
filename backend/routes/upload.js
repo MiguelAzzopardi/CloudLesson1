@@ -251,13 +251,10 @@ let messageCount = 0;
 let receivedMyId = false;
 async function awaitMessages(req, res, email){
   const messageHandler = async message => {
-    console.log(`Received message ${message.id}:`);
-    console.log(`Data: ${message.data}`);
-    console.log(`tAttributes: ${message.attributes}`);
+    //console.log(`Received message ${message.id}:`);
+    //console.log(`Data: ${message.data}`);
+    //console.log(`tAttributes: ${message.attributes}`);
     messageCount += 1;
-
-    // Ack the messae
-    message.ack();
 
     if(message.id == myMsgId){
       receivedMyId = true;
@@ -282,6 +279,9 @@ async function awaitMessages(req, res, email){
         url: fileToDownloadURL
       });
     }
+
+    // Ack the message
+    message.ack();
   };
   
   // Listen for new messages until timeout is hit
