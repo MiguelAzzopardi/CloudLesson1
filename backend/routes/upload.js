@@ -258,17 +258,6 @@ async function awaitMessages(req, res, email){
   
     if(message.id == myMsgId){
       receivedMyId = true;
-    }
-    // Ack the messae
-    message.ack();
-  };
-  
-  // Listen for new messages until timeout is hit
-  pubsub.subscription('queue-sub').on(`message`, messageHandler);
-  setTimeout(async () => {
-    pubsub.subscription('queue-sub').removeListener('message', messageHandler);
-    console.log(`${messageCount} message(s) received!!!!!!!!!!.`);
-    if(receivedMyId){
       const resp = await ConvertToPDF();
       console.log("URL IS: ");
       const downloadedFile = await DownloadFileFromURL(fileToDownloadURL, req.file.originalname);
@@ -289,6 +278,18 @@ async function awaitMessages(req, res, email){
         message: "File uploaded successfully! Processing..",
         url: fileToDownloadURL
       });
+    }
+    // Ack the messae
+    message.ack();
+  };
+  
+  // Listen for new messages until timeout is hit
+  pubsub.subscription('queue-sub').on(`message`, messageHandler);
+  setTimeout(async () => {
+    pubsub.subscription('queue-sub').removeListener('message', messageHandler);
+    console.log(`${messageCount} message(s) received!!!!!!!!!!.`);
+    if(receivedMyId){
+      
     }
   }, 5 * 1000);
 }
