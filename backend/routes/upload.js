@@ -127,12 +127,15 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
         
       });*/
       awaitMessages(req, res, email);
-      publishMessageNew({
-        url: "https://storage.googleapis.com/pftc001.appspot.com/pending/" + req.file.originalname,
-        date: new Date().toUTCString(),
-        email: email,
-        filename: req.file.originalname,
+      await UploadCloud("pending/", req.file, "").then(async ([r]) => {
+        publishMessageNew({
+          url: "https://storage.googleapis.com/pftc001.appspot.com/pending/" + req.file.originalname,
+          date: new Date().toUTCString(),
+          email: email,
+          filename: req.file.originalname,
+        });
       });
+      
       
     }
     
@@ -288,7 +291,7 @@ async function awaitMessages(req, res, email){
   
     if(message.id == myMsgId){
       const resp = await ConvertToPDF();
-
+      console.log("URL IS: ");
       const downloadedFile = await DownloadFileFromURL(fileToDownloadURL, req.file.originalname);
       console.log(`Downloaded file path: ${downloadFile.path}`);
 
