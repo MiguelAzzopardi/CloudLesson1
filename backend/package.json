@@ -24,7 +24,6 @@
     "multer": "^1.4.4",
     "pubsub": "^3.2.1",
     "redis": "^4.0.6",
-    "sleep": "^6.3.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
