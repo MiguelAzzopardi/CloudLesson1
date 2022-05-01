@@ -82,11 +82,11 @@ const startServer = async () =>{
 
 const app = Express();
 
-export function GetAPISecret(){
+export async function GetAPISecret(){
   api_secret = await sm.accessSecretVersion({
     name: SECRET_API,
   });
-  
+
   return api_secret;
 }
 
