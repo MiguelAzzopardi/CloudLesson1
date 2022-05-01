@@ -257,6 +257,7 @@ async function awaitMessages(req, res, email){
     messageCount += 1;
   
     if(message.id == myMsgId){
+      await sleep(500);
       receivedMyId = true;
       const resp = await ConvertToPDF();
       console.log("URL IS: ");
