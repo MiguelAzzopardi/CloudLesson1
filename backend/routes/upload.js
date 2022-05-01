@@ -287,6 +287,18 @@ async function GetDocWithMessageID(id) {
 
   return pendingDoc;
 }
+
+export async function GetAllConversions(email){
+  const docRef = db.collection("conversions");
+  const snapshot = await docRef.where("email", "==", email).get();
+
+  var docs = [];
+  snapshot.forEach((doc) => {
+    doc.push(doc.data());
+  });
+
+  return docs;
+}
 //#endregion
 
 //#region Extras

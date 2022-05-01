@@ -69,7 +69,15 @@
         <div class="main_content">
             <!-- Upload Area -->
             <div class="upload_area" id="uploadDiv" style="display: none;">
-                <table class="table">
+                <div class="upload_file">
+                    <input id="fileInput" class="form-control" type="file" id="formFile" accept="image/*">
+                </div>
+
+                <div class="uploadbutton">
+                    <button id="convert" type="button" class="btn btn-primary" onclick="uploadFile()">Convert</button>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="GetAllConversions()">Refresh Table</button>
+                <table class="table" id="conversionTable">
                     <tr>
                         <th>Date</th>
                         <th>Name</th>
@@ -86,13 +94,6 @@
                         <th>Test6</th>
                     </tr>
                 </table>
-                <div class="upload_file">
-                    <input id="fileInput" class="form-control" type="file" id="formFile" accept="image/*">
-                </div>
-
-                <div class="uploadbutton">
-                    <button id="convert" type="button" class="btn btn-primary" onclick="uploadFile()">Convert</button>
-                </div>
             </div>
 
             <div class="upload_area" id="admin_area" style="display: none;">

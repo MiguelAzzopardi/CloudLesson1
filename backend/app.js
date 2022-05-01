@@ -1,4 +1,4 @@
-import Express from "express";
+import Express, { application } from "express";
 import cors from "cors";
 import { fileURLToPath} from "url";
 import path, {dirname} from "path";
@@ -172,6 +172,12 @@ app.post("/setUserCredits", (req, res) => {
     res.send({ result: "setUserCredits", reason: "Credits set!"});
   }); 
 });
+
+app.post("/getAllConversions", async(req, res)=>{
+  GetAllConversions(req.query.email).then((result)=>{
+    res.send({docs: result});
+  })
+})
 
 startServer();
 //--------------------------------

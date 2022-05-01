@@ -182,6 +182,19 @@ async function RemoveCredit(){
   UpdateCreditAmount();
 }
 
+let table = document.getElementById("conversionTable");
+async function GetAllConversions(){
+  const url = `/getAllConversions?email=${email}`;
+  const response = await axios.post(url);
+  
+  table.innerHTML = "";
+  table.innerHTML += " <tr><th>Date</th><th>Name</th></tr>";
+
+  response.forEach(element => {
+    table.innerHTML += `<tr><th>${element.date}</th><th href=\"${element.completed}\">${element.filename}</th></tr>`;
+  });
+}
+
 /*const authenticateReq = async (token) => {*/
 var email = "";
 async function authenticateReq(token) {
