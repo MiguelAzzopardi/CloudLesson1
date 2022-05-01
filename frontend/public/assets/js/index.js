@@ -190,7 +190,7 @@ async function GetAllConversions(){
   table.innerHTML = "";
   table.innerHTML += " <tr><th>Date</th><th>Name</th></tr>";
 
-  response.forEach(element => {
+  response.data.docs.forEach(element => {
     table.innerHTML += `<tr><th>${element.date}</th><th href=\"${element.completed}\">${element.filename}</th></tr>`;
   });
 }
