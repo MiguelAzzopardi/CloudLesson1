@@ -4,6 +4,10 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "@google-cloud/firestore": "^5.0.2"
+    "@google-cloud/firestore": "^5.0.2",
+    "@google-cloud/storage": "^5.19.4",
+    "convertapi": "^1.11.1",
+    "fs": "0.0.1-security",
+    "http": "0.0.1-security"
   }
 }

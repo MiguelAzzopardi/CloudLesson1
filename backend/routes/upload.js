@@ -85,14 +85,13 @@ async function downloadFile(filename) {
 
 var email = "";
 upload.route("/").post(imageUpload.single("image"), async function (req, res) {
-
   const token = req.headers.cookie.split("token=")[1].split(";")[0];
   validateToken(token).then(async function (rsp) {
     email = rsp.getPayload().email;
     if (req.file) {
 
       receivedMyId = false;
-      console.log("Initial retrieved file name: " + req.file.originalname);
+      /*console.log("Initial retrieved file name: " + req.file.originalname);
       awaitMessages(req, res, email);
       await UploadCloud("pending/", req.file, "").then(async ([r]) => {
         publishMessageNew({
@@ -101,10 +100,15 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
         email: email,
         filename: req.file.originalname,
       });
+      });*/
+      publishMessage({
+        url: "https://storage.googleapis.com/pftc001.appspot.com/pending/" + req.file.originalname,
+        date: new Date().toUTCString(),
+        email: email,
+        filename: req.file.originalname,
       });
       
     }
-    
   });
 });
 
