@@ -264,7 +264,7 @@ async function awaitMessages(req, res, email){
         const docToUpdate = await GetPendingDocumentReference();
         const docReff = db.collection('conversions').doc(docToUpdate);
         const res = await docReff.update({
-          completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + req.file.originalname,
+          completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + path.basename(downloadedFile.path),
         });
         console.log("Updated conversion!");
       });
