@@ -1,5 +1,5 @@
 import Express from "express";
-import { Storage } from ('@google-cloud/storage');
+const { Storage } = require ('@google-cloud/storage');
 const clean = Express.Router();
 
 const bucketName = "pftc001.appspot.com";
