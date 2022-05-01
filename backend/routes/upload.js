@@ -206,7 +206,7 @@ const UploadCloud = async (folder, file, overridePath) => {
 
     return cloudRet;
   } else {
-    console.log(`!!File: ${file} + file path: ${overridePath}`);
+    console.log(`!!File: ${file.originalname} + file path: ${overridePath}`);
 
     const cloudRet = await storage.bucket(bucketName).upload(overridePath, {
       destination: folder + file.originalname,
