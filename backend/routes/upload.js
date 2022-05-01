@@ -280,7 +280,7 @@ async function publishMessageNew(payload) {
 let myMsgId = 0;
 let messageCount = 0;
 async function awaitMessages(res){
-  const messageHandler = message => {
+  const messageHandler = async message => {
     console.log(`Received message ${message.id}:`);
     console.log(`Data: ${message.data}`);
     console.log(`tAttributes: ${message.attributes}`);
