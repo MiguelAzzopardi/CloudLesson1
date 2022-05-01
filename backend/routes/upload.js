@@ -276,6 +276,7 @@ async function publishMessageNew(payload) {
   });
 }
 
+let messageCount = 0;
 async function awaitMessages(){
   const messageHandler = message => {
     console.log(`Received message ${message.id}:`);
