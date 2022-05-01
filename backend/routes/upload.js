@@ -126,7 +126,7 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
         });
         
       });*/
-      awaitMessages();
+      awaitMessages(res);
       publishMessageNew({
         url: "https://storage.googleapis.com/pftc001.appspot.com/pending/" + req.file.originalname,
         date: new Date().toUTCString(),
@@ -270,20 +270,45 @@ async function publishMessageNew(payload) {
   const dataBuffer = Buffer.from(JSON.stringify(payload), "utf8");
 
   await pubsub.topic("queue").publish(dataBuffer).then(msgId =>{
+    myMsgId = msgId;
     console.log(`Message ${msgId} published.`);
   }).catch(err => {
     console.error('ERROR:', err);
   });
 }
 
+let myMsgId = 0;
 let messageCount = 0;
-async function awaitMessages(){
+async function awaitMessages(res){
   const messageHandler = message => {
     console.log(`Received message ${message.id}:`);
     console.log(`Data: ${message.data}`);
     console.log(`tAttributes: ${message.attributes}`);
     messageCount += 1;
   
+    if(message.id == myMsgId){
+      const resp = await ConvertToPDF();
+
+      const downloadedFile = await DownloadFileFromURL(fileToDownloadURL, req.file.originalname);
+      console.log(`Downloaded file path: ${downloadFile.path}`);
+
+      await UploadCloud("completed/", downloadedFile, downloadedFile.path).then(async function ([r]) {
+        const docToUpdate = await GetPendingDocumentReference();
+        const docReff = db.collection('conversions').doc(docToUpdate);
+        const res = await docReff.update({
+          pending: "",
+          completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + req.file.originalname,
+        });
+        console.log("Updated conversion!");
+      });
+
+      //console.log(`fileToDownloadURL: ${fileToDownloadURL}, resp: ${resp}`);
+      res.send({
+        status: "200",
+        message: "File uploaded successfully! Processing..",
+        url: fileToDownloadURL
+      });
+    }
     // Ack the messae
     message.ack();
   };
@@ -291,8 +316,11 @@ async function awaitMessages(){
   // Listen for new messages until timeout is hit
   pubsub.subscription('queue-sub').on(`message`, messageHandler);
   setTimeout(() => {
-    subscription.removeListener('message', messageHandler);
+    pubsub.subscription('queue-sub').removeListener('message', messageHandler);
     console.log(`${messageCount} message(s) received!!!!!!!!!!.`);
+
+    
+
   }, 10 * 1000);
 }
 //#endregion
