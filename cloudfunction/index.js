@@ -22,6 +22,7 @@ exports.helloPubSub = async function (event, context) {
     const jsonData = JSON.parse(data);
 
     console.log(`File ${jsonData.filename} with url ${jsonData.url} uploaded by ${jsonData.email} on ${jsonData.date}`);
+    
     await AddDocument("conversions", {
         email: jsonData.email,
         filename: jsonData.filename,

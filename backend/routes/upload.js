@@ -101,13 +101,15 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
         filename: req.file.originalname,
       });
       });*/
-      publishMessage({
-        url: "https://storage.googleapis.com/pftc001.appspot.com/pending/" + req.file.originalname,
-        date: new Date().toUTCString(),
-        email: email,
-        filename: req.file.originalname,
+
+      await UploadCloud("pending/", req.file, "").then(async ([r]) => {
+        publishMessage({
+          url: "https://storage.googleapis.com/pftc001.appspot.com/pending/" + req.file.originalname,
+          date: new Date().toUTCString(),
+          email: email,
+          filename: req.file.originalname,
+        });
       });
-      
     }
   });
 });
@@ -163,7 +165,7 @@ async function DownloadFileFromURL(url, name) {
   } else if (name.includes(".docx")) {
     name = name.replace('.docx', '.pdf');
   }
-  
+
   downloadedLocalPath = "./downloads/" + name;
 
   const file = fs.createWriteStream(downloadedLocalPath);
@@ -242,7 +244,7 @@ async function publishMessage(payload) {
 async function publishMessageNew(payload) {
   const dataBuffer = Buffer.from(JSON.stringify(payload), "utf8");
 
-  await pubsub.topic("queue").publish(dataBuffer).then(msgId =>{
+  await pubsub.topic("queue").publish(dataBuffer).then(msgId => {
     myMsgId = msgId;
     console.log(`Message ${msgId} published.`);
   }).catch(err => {
@@ -253,14 +255,14 @@ async function publishMessageNew(payload) {
 let myMsgId = 0;
 let messageCount = 0;
 let receivedMyId = false;
-async function awaitMessages(req, res, email){
+async function awaitMessages(req, res, email) {
   const messageHandler = async message => {
     console.log(`Received message ${message.id}:`);
     //console.log(`Data: ${message.data}`);
     //console.log(`tAttributes: ${message.attributes}`);
     messageCount += 1;
 
-    if(message.id == myMsgId){
+    if (message.id == myMsgId) {
       receivedMyId = true;
       const resp = await ConvertToPDF();
       console.log("URL IS: ");
@@ -287,7 +289,7 @@ async function awaitMessages(req, res, email){
     // Ack the message
     message.ack();
   };
-  
+
   // Listen for new messages until timeout is hit
   pubsub.subscription('queue-sub').on(`message`, messageHandler);
   setTimeout(async () => {
