@@ -288,7 +288,7 @@ async function awaitMessages(){
   };
   
   // Listen for new messages until timeout is hit
-  pubsub.subscription('queueSub').on(`message`, messageHandler);
+  pubsub.subscription('queue-sub').on(`message`, messageHandler);
   setTimeout(() => {
     subscription.removeListener('message', messageHandler);
     console.log(`${messageCount} message(s) received!!!!!!!!!!.`);
