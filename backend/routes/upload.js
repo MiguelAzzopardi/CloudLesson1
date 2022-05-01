@@ -10,7 +10,7 @@ import { validateToken } from "./auth.js";
 import fs from "fs"
 import Firestore from "@google-cloud/firestore";
 import http from 'http';
-import {GetAPISecret} from "../app.js"
+import { GetAPISecret } from "../app.js"
 
 export const GOOGLE_APPLICATION_CREDENTIALS = './key.json'
 var convertapi;
@@ -84,44 +84,45 @@ async function downloadFile(filename) {
 
 var email = "";
 upload.route("/").post(imageUpload.single("image"), async function (req, res) {
-  
+
   const token = req.headers.cookie.split("token=")[1].split(";")[0];
   validateToken(token).then(async function (rsp) {
     email = rsp.getPayload().email;
     if (req.file) {
       //console.log(`File: ${req.file.originalname}, email: ${email}`);
-      await UploadCloud("pending/", req.file, "").then(([r]) => {
-        publishMessage({
+      await UploadCloud("pending/", req.file, "").then(async ([r]) => {
+        await publishMessage({
           url: "https://storage.googleapis.com/pftc001.appspot.com/pending/" + req.file.originalname,
           date: new Date().toUTCString(),
           email: email,
           filename: req.file.originalname,
         });
-      });
-      //console.log("\nFile downloaded at: " + req.file.path);
+      }).then(async function () {
+        //console.log("\nFile downloaded at: " + req.file.path);
 
-      //var resp = await uploadFile(req.file).catch(console.error);
+        //var resp = await uploadFile(req.file).catch(console.error);
 
-      const resp = await ConvertToPDF();
+        const resp = await ConvertToPDF();
 
-      const downloadedFile = await DownloadFileFromURL(fileToDownloadURL, req.file.originalname);
-      console.log(`Downloaded file path: ${downloadFile.path}`);
+        const downloadedFile = await DownloadFileFromURL(fileToDownloadURL, req.file.originalname);
+        console.log(`Downloaded file path: ${downloadFile.path}`);
 
-      await UploadCloud("completed/", downloadedFile, downloadedFile.path).then(async function ([r]) {
-        const docToUpdate = await GetPendingDocumentReference();
-        const docReff = db.collection('conversions').doc(docToUpdate);
-        const res = await docReff.update({
-          pending: "",
-          completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + req.file.originalname,
+        await UploadCloud("completed/", downloadedFile, downloadedFile.path).then(async function ([r]) {
+          const docToUpdate = await GetPendingDocumentReference();
+          const docReff = db.collection('conversions').doc(docToUpdate);
+          const res = await docReff.update({
+            pending: "",
+            completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + req.file.originalname,
+          });
+          console.log("Updated conversion!");
         });
-        console.log("Updated conversion!");
-      });
 
-      //console.log(`fileToDownloadURL: ${fileToDownloadURL}, resp: ${resp}`);
-      res.send({
-        status: "200",
-        message: "File uploaded successfully! Processing..",
-        url: fileToDownloadURL
+        //console.log(`fileToDownloadURL: ${fileToDownloadURL}, resp: ${resp}`);
+        res.send({
+          status: "200",
+          message: "File uploaded successfully! Processing..",
+          url: fileToDownloadURL
+        });
       });
     }
   });
@@ -161,24 +162,24 @@ async function GetPendingDocumentReference() {
 
 var downloadedLocalPath = "";
 async function DownloadFileFromURL(url, name) {
-  if(name.includes(".jpg")){
+  if (name.includes(".jpg")) {
     name = name.replace('.jpg', '.pdf');
   }
-  else if(name.includes(".png")){
+  else if (name.includes(".png")) {
     name = name.replace('.png', '.pdf');
   }
-  else if(name.includes(".gif")){
+  else if (name.includes(".gif")) {
     name = name.replace('.gif', '.pdf');
   }
-  else if(name.includes(".jpeg")){
+  else if (name.includes(".jpeg")) {
     name = name.replace('.jpeg', '.pdf');
   }
-  else if(name.includes(".doc")){
+  else if (name.includes(".doc")) {
     name = name.replace('.doc', '.pdf');
-  }else if(name.includes(".docx")){
+  } else if (name.includes(".docx")) {
     name = name.replace('.docx', '.pdf');
   }
-  
+
   downloadedLocalPath = "./downloads/" + name;
 
   const file = fs.createWriteStream(downloadedLocalPath);

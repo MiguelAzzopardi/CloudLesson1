@@ -11,12 +11,12 @@ const AddDocument = async (collection, data) => {
 };
 
 //entry point for application with url  uploaded by emal on  data
-exports.helloPubSub = (event, context)=>{
+exports.helloPubSub = async function (event, context){
     const data = Buffer.from(event.data, "base64").toString();
     const jsonData = JSON.parse(data);
     
     console.log(`File ${jsonData.filename} with url ${jsonData.url} uploaded by ${jsonData.email} on ${jsonData.date}`);
-    AddDocument("conversions",{
+    await AddDocument("conversions",{
         email:jsonData.email,
         filename:jsonData.filename,
         date: jsonData.date,
