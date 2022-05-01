@@ -251,7 +251,7 @@ let messageCount = 0;
 let receivedMyId = false;
 async function awaitMessages(req, res, email){
   const messageHandler = async message => {
-    //console.log(`Received message ${message.id}:`);
+    console.log(`Received message ${message.id}:`);
     //console.log(`Data: ${message.data}`);
     //console.log(`tAttributes: ${message.attributes}`);
     messageCount += 1;
