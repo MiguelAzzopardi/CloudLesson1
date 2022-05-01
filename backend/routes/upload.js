@@ -294,7 +294,7 @@ export async function GetAllConversions(email){
 
   var docs = [];
   snapshot.forEach((doc) => {
-    doc.push(doc.data());
+    docs.push(doc.data());
   });
 
   return docs;
