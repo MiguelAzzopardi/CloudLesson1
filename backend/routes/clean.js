@@ -19,9 +19,9 @@ async function listFiles() {
 
     console.log('Files:');
     files.forEach(file => {
-        if(new Date(file.metadata.timeCreated) < Date.now()-(1800000)){ //86400000 = 1day
+        if(new Date(file.metadata.timeCreated) < Date.now()-(86400000)){ //86400000 = 1day
             console.log(file.name + " is over 1 day old!");
-            //fokin yeet
+            
             file.delete();
         }
     });
