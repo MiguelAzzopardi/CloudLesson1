@@ -12,6 +12,10 @@ import home from "./routes/home.js";
 import clean from "./routes/clean.js";
 
 import {
+  GetAllConversions
+} from "./routes/upload.js"
+
+import {
   GetUser,
   CreateUser,
   GetCurCredits,
