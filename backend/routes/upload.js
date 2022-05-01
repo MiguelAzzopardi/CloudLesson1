@@ -243,30 +243,30 @@ async function awaitMessages(req, res, email) {
 
     if (message.id == myMsgId) {
       receivedMyId = true;
-    }
-
-    // Ack the message
-    message.ack();
-
-    const doc = await GetDocWithMessageID(message.id);
-
-      const downloadedFile = await DownloadFileFromURL(doc.data().completed, doc.data().filename);
-
-      fileToDownloadURL = "https://storage.googleapis.com/pftc001.appspot.com/completed/" + path.basename(downloadedFile.path);
-      await UploadCloud("completed/", downloadedFile, downloadedFile.path).then(async function ([r]) {
-        const docReff = db.collection('conversions').doc(doc.id);
-        const res = await docReff.update({
-          completed: fileToDownloadURL,
-        });
-        console.log("Updated completed file!");
-      });
-
-      //console.log(`fileToDownloadURL: ${fileToDownloadURL}, resp: ${resp}`);
       res.send({
         status: "200",
         message: "File uploaded successfully! Processing..",
         url: fileToDownloadURL
       });
+    }
+
+    // Ack the message
+    message.ack();
+    /*const doc = await GetDocWithMessageID(message.id);
+
+    const downloadedFile = await DownloadFileFromURL(doc.data().completed, doc.data().filename);
+
+    fileToDownloadURL = "https://storage.googleapis.com/pftc001.appspot.com/completed/" + path.basename(downloadedFile.path);
+    await UploadCloud("completed/", downloadedFile, downloadedFile.path).then(async function ([r]) {
+      const docReff = db.collection('conversions').doc(doc.id);
+      const res = await docReff.update({
+        completed: fileToDownloadURL,
+      });
+      console.log("Updated completed file!");
+    });*/
+
+    //console.log(`fileToDownloadURL: ${fileToDownloadURL}, resp: ${resp}`);
+    
   };
   // Listen for new messages until timeout is hit
   pubsub.subscription('queue-sub').on(`message`, messageHandler);

@@ -9,10 +9,12 @@ const uploadFile = async () => {
     };
     formData.append("image", fileUpload);
     const response = await axios.post(url, formData, headers);
-
+    if(response.data.status == 200){
+      RemoveCredit();
+    }
     console.log(`response: ${response}, responseURL: ${response.data.url}`);
-    window.open(response.data.url, "_blank");
-    RemoveCredit();
+    //window.open(response.data.url, "_blank");
+    
     console.log(response);
   } else {
     console.log("No file uploaded.");
