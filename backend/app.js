@@ -144,6 +144,7 @@ app.post("/credits", (req, res) => {
 });
 
 app.post("/setCredits", (req, res) => {
+  console.log("!!!!!!! " + req.body);
   SetCreditsPrices(req.body).then((methodResult)=>{
     res.send({ result: "setCreditPrices", reason: "Credits set!"});
   }); 

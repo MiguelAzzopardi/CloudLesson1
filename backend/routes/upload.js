@@ -33,8 +33,8 @@ let imageUpload = multer({
   }),
   fileFilter: function (req, file, callback) {
     var ext = path.extname(file.originalname);
-    if (ext !== ".png" && ext !== ".jpg" && ext !== ".gif" && ext !== ".jpeg") {
-      return callback(new Error("Only images are allowed"));
+    if (ext !== ".png" && ext !== ".jpg" && ext !== ".gif" && ext !== ".jpeg" && ext !== ".doc" && ext !== ".docx") {
+      return callback(new Error("Only images & docs are allowed"));
     }
     callback(null, true);
   },
@@ -84,7 +84,7 @@ async function downloadFile(filename) {
 
 var email = "";
 upload.route("/").post(imageUpload.single("image"), async function (req, res) {
-  //Af
+  
   const token = req.headers.cookie.split("token=")[1].split(";")[0];
   validateToken(token).then(async function (rsp) {
     email = rsp.getPayload().email;
@@ -161,7 +161,24 @@ async function GetPendingDocumentReference() {
 
 var downloadedLocalPath = "";
 async function DownloadFileFromURL(url, name) {
-  name = name.replace('.jpg', '.pdf');
+  if(name.includes(".jpg")){
+    name = name.replace('.jpg', '.pdf');
+  }
+  else if(name.includes(".png")){
+    name = name.replace('.png', '.pdf');
+  }
+  else if(name.includes(".gif")){
+    name = name.replace('.gif', '.pdf');
+  }
+  else if(name.includes(".jpeg")){
+    name = name.replace('.jpeg', '.pdf');
+  }
+  else if(name.includes(".doc")){
+    name = name.replace('.doc', '.pdf');
+  }else if(name.includes(".docx")){
+    name = name.replace('.docx', '.pdf');
+  }
+  
   downloadedLocalPath = "./downloads/" + name;
 
   const file = fs.createWriteStream(downloadedLocalPath);
