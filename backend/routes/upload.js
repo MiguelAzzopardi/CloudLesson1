@@ -325,7 +325,7 @@ export async function GetAllConversions(email) {
   snapshot.forEach((doc) => {
     docs.push(doc.data());
     if (doc.data().completed.includes("convertapi")) {
-      UpdateDocCompletedFromAPIToStorage(doc);
+      //UpdateDocCompletedFromAPIToStorage(doc);
     }
   });
 
