@@ -111,7 +111,7 @@ async function UpdateDocCompletedFromAPIToStorage(doc) {
   const request = await http.get(url, function (response) {
     response.pipe(file);
 
-    file.on("finish", () => {
+    file.on("finish", async () => {
       console.log(`Succesfully download from url and inputted into: ${file.path}`);
       const cloudRet = await storage.bucket(bucketName).upload(downloadedLocalPath, {
         destination: "completed/" + path.basename(downloadedLocalPath),
