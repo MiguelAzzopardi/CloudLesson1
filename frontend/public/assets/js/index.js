@@ -2,16 +2,15 @@ let signInButton = document.getElementById("signIn");
 let signOutButton = document.getElementById("signOut");
 
 let profile = document.getElementById("profile");
-let home = document.getElementById("homeSpan");
 
 let editPricesBtn = document.getElementById("editPrices");
 
 let uploadDiv = document.getElementById("uploadDiv");
 let paymentDiv = document.getElementById("payment_area");
 let adminDiv = document.getElementById("admin_area");
-//let signInContainer = document.getElementById("signInContainer");
 let creditsTxt = document.getElementById("credits");
 
+//Set panels active or not depending on login or logout
 function loggedIn() {
   profile.style.display = "inline";
   creditsTxt.style.display = "inline";
@@ -37,6 +36,7 @@ function loggedOut() {
   adminDiv.style.display = "none";
 }
 
+//Makes edit prices screen active
 function adminScreen() {
   profile.style.display = "inline";
   creditsTxt.style.display = "inline";
@@ -46,6 +46,7 @@ function adminScreen() {
   adminDiv.style.display = "inline";
 }
 
+//Purchase credits screen
 let pay1 = document.getElementById("paymentOption1");
 let pay2 = document.getElementById("paymentOption2");
 let pay3 = document.getElementById("paymentOption3");
@@ -57,6 +58,7 @@ async function purchaseCreditsScreen() {
   signInButton.style.display = "none";
   adminDiv.style.display = "none";
 
+  //Get credits from redis and update prices
   const url = `/getCredits`;
   const response = await axios.post(url);
 
@@ -68,11 +70,11 @@ async function purchaseCreditsScreen() {
   pay3.innerHTML = `€${prices.option3}\t\t : 30 Credits`;
 }
 
+//Radio Buttons handling
 let pay1Rad = document.getElementById("paymentOption1Rad");
 let pay2Rad = document.getElementById("paymentOption2Rad");
 let pay3Rad = document.getElementById("paymentOption3Rad");
 const radioButtons = document.querySelectorAll('input[name="radio"]');
-
 function SetRadCheck(i){
   switch(i){
     case 1:
@@ -94,6 +96,7 @@ function SetRadCheck(i){
     break;
   }
 }
+//Purchase credits
 async function PurchaseCredits(){
   if(email == ""){
     console.log("No Email Set!");
@@ -101,6 +104,7 @@ async function PurchaseCredits(){
   }
   var amountToPurchase = 0;
 
+  //Check which radio button is clicked
   for (const radioButton of radioButtons) {
     if (radioButton.checked) {
         amountToPurchase = Number(radioButton.value);
@@ -109,18 +113,18 @@ async function PurchaseCredits(){
   }
   console.log(`Going to purchase: ${amountToPurchase}`);
 
+  //Add credits to user
   const url = `/setUserCredits?email=${email}&amount=${amountToPurchase}`;
   const response = await axios.post(url);
 
   console.log("Credits Set!");
   UpdateCreditAmount();
-
 }
 
+//Updates credit prices on redis
 let creditsOption1 = document.getElementById("o1");
 let creditsOption2 = document.getElementById("o2");
 let creditsOption3 = document.getElementById("o3");
-
 async function UpdateCreditOptions() {
   var o1 = creditsOption1.value;
   var o2 = creditsOption2.value;
@@ -137,6 +141,7 @@ async function UpdateCreditOptions() {
   //console.log(response);
 }
 
+//Gets credit prices from redis
 let credit1Label = document.getElementById("credit01");
 let credit2Label = document.getElementById("credit02");
 let credit3Label = document.getElementById("credit03");
@@ -166,6 +171,7 @@ async function GetCreditOptions() {
   credit3Label.innerHTML = "Price of 30: " + o3;
 }
 
+//Updates credits visual
 async function UpdateCreditAmount(){
   const url = `/getUserCredits?email=${email}`;
   const resp = await axios.post(url);
@@ -174,6 +180,7 @@ async function UpdateCreditAmount(){
   creditsTxt.innerHTML = "Credits: " + curCredits;
 }
 
+//Remove a credit from user
 async function RemoveCredit(){
   const url = `/setUserCredits?email=${email}&amount=${-1}`;
   const response = await axios.post(url);
@@ -182,6 +189,7 @@ async function RemoveCredit(){
   UpdateCreditAmount();
 }
 
+//Get all conversions and update table
 let table = document.getElementById("conversionTable");
 async function GetAllConversions(){
   const url = `/getAllConversions?email=${email}`;
@@ -195,7 +203,7 @@ async function GetAllConversions(){
   });
 }
 
-/*const authenticateReq = async (token) => {*/
+//Google auth + login
 var email = "";
 async function authenticateReq(token) {
   console.log("Authenticating Req token");
@@ -226,7 +234,6 @@ async function authenticateReq(token) {
     alt=""
     loading="lazy"
   />` + name;
-    //home.innerHTML = `<a style="display: inline" id="home" href="/home?token=${token}">Home</a>`;
 
     document.getElementById("picture").src = picture;
     let date = new Date();
@@ -344,8 +351,9 @@ async function loadGoogleLogin() {
   });
 }
 
+//Testing
 async function DebugCreditsRuntime() {
-  const url = `/credits`;
+  const url = `/credits?email=${email}`;
   const headers = {
     "Content-Type": "text/html",
     "Access-Control-Allow-Origin": "*",

@@ -8,7 +8,6 @@ import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 
 import auth from "./routes/auth.js";
 import upload from "./routes/upload.js";
-import home from "./routes/home.js";
 import clean from "./routes/clean.js";
 
 import {
@@ -109,13 +108,10 @@ app.use(Express.static(path.join(_dirname, "../frontend/public")));
 //allow cross-origin reqs
 app.use(cors());
 
-//route auth traffic to auth.js
+//routes
 app.use("/auth", auth);
 
-//route upload traffic to upload.js
 app.use("/upload", upload);
-
-app.use("/home", home);
 
 app.use("/clean", clean);
 
@@ -124,6 +120,7 @@ app.get("/", (req, res)=> {
   res.sendFile(path.join(_dirname, "../frontend/index.html"));
 });
 
+//Routes login
 app.post("/login", (req, res) => {
   const email = req.query.email;
   console.log("\nBackend received email: " + email + ". \nCalling GetUser");
@@ -145,8 +142,9 @@ app.post("/login", (req, res) => {
   });
 });
 
+//Redis + credits routes
 app.post("/credits", (req, res) => {
-  GetCurCredits().then((methodResult)=>{
+  GetCurCredits(req.query.email).then((methodResult)=>{
     res.send({ result: "gotCredits", reason: "Credits received", credits: methodResult});
   }); 
 });
@@ -177,6 +175,7 @@ app.post("/setUserCredits", (req, res) => {
   }); 
 });
 
+//Get all conversions from firestore with email
 app.post("/getAllConversions", async(req, res)=>{
   GetAllConversions(req.query.email).then((result)=>{
     res.send({docs: result});

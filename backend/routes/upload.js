@@ -12,6 +12,7 @@ import Firestore from "@google-cloud/firestore";
 import http from 'http';
 import { GetAPISecret } from "../app.js";
 
+//Initialize constants
 export const GOOGLE_APPLICATION_CREDENTIALS = './key.json'
 var convertapi;
 
@@ -22,6 +23,36 @@ const __dirname = dirname(__filename);
 
 const upload = Express.Router();
 
+//Firestore instance
+const db = new Firestore({
+  projectId: 'pftc001',
+  keyFilename: GOOGLE_APPLICATION_CREDENTIALS,
+});
+
+//Route for /upload
+upload.route("/").post(imageUpload.single("image"), async function (req, res) {
+  const token = req.headers.cookie.split("token=")[1].split(";")[0];
+  validateToken(token).then(async function (rsp) {
+    const email = rsp.getPayload().email;
+    if (req.file) {
+      receivedMyId = false;
+
+      //Start listening for messages from cloud functions
+      awaitMessages(req, res, email);
+
+      await UploadCloud("pending/", req.file, "").then(async ([r]) => {
+        publishMessage({
+          url: "https://storage.googleapis.com/pftc001.appspot.com/pending/" + req.file.originalname,
+          date: new Date().toUTCString(),
+          email: email,
+          filename: req.file.originalname,
+        });
+      });
+    }
+  });
+});
+
+//Upload image to backend ../uploads/
 let imageUpload = multer({
   storage: multer.diskStorage({
     destination: function (req, file, cb) {
@@ -43,6 +74,9 @@ let imageUpload = multer({
   },
 });
 
+var fileToConvertPath = "";
+var fileToDownloadURL = "";
+//Convert 'fileToConvertPath' to PDF via API
 async function ConvertToPDF() {
   console.log("Calling API with file path: " + fileToConvertPath);
   var APISECRET = "8hfr6FeNB9QiLhvK";
@@ -52,8 +86,6 @@ async function ConvertToPDF() {
       // get converted file url
       console.log("Converted file url: " + result.file.url);
 
-      // save to file
-      //global.window.open(result.file.url, "_blank");
       fileToDownloadURL = result.file.url;
       //return result.file.save('/uploads');
     })
@@ -65,97 +97,43 @@ async function ConvertToPDF() {
     });
 }
 
-var fileToConvertPath = "";
-var fileToDownloadURL = "";
-async function downloadFile(filename) {
-
-  const storage = new Storage.Storage({
-    projectId: 'pftc001',
-    keyFilename: './key.json',
-  });
-
-  const options = {
-    destination: `/uploads/${filename}`
-  }
-  console.log(`Attempting to download file`);
-  await storage.bucket(bucketName).file(`completed/${filename}`).downloadFile(options);
-
-  console.log(`file downloaded to /upload/${filename}`);
-}
-
-var email = "";
-upload.route("/").post(imageUpload.single("image"), async function (req, res) {
-  const token = req.headers.cookie.split("token=")[1].split(";")[0];
-  validateToken(token).then(async function (rsp) {
-    email = rsp.getPayload().email;
-    if (req.file) {
-      receivedMyId = false;
-
-      awaitMessages(req, res, email);
-
-      await UploadCloud("pending/", req.file, "").then(async ([r]) => {
-        publishMessage({
-          url: "https://storage.googleapis.com/pftc001.appspot.com/pending/" + req.file.originalname,
-          date: new Date().toUTCString(),
-          email: email,
-          filename: req.file.originalname,
-        });
-      });
-    }
-  });
-});
-
-const db = new Firestore({
-  projectId: 'pftc001',
-  keyFilename: GOOGLE_APPLICATION_CREDENTIALS,
-});
-
-async function GetPendingDocumentReference() {
+//Gets the most recent document in firestore/conversions
+async function GetPendingDocumentReference(email) {
   if (email == "") {
     return null;
   }
-  const docRef = db.collection("conversions");
-  const snapshot = await docRef.where("email", "==", email).get();
 
-  var pendingDoc = "";
-  var lowestDate = new Date();
+  //Get all documents with the same email as user
+  const collectionRef = db.collection("conversions");
+  const snapshot = await collectionRef.where("email", "==", email).get();
+
+  //Temp vars to keep track of most recent document
+  var pendingDocId = "";
+  var tmpRecentDate = new Date();
+  
+  //Update most recent doc per document in collection snapshot with email
   snapshot.forEach((doc) => {
-    if (lowestDate == null || pendingDoc == "") {
-      pendingDoc = doc.id;
-      lowestDate = doc.date;
-    } else {
-      if (doc.date > lowestDate) {
-        lowestDate = doc.date;
-        pendingDoc = doc.id;
-      }
+    if (tmpRecentDate == null || pendingDocId == "") {
+      pendingDocId = doc.id;
+      tmpRecentDate = doc.date;
+    } else if (doc.date > tmpRecentDate) {
+      tmpRecentDate = doc.date;
+      pendingDocId = doc.id;
     }
   });
 
-  if (pendingDoc == "") {
+  if (pendingDocId == "") {
     console.log("BIG ERROR - Couldn't find lowest date doc with email: " + email);
   }
-  return pendingDoc;
+
+  return pendingDocId;
 }
 
+//Download file from api url
 var downloadedLocalPath = "";
 async function DownloadFileFromURL(url, name) {
-  if (name.includes(".jpg")) {
-    name = name.replace('.jpg', '.pdf');
-  }
-  else if (name.includes(".png")) {
-    name = name.replace('.png', '.pdf');
-  }
-  else if (name.includes(".gif")) {
-    name = name.replace('.gif', '.pdf');
-  }
-  else if (name.includes(".jpeg")) {
-    name = name.replace('.jpeg', '.pdf');
-  }
-  else if (name.includes(".doc")) {
-    name = name.replace('.doc', '.pdf');
-  } else if (name.includes(".docx")) {
-    name = name.replace('.docx', '.pdf');
-  }
+  var ext = name.split('.').pop();
+  name = name.replace('.' + ext, '.pdf');
 
   downloadedLocalPath = "./downloads/" + name;
 
@@ -177,19 +155,20 @@ async function DownloadFileFromURL(url, name) {
 
 export default upload;
 
+//Pubsub related Items
 //#region PubSub
-//Pubsub
-
 const pubsub = new PubSub({
   projectId: 'pftc001',
   keyFilename: './key.json'
 });
 
+//Storage instance
 const storage = new Storage({
   projectId: 'pftc001',
   keyFilename: './key.json'
 });
 
+//Upload to bucket
 const UploadCloud = async (folder, file, overridePath) => {
 
   if (overridePath == "") {
@@ -217,6 +196,7 @@ const UploadCloud = async (folder, file, overridePath) => {
   }
 };
 
+//Gets called when cloud function is called and receives message
 const callbackPubSub = (error, msgId) => {
   console.log("File uploaded from cloud function, message id: " + msgId);
   myMsgId = msgId;
@@ -225,35 +205,41 @@ const callbackPubSub = (error, msgId) => {
   }
 }
 
+//Publish message to cloud function
 async function publishMessage(payload) {
   const dataBuffer = Buffer.from(JSON.stringify(payload), "utf8");
 
   await pubsub.topic("queue").publish(dataBuffer, {}, callbackPubSub);
 }
 
+//Awaits message from cloud function (used to send back to frontend when cloud function is done, to remove credits)
 let myMsgId = 0;
 let messageCount = 0;
 let receivedMyId = false;
 async function awaitMessages(req, res, email) {
   const messageHandler = async message => {
     console.log(`Received message ${message.id}:`);
-    //console.log(`Data: ${message.data}`);
-    //console.log(`tAttributes: ${message.attributes}`);
+
     messageCount += 1;
 
+    //If received msg id is same as the one I sent, send back to frontend
     if (message.id == myMsgId) {
       receivedMyId = true;
-      try{res.send({
-        status: "200",
-        message: "File uploaded successfully! Processing..",
-        url: fileToDownloadURL
-      });}catch(error){
+      try {
+        res.send({
+          status: "200",
+          message: "File uploaded successfully! Processing..",
+          url: fileToDownloadURL
+        });
+      } catch (error) {
         console.log("Await Messages err: " + error);
       }
     }
 
     // Ack the message
     message.ack();
+
+    //Was supposedto use this to download file from api and use that in the completed link, but weird interaction where this gets called before the cloud function is actually done uploading
     /*const doc = await GetDocWithMessageID(message.id);
 
     const downloadedFile = await DownloadFileFromURL(doc.data().completed, doc.data().filename);
@@ -268,7 +254,7 @@ async function awaitMessages(req, res, email) {
     });*/
 
     //console.log(`fileToDownloadURL: ${fileToDownloadURL}, resp: ${resp}`);
-    
+
   };
   // Listen for new messages until timeout is hit
   pubsub.subscription('queue-sub').on(`message`, messageHandler);
@@ -278,6 +264,7 @@ async function awaitMessages(req, res, email) {
   }, 5 * 1000);
 }
 
+//Returns document from firestore using messageID
 async function GetDocWithMessageID(id) {
   const docRef = db.collection("conversions");
   const snapshot = await docRef.where("messageId", "==", id).get();
@@ -290,7 +277,8 @@ async function GetDocWithMessageID(id) {
   return pendingDoc;
 }
 
-export async function GetAllConversions(email){
+//Gets and returns all conversions with said email
+export async function GetAllConversions(email) {
   const docRef = db.collection("conversions");
   const snapshot = await docRef.where("email", "==", email).get();
 

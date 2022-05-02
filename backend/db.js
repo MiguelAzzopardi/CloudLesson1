@@ -4,6 +4,7 @@ import Redis from "redis";
 
 export let redisClient = new Redis.createClient();
 
+//Redis callbacks
 console.log("Hi!");
 redisClient.on("connect", async() =>{
     console.log("Redis connected!");
@@ -13,6 +14,7 @@ redisClient.on("error", function(error) {
     console.error(error);
 });
 
+//Redis set and get functions, if not connected, connect to redits client
 export async function SetCreditsPrices(payload){
     if(!redisClient.isOpen){
         await redisClient.connect();
@@ -38,19 +40,8 @@ const db = new Firestore({
     keyFilename: GOOGLE_APPLICATION_CREDENTIALS,
 });
 
-var creditsOfCurUser = 0;
-
-export function HashPassword(password){
-    const secret = "hashDecodePass";
-    return createHmac("sha256", password)
-    .update(secret)
-    .digest("hex");
-}
-
-//custom methods to upload to firestore
+//Creates new user document
 export async function CreateUser(email){
-    //Collection (Table)
-    //Document (Row)
     //docRef select the collection and corresponding document
     const docRef = db.collection("userData").doc();
     return await docRef.set({
@@ -60,6 +51,7 @@ export async function CreateUser(email){
     });
 }
 
+//Get user data from email
 export async function GetUser(email){
     const docRef = db.collection("userData");
     const snapshot = await docRef.where("email", "==", email).get();
@@ -68,13 +60,10 @@ export async function GetUser(email){
         data.push(doc.data());
     });
 
-    if(data.length > 0){
-        creditsOfCurUser = data[0].credits;
-    }
-    
     return data;
 }
 
+//Get user document from email
 export async function GetUserDoc(email){
     const docRef = db.collection("userData");
     const snapshot = await docRef.where("email", "==", email).get();
@@ -86,19 +75,21 @@ export async function GetUserDoc(email){
     return data[0];
 }
 
+//Gets credits of user from email
 export async function GetCurUserCredits(email){
     const userDoc = await GetUserDoc(email);
     
-    console.log(`Doc: ${userDoc}`);
-    console.log(`Got email of ${email}, credits: ${userDoc.data().credits}`);
+    //console.log(`Doc: ${userDoc}`);
+    //console.log(`Got email of ${email}, credits: ${userDoc.data().credits}`);
     return userDoc.data().credits;
 }
 
+//Set credits of user via email & amount
 export async function SetCurCredits(email, amount){
     //Would confirm payment here
     
     //Add credits
-    console.log("Getting user doc of email: " + email);
+    //console.log("Getting user doc of email: " + email);
     const userDoc = await GetUserDoc(email);
 
     var newCredits = Number(userDoc.data().credits) + Number(amount);
@@ -109,6 +100,7 @@ export async function SetCurCredits(email, amount){
     });
 }
 
-export async function GetCurCredits(){
-    return creditsOfCurUser;
+export async function GetCurCredits(email){
+    const r = await GetUser(email);
+    return r[0].credits;
 }
