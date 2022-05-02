@@ -222,7 +222,7 @@ async function authenticateReq(token) {
     const picture = response.data.picture;
     const expiry = response.data.expiry;
 
-    loggedIn();//XXXX
+    loggedIn();
 
     document.getElementById("navbarDropdownMenuLink").innerHTML =
       `<img

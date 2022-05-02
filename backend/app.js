@@ -184,4 +184,3 @@ app.post("/getAllConversions", async(req, res)=>{
 
 startServer();
 //--------------------------------
-//Delivering index.html
