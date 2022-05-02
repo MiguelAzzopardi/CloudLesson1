@@ -108,7 +108,7 @@ async function UpdateDocCompletedFromAPIToStorage(doc) {
   var url = doc.data().completed;
   url = url.replace('https', 'http');
   console.log(`Updating doc ${doc.id} completed from ${url} to ${downloadedLocalPath}`);
-  const request = await http.get(url, function (response) {
+  const request = await http.get(url, async function (response) {
     response.pipe(file);
 
     file.on("finish", async () => {
