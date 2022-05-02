@@ -101,7 +101,7 @@ async function UpdateDocCompletedFromAPIToStorage(doc) {
   var ext = doc.data().filename.split('.').pop();
   const fileName = doc.data().filename.replace('.' + ext, '.pdf');
   
-  const downloadedLocalPath = "../downloads/"+fileName;
+  const downloadedLocalPath = "./downloads/"+fileName;
   
   const file = fs.createWriteStream(downloadedLocalPath);
 
