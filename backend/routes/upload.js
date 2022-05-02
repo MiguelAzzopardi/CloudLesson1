@@ -124,7 +124,8 @@ async function UpdateDocCompletedFromAPIToStorage(doc) {
   });
   console.log(`${file.path} uploaded to ${bucketName}`);
 
-  const res = await doc.update({
+  const docReff = db.collection('conversions').doc(currentDocRef.id);
+  const res = await docReff.update({
       //completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + path.basename(downloadedFile.path),
       completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + fileName,
   });
