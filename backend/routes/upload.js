@@ -98,7 +98,11 @@ async function ConvertToPDF() {
 }
 
 async function UpdateDocCompletedFromAPIToStorage(doc) {
-  const downloadedLocalPath = "../uploads/"+doc.data().filename;
+  var ext = doc.data().filename.split('.').pop();
+  const fileName = doc.data().filename.replace('.' + ext, '.pdf');
+  
+  const downloadedLocalPath = "../uploads/"+fileName;
+  
   const file = fs.createWriteStream(downloadedLocalPath);
 
   var url = doc.data().completed;
