@@ -126,7 +126,7 @@ async function UpdateDocCompletedFromAPIToStorage(doc) {
 
   const res = await doc.update({
       //completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + path.basename(downloadedFile.path),
-      completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + filename,
+      completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + fileName,
   });
   // after download completed close filestream
   console.log("File completed transfering");
