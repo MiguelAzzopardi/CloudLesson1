@@ -29,6 +29,28 @@ const db = new Firestore({
   keyFilename: GOOGLE_APPLICATION_CREDENTIALS,
 });
 
+//Upload image to backend ../uploads/
+let imageUpload = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, path.join(__dirname, "../uploads/"));
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname);
+    },
+  }),
+  fileFilter: function (req, file, callback) {
+    var ext = path.extname(file.originalname);
+    if (ext !== ".png" && ext !== ".jpg" && ext !== ".gif" && ext !== ".jpeg" && ext !== ".doc" && ext !== ".docx") {
+      return callback(new Error("Only images & docs are allowed"));
+    }
+    callback(null, true);
+  },
+  limits: {
+    fileSize: 2621441,
+  },
+});
+
 //Route for /upload
 upload.route("/").post(imageUpload.single("image"), async function (req, res) {
   const token = req.headers.cookie.split("token=")[1].split(";")[0];
@@ -50,28 +72,6 @@ upload.route("/").post(imageUpload.single("image"), async function (req, res) {
       });
     }
   });
-});
-
-//Upload image to backend ../uploads/
-let imageUpload = multer({
-  storage: multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, path.join(__dirname, "../uploads/"));
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.originalname);
-    },
-  }),
-  fileFilter: function (req, file, callback) {
-    var ext = path.extname(file.originalname);
-    if (ext !== ".png" && ext !== ".jpg" && ext !== ".gif" && ext !== ".jpeg" && ext !== ".doc" && ext !== ".docx") {
-      return callback(new Error("Only images & docs are allowed"));
-    }
-    callback(null, true);
-  },
-  limits: {
-    fileSize: 2621441,
-  },
 });
 
 var fileToConvertPath = "";
