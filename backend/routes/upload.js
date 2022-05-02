@@ -105,29 +105,32 @@ async function UpdateDocCompletedFromAPIToStorage(doc) {
 
   const file = fs.createWriteStream(downloadedLocalPath);
 
-  var url = doc.data().completed;
-  url = url.replace('https', 'http');
-  console.log(`Updating doc ${doc.id} completed from ${url} to ${downloadedLocalPath}`);
-  const request = await http.get(url, async function (response) {
-    file.on("finish", async () => {
-      file.close();
-      console.log("Download Completed");
+  try {
+    var url = doc.data().completed;
+    url = url.replace('https', 'http');
+    console.log(`Updating doc ${doc.id} completed from ${url} to ${downloadedLocalPath}`);
+    const request = await http.get(url, async function (response) {
+      file.on("finish", async () => {
+        file.close();
+        console.log("Download Completed");
+      });
+      response.pipe(file);
     });
-    response.pipe(file);    
-  });
-  console.log(`Succesfully download from url and inputted into: ${file.path}`);
-  const cloudRet = await storage.bucket(bucketName).upload(downloadedLocalPath, {
-    destination: "completed/" + path.basename(downloadedLocalPath),
-  });
-  console.log(`${file.path} uploaded to ${bucketName}`);
+    console.log(`Succesfully download from url and inputted into: ${file.path}`);
+    const cloudRet = await storage.bucket(bucketName).upload(downloadedLocalPath, {
+      destination: "completed/" + path.basename(downloadedLocalPath),
+    });
+    console.log(`${file.path} uploaded to ${bucketName}`);
 
-  const docReff = db.collection('conversions').doc(doc.id);
-  const res = await docReff.update({
-    //completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + path.basename(downloadedFile.path),
-    completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + fileName,
-  });
-  //const request = await http.get(url);
-
+    const docReff = db.collection('conversions').doc(doc.id);
+    const res = await docReff.update({
+      //completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + path.basename(downloadedFile.path),
+      completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + fileName,
+    });
+    //const request = await http.get(url);
+  } catch (error) {
+    console.log(`Update completed error: ${error}`);
+  }
 
   // after download completed close filestream
   console.log("File completed transfering");
