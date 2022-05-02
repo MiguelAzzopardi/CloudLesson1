@@ -112,6 +112,7 @@ async function UpdateDocCompletedFromAPIToStorage(doc) {
     response.pipe(file);
 
     file.on("finish", async () => {
+      file.close();
       console.log(`Succesfully download from url and inputted into: ${file.path}`);
       const cloudRet = await storage.bucket(bucketName).upload(downloadedLocalPath, {
         destination: "completed/" + path.basename(downloadedLocalPath),
@@ -123,7 +124,6 @@ async function UpdateDocCompletedFromAPIToStorage(doc) {
         //completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + path.basename(downloadedFile.path),
         completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + fileName,
       });
-      file.close();
       console.log("Download Completed");
     });
   });
