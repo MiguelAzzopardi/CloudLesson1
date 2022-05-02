@@ -97,6 +97,34 @@ async function ConvertToPDF() {
     });
 }
 
+async function UpdateDocCompletedFromAPIToStorage(doc) {
+  const downloadedLocalPath = "../uploads/"+doc.data().filename;
+  const file = fs.createWriteStream(downloadedLocalPath);
+
+  var url = doc.data().completed;
+  url = url.replace('https', 'http');
+  console.log(`Updating doc ${doc.id} completed from ${url} to ${downloadedLocalPath}`);
+  const request = await http.get(url, function(response) {
+   response.pipe(file);
+
+   file.on("finish", () => {
+       file.close();
+       console.log("Download Completed");
+   });
+  });
+  //const request = await http.get(url);
+
+  console.log(`Succesfully download from url and inputted into: ${file.path}`);
+  const cloudRet = await storage.bucket(bucketName).upload(downloadedLocalPath, {
+    destination: "completed/" + path.basename(downloadedLocalPath),
+  });
+
+  console.log(`${file.path} uploaded to ${bucketName}`);
+
+  // after download completed close filestream
+  console.log("File completed transfering");
+}
+
 //Gets the most recent document in firestore/conversions
 async function GetPendingDocumentReference(email) {
   if (email == "") {
@@ -110,7 +138,7 @@ async function GetPendingDocumentReference(email) {
   //Temp vars to keep track of most recent document
   var pendingDocId = "";
   var tmpRecentDate = new Date();
-  
+
   //Update most recent doc per document in collection snapshot with email
   snapshot.forEach((doc) => {
     if (tmpRecentDate == null || pendingDocId == "") {
@@ -285,6 +313,9 @@ export async function GetAllConversions(email) {
   var docs = [];
   snapshot.forEach((doc) => {
     docs.push(doc.data());
+    if (doc.data().completed.includes("convertapi")) {
+      UpdateDocCompletedFromAPIToStorage(doc);
+    }
   });
 
   return docs;
