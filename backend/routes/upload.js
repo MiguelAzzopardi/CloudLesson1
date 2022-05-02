@@ -100,35 +100,36 @@ async function ConvertToPDF() {
 async function UpdateDocCompletedFromAPIToStorage(doc) {
   var ext = doc.data().filename.split('.').pop();
   const fileName = doc.data().filename.replace('.' + ext, '.pdf');
-  
-  const downloadedLocalPath = "./downloads/"+fileName;
-  
+
+  const downloadedLocalPath = "./downloads/" + fileName;
+
   const file = fs.createWriteStream(downloadedLocalPath);
 
   var url = doc.data().completed;
   url = url.replace('https', 'http');
   console.log(`Updating doc ${doc.id} completed from ${url} to ${downloadedLocalPath}`);
-  const request = await http.get(url, function(response) {
-   response.pipe(file);
+  const request = await http.get(url, function (response) {
+    response.pipe(file);
 
-   file.on("finish", () => {
-       file.close();
-       console.log("Download Completed");
-   });
+    file.on("finish", () => {
+      console.log(`Succesfully download from url and inputted into: ${file.path}`);
+      const cloudRet = await storage.bucket(bucketName).upload(downloadedLocalPath, {
+        destination: "completed/" + path.basename(downloadedLocalPath),
+      });
+      console.log(`${file.path} uploaded to ${bucketName}`);
+
+      const docReff = db.collection('conversions').doc(doc.id);
+      const res = await docReff.update({
+        //completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + path.basename(downloadedFile.path),
+        completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + fileName,
+      });
+      file.close();
+      console.log("Download Completed");
+    });
   });
   //const request = await http.get(url);
 
-  console.log(`Succesfully download from url and inputted into: ${file.path}`);
-  const cloudRet = await storage.bucket(bucketName).upload(downloadedLocalPath, {
-    destination: "completed/" + path.basename(downloadedLocalPath),
-  });
-  console.log(`${file.path} uploaded to ${bucketName}`);
 
-  const docReff = db.collection('conversions').doc(doc.id);
-  const res = await docReff.update({
-      //completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + path.basename(downloadedFile.path),
-      completed: "https://storage.googleapis.com/pftc001.appspot.com/completed/" + fileName,
-  });
   // after download completed close filestream
   console.log("File completed transfering");
 }
